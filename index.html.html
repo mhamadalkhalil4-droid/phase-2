@@ -1,0 +1,1845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payer Mandate Submission — Autora</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+      --midnight-plum: #120C24;
+      --ultraviolet: #7A5CFF;
+      --luminous-orchid: #B36CFF;
+      --solar-coral: #FF6B68;
+      --warm-sand: #F6EFE8;
+      --mist-lavender: #EAE5F4;
+      --graphite-plum: #4E465E;
+      --white: #ffffff;
+      --near-black: #1a1a2e;
+      --input-border: #D8D3E3;
+      --success: #22c55e;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html {
+      margin: 0;
+      scroll-behavior: smooth;
+      overflow-y: scroll;
+      -webkit-overflow-scrolling: touch;
+    }
+    body {
+      margin: 0;
+      font-family: "Inter", system-ui, sans-serif;
+      background: var(--warm-sand);
+      color: var(--near-black);
+      font-size: 15px;
+      line-height: 1.45;
+      min-height: 100%;
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    button { font-family: inherit; cursor: pointer; }
+    a { color: var(--ultraviolet); }
+
+    .page {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 20px 16px calc(32px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .demo-bar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      margin: 0 -16px 16px;
+      padding: 12px 16px 14px;
+      background: rgba(246, 239, 232, 0.96);
+      border-bottom: 1px solid var(--mist-lavender);
+      box-shadow: 0 4px 16px rgba(18, 12, 36, 0.06);
+      backdrop-filter: blur(8px);
+    }
+    .demo-bar-hint {
+      margin: 0 0 10px;
+      font-size: 12px;
+      line-height: 1.35;
+      color: var(--graphite-plum);
+    }
+    .demo-bar-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .btn-demo {
+      flex: 1;
+      min-width: 140px;
+      min-height: 48px;
+      border: none;
+      border-radius: 8px;
+      background: var(--midnight-plum);
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 0 12px;
+    }
+    .btn-demo:hover:not(:disabled) { filter: brightness(1.08); }
+    .btn-demo:disabled { opacity: 0.45; cursor: not-allowed; }
+    .btn-demo-outline {
+      min-height: 48px;
+      border-radius: 8px;
+      border: 1px solid var(--input-border);
+      background: var(--white);
+      color: var(--graphite-plum);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 0 14px;
+    }
+    .step-scroll {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+    }
+    .step-scroll-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--graphite-plum);
+      margin-right: 4px;
+    }
+    .step-pill {
+      min-width: 44px;
+      min-height: 44px;
+      padding: 0 10px;
+      border-radius: 8px;
+      border: 1px solid var(--input-border);
+      background: var(--white);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--graphite-plum);
+    }
+    .step-pill:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+    .step-pill:not(:disabled):hover {
+      border-color: var(--ultraviolet);
+      color: var(--ultraviolet);
+    }
+
+    .payer-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .brand-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .brand-logo-svg {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+      filter: drop-shadow(0 2px 10px rgba(122, 92, 255, 0.45));
+    }
+    .brand-name {
+      font-weight: 600;
+      font-size: 18px;
+      color: var(--midnight-plum);
+      letter-spacing: -0.02em;
+    }
+    .payer-subtitle {
+      margin: 10px 0 0;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--graphite-plum);
+    }
+
+    .progress {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px;
+      margin-bottom: 16px;
+      padding: 0 4px 4px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+    }
+    .progress-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 0 0 auto;
+      min-width: 40px;
+      position: relative;
+    }
+    .progress-step:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      top: 14px;
+      left: calc(50% + 14px);
+      right: calc(-50% + 14px);
+      height: 2px;
+      background: var(--mist-lavender);
+      z-index: 0;
+    }
+    .progress-step.done:not(:last-child)::after { background: var(--success); }
+    .progress-dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid var(--mist-lavender);
+      background: var(--white);
+      display: grid;
+      place-items: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--graphite-plum);
+      position: relative;
+      z-index: 1;
+    }
+    .progress-step.active .progress-dot {
+      border-color: var(--ultraviolet);
+      background: var(--ultraviolet);
+      color: var(--white);
+    }
+    .progress-step.done .progress-dot {
+      border-color: var(--success);
+      background: var(--success);
+      color: var(--white);
+    }
+    .progress-step.done .progress-dot .step-num { display: none; }
+    .progress-step.done .progress-dot .step-check { display: block !important; }
+    .progress-step .progress-dot .step-check { display: none; width: 14px; height: 14px; }
+
+    .section-block { margin-bottom: 14px; }
+
+    .summary-row {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px;
+      background: var(--white);
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+      border: 1px solid var(--mist-lavender);
+    }
+    .summary-row.visible { display: flex; }
+    .summary-row .sum-icon {
+      width: 22px;
+      height: 22px;
+      color: var(--success);
+      flex-shrink: 0;
+    }
+    .summary-row .sum-text {
+      flex: 1;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--midnight-plum);
+    }
+    .btn-edit {
+      background: transparent;
+      border: none;
+      color: var(--ultraviolet);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 4px;
+      min-height: 44px;
+    }
+    .btn-edit:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+      border: 1px solid var(--mist-lavender);
+      padding: 18px 16px;
+    }
+    .card.hidden { display: none !important; }
+
+    .card-title { font-size: 18px; font-weight: 700; margin: 0 0 6px; color: var(--midnight-plum); letter-spacing: -0.02em; }
+    .card-sub { margin: 0 0 16px; font-size: 13px; color: var(--graphite-plum); }
+
+    .form-group { margin-bottom: 14px; }
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--graphite-plum);
+      margin-bottom: 6px;
+    }
+    .input {
+      width: 100%;
+      min-height: 48px;
+      border: 1px solid var(--input-border);
+      border-radius: 8px;
+      padding: 0 14px;
+      font-size: 15px;
+      font-family: inherit;
+      color: var(--near-black);
+      background: var(--white);
+    }
+    .input:focus { outline: none; border-color: var(--ultraviolet); }
+    .input.input-invalid { border-color: var(--solar-coral); }
+
+    .field-error {
+      font-size: 13px;
+      color: var(--solar-coral);
+      margin-top: 6px;
+      display: none;
+    }
+    .field-error.show { display: block; }
+
+    .btn-primary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      min-height: 48px;
+      border: none;
+      border-radius: 8px;
+      background: var(--ultraviolet);
+      color: var(--white);
+      font-size: 15px;
+      font-weight: 600;
+    }
+    .btn-primary:hover:not(:disabled) { filter: brightness(1.05); }
+    .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    .btn-secondary {
+      flex: 1;
+      min-height: 48px;
+      border-radius: 8px;
+      border: 1px solid var(--input-border);
+      background: var(--white);
+      color: var(--graphite-plum);
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .btn-row { display: flex; gap: 10px; margin-top: 8px; }
+
+    .segmented { display: flex; border: 1px solid var(--input-border); border-radius: 8px; overflow: hidden; }
+    .segmented button {
+      flex: 1;
+      min-height: 48px;
+      border: none;
+      background: var(--white);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--graphite-plum);
+      border-right: 1px solid var(--mist-lavender);
+    }
+    .segmented button:last-child { border-right: none; }
+    .segmented button.active { background: var(--ultraviolet); color: var(--white); }
+
+    .upload-zone {
+      position: relative;
+      display: block;
+      border: 2px dashed var(--input-border);
+      border-radius: 10px;
+      padding: 22px 16px;
+      text-align: center;
+      background: #faf9fc;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .upload-zone:hover { border-color: var(--ultraviolet); background: #f5f3fb; }
+    .upload-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      font-size: 0;
+    }
+    .upload-inner { pointer-events: none; position: relative; z-index: 0; }
+    .upload-inner svg { width: 32px; height: 32px; color: var(--ultraviolet); margin-bottom: 8px; }
+    .upload-inner p { margin: 0; font-size: 15px; color: var(--graphite-plum); }
+    .upload-note { margin: 6px 0 0 !important; font-size: 13px !important; color: var(--graphite-plum) !important; }
+    .upload-success { display: none; flex-direction: column; align-items: center; gap: 6px; }
+    .upload-zone.has-file .upload-prompt { display: none; }
+    .upload-zone.has-file .upload-success { display: flex; }
+    .upload-success svg { color: var(--success); }
+    .link-ocr {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      background: none;
+      border: none;
+      padding: 8px 0;
+      color: var(--ultraviolet);
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .ocr-fail-actions { display: none; margin-top: 12px; }
+    .ocr-fail-actions.visible { display: flex; gap: 10px; align-items: stretch; }
+    .ocr-fail-actions .btn-secondary { flex: 1; }
+
+    .sig-wrap { position: relative; margin-bottom: 14px; }
+    .sig-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .sig-head label { margin: 0; font-size: 13px; font-weight: 600; color: var(--graphite-plum); }
+    .btn-clear {
+      background: none;
+      border: none;
+      color: var(--ultraviolet);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 4px;
+    }
+    .sig-canvas-box {
+      height: 120px;
+      border: 1px solid var(--input-border);
+      border-radius: 8px;
+      background: var(--white);
+      touch-action: none;
+      overflow: hidden;
+    }
+    .sig-canvas-box canvas { display: block; width: 100%; height: 120px; cursor: crosshair; }
+
+    .sig-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+    @media (min-width: 400px) {
+      .sig-grid { grid-template-columns: 1fr 1fr; gap: 12px 12px; }
+    }
+
+    .review-list { display: flex; flex-direction: column; gap: 12px; }
+    .review-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 15px;
+      border-bottom: 1px solid var(--mist-lavender);
+      padding-bottom: 10px;
+    }
+    .review-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .review-k { color: var(--graphite-plum); flex-shrink: 0; }
+    .review-v { text-align: right; font-weight: 600; color: var(--midnight-plum); word-break: break-word; }
+
+    .checkbox-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin: 18px 0 8px;
+    }
+    .checkbox-row input {
+      width: 22px;
+      height: 22px;
+      min-width: 22px;
+      margin-top: 2px;
+      accent-color: var(--ultraviolet);
+    }
+    .checkbox-row label { font-size: 15px; font-weight: 500; color: var(--midnight-plum); margin: 0; }
+
+    .success-banner {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 10px;
+      background: rgba(34, 197, 94, 0.12);
+      border: 1px solid rgba(34, 197, 94, 0.35);
+      margin-bottom: 16px;
+    }
+    .success-banner svg { width: 28px; height: 28px; color: var(--success); flex-shrink: 0; }
+    .success-banner h3 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--midnight-plum);
+      line-height: 1.35;
+    }
+
+    .pdf-viewer-wrapper {
+      width: 100%;
+      border: 1px solid #d8d3e3;
+      border-radius: 8px;
+      background: #525659;
+      padding: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      margin-top: 16px;
+      overflow: auto;
+      max-height: 700px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .pdf-viewer-wrapper::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    .pdf-viewer-wrapper::-webkit-scrollbar-thumb {
+      background: #7a5cff;
+      border-radius: 4px;
+    }
+
+    .pdf-page {
+      background: white;
+      width: 750px;
+      min-height: 1000px;
+      margin: 0 auto;
+      padding: 24px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 10px;
+      color: #1a1a1a;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      box-sizing: border-box;
+    }
+
+    .pdf-page table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    .pdf-page td {
+      border: 1px solid #333;
+      padding: 4px 6px;
+      vertical-align: middle;
+    }
+    .pdf-page .field-num {
+      width: 20px;
+      text-align: center;
+      font-weight: bold;
+      background: #f9f9f9;
+    }
+    .pdf-page .field-label {
+      font-weight: bold;
+      width: 130px;
+      background: #f9f9f9;
+    }
+    .pdf-page .field-value {
+      background: white;
+    }
+    .pdf-page .field-arabic {
+      text-align: right;
+      font-size: 9px;
+      width: 90px;
+      background: #f9f9f9;
+      direction: rtl;
+    }
+    .pdf-page .required {
+      color: red;
+    }
+
+    .pdf-page > table + table {
+      margin-top: -1px;
+    }
+    .pdf-footer-check + .pdf-footer-check {
+      margin-top: -1px;
+    }
+
+    .pdf-dd-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 8px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #333;
+    }
+    .pdf-dd-header-left .pdf-dd-title {
+      font-weight: bold;
+      font-size: 12px;
+      margin: 0 0 4px;
+    }
+    .pdf-dd-header-left .pdf-dd-sub {
+      font-weight: bold;
+      font-size: 11px;
+      margin: 0 0 6px;
+    }
+    .pdf-dd-header-left .pdf-dd-ar-red {
+      color: #c00;
+      font-size: 10px;
+      margin: 0;
+      direction: rtl;
+      text-align: left;
+    }
+    .pdf-dd-header-right {
+      text-align: right;
+    }
+    .pdf-dd-header-right .pdf-dd-logo-ar {
+      font-weight: bold;
+      font-size: 13px;
+      margin: 0 0 6px;
+      line-height: 1.2;
+    }
+    .pdf-dd-header-right .pdf-dd-rev {
+      font-size: 9px;
+      margin: 0;
+      font-weight: normal;
+    }
+
+    .pdf-oic-table td {
+      font-weight: bold;
+      text-align: center;
+      background: #f9f9f9;
+      min-width: 28px;
+    }
+    .pdf-oic-table .pdf-oic-label-cell {
+      background: #fff;
+      font-weight: bold;
+      padding: 6px 10px;
+    }
+
+    .pdf-agreement {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 14px;
+      background: #e8e8e8;
+      border: 1px solid #333;
+      padding: 10px 12px;
+      margin-top: -1px;
+    }
+    .pdf-agreement p {
+      margin: 0 0 8px;
+      font-size: 9px;
+      line-height: 1.35;
+      color: #1a1a1a;
+    }
+    .pdf-agreement p:last-child {
+      margin-bottom: 0;
+    }
+
+    .pdf-sig-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0;
+      border: 1px solid #333;
+      border-top: none;
+      margin-top: -1px;
+      min-height: 140px;
+      align-items: stretch;
+    }
+    .pdf-sig-cell {
+      border-right: 1px solid #333;
+      padding: 8px;
+      vertical-align: top;
+      box-sizing: border-box;
+      min-height: 120px;
+    }
+    .pdf-sig-cell:first-child {
+      min-height: 155px;
+    }
+    .pdf-sig-cell:nth-child(2) {
+      display: flex;
+      flex-direction: column;
+    }
+    .pdf-sig-cell:last-child {
+      border-right: none;
+    }
+    .pdf-sig-cap {
+      font-weight: bold;
+      font-size: 9px;
+      margin: 0 0 8px;
+      line-height: 1.3;
+    }
+    .pdf-sig-name {
+      margin: 0 0 6px;
+      font-weight: normal;
+    }
+    .pdf-sig-placeholder {
+      flex: 1;
+      min-height: 72px;
+      background: #e8e8e8;
+      border: 1px solid #ccc;
+    }
+
+    .pdf-footer-check {
+      border: 1px solid #333;
+      border-top: none;
+      padding: 6px 8px;
+      margin-top: -1px;
+      font-size: 10px;
+      background: #fafafa;
+    }
+
+    .page-footer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid var(--mist-lavender);
+      font-size: 12px;
+      color: var(--graphite-plum);
+      text-align: center;
+    }
+    .page-footer .footer-mark { width: 22px; height: 22px; flex-shrink: 0; }
+
+    .spinner { animation: spin 0.9s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .hidden { display: none !important; }
+
+    body.flow-locked .btn-edit { display: none; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="payer-header">
+      <div class="brand-row">
+        <svg class="brand-logo-svg" width="40" height="40" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="autoraLogoGradPay001" x1="8" y1="54" x2="54" y2="10" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#7A5CFF"/><stop offset="45%" stop-color="#FF6B68"/><stop offset="100%" stop-color="#B36CFF"/>
+            </linearGradient>
+          </defs>
+          <path fill="url(#autoraLogoGradPay001)" d="M32 6 C22 6 13 12 10 22 C8 28 9 36 13 42 L19 38 C16 33 15 27 17 22 C19 15 26 10 34 11 C42 12 49 19 51 27 C52 32 51 38 48 43 L54 47 C58 40 60 31 58 23 C55 12 44 6 32 6 Z"/>
+          <path fill="url(#autoraLogoGradPay001)" opacity="0.92" d="M32 18 C26 18 21 22 20 29 C19 33 20 38 23 42 L29 38 C27 35 26 31 27 28 C28 23 32 20 37 20 C42 20 46 24 47 29 C48 32 47 36 45 39 L51 43 C54 38 55 31 54 25 C52 16 43 18 32 18 Z"/>
+          <path fill="url(#autoraLogoGradPay001)" d="M22 36 L26 30 L38 30 L42 36 L40 38 L24 38 Z"/>
+        </svg>
+        <span class="brand-name">Autora</span>
+      </div>
+      <p class="payer-subtitle">Secure Mandate Authorization</p>
+    </header>
+
+    <nav class="progress" id="progressBar" aria-label="Mandate steps">
+      <div class="progress-step active" data-step="0">
+        <div class="progress-dot"><span class="step-num">1</span><i data-lucide="check" class="step-check"></i></div>
+      </div>
+      <div class="progress-step" data-step="1">
+        <div class="progress-dot"><span class="step-num">2</span><i data-lucide="check" class="step-check"></i></div>
+      </div>
+      <div class="progress-step" data-step="2">
+        <div class="progress-dot"><span class="step-num">3</span><i data-lucide="check" class="step-check"></i></div>
+      </div>
+      <div class="progress-step" data-step="3">
+        <div class="progress-dot"><span class="step-num">4</span><i data-lucide="check" class="step-check"></i></div>
+      </div>
+      <div class="progress-step" data-step="4">
+        <div class="progress-dot"><span class="step-num">5</span><i data-lucide="check" class="step-check"></i></div>
+      </div>
+    </nav>
+
+    <div class="demo-bar" id="demoBar">
+      <p class="demo-bar-hint">
+        Scroll the page for all steps. If your browser blocks file uploads, use <strong>Demo: next step</strong> to advance with sample data.
+      </p>
+      <div class="demo-bar-actions">
+        <button type="button" class="btn-demo" id="demoNextBtn">Demo: next step</button>
+        <button type="button" class="btn-demo-outline" id="demoResetBtn" title="Start over">Reset</button>
+      </div>
+      <div class="step-scroll" role="navigation" aria-label="Scroll to step">
+        <span class="step-scroll-label">Go to:</span>
+        <button type="button" class="step-pill" data-step-scroll="1">1</button>
+        <button type="button" class="step-pill" data-step-scroll="2">2</button>
+        <button type="button" class="step-pill" data-step-scroll="3">3</button>
+        <button type="button" class="step-pill" data-step-scroll="4">4</button>
+        <button type="button" class="step-pill" data-step-scroll="5">5</button>
+      </div>
+    </div>
+
+    <!-- Section 1 -->
+    <div class="section-block" id="sec1Block" data-step-anchor="1">
+      <div class="summary-row" id="sec1Summary">
+        <i data-lucide="check-circle-2" class="sum-icon"></i>
+        <span class="summary-text sum-text" id="sec1SummaryText">Emirates ID</span>
+        <button type="button" class="btn-edit" id="sec1Edit">Edit</button>
+      </div>
+      <div class="card" id="sec1Card">
+        <h2 class="card-title">Emirates ID</h2>
+        <p class="card-sub">Upload a photo of your Emirates ID</p>
+
+        <div class="upload-zone" id="eidUploadZone">
+          <input type="file" id="eidFile" accept=".jpg,.jpeg,.png,.pdf,image/jpeg,image/png,application/pdf" />
+          <div class="upload-inner upload-prompt">
+            <i data-lucide="upload-cloud"></i>
+            <p>Tap to upload your Emirates ID</p>
+            <p class="upload-note">JPG, PNG or PDF</p>
+          </div>
+          <div class="upload-inner upload-success" id="eidUploadOk">
+            <i data-lucide="check-circle-2"></i>
+            <p id="eidFileName">document.pdf</p>
+          </div>
+        </div>
+        <button type="button" class="link-ocr" id="eidOcrFailBtn">Simulate OCR failure</button>
+        <div class="ocr-fail-actions" id="eidOcrFailActions">
+          <button type="button" class="btn-secondary" id="eidReupload">Re-upload photo</button>
+          <button type="button" class="btn-secondary" id="eidManual">Enter manually</button>
+        </div>
+
+        <div id="eidFields" style="display:none;margin-top:16px;">
+          <div class="form-group">
+            <label for="fullName">Full Name</label>
+            <input class="input" id="fullName" placeholder="As on your Emirates ID" autocomplete="name" />
+            <div class="field-error" id="fullNameErr">This field is required</div>
+          </div>
+          <div class="form-group">
+            <label for="eidNumber">Emirates ID Number</label>
+            <input class="input" id="eidNumber" placeholder="784-YYYY-XXXXXXX-X" inputmode="text" />
+            <div class="field-error" id="eidNumberErr">This field is required</div>
+          </div>
+          <button type="button" class="btn-primary" id="sec1Confirm">Confirm Details</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="section-block hidden" id="sec2Block" data-step-anchor="2">
+      <div class="summary-row" id="sec2Summary">
+        <i data-lucide="check-circle-2" class="sum-icon"></i>
+        <span class="sum-text" id="sec2SummaryText">Banking Information</span>
+        <button type="button" class="btn-edit" id="sec2Edit">Edit</button>
+      </div>
+      <div class="card hidden" id="sec2Card">
+        <h2 class="card-title">Banking Information</h2>
+        <p class="card-sub">Enter your bank details</p>
+
+        <div class="form-group">
+          <label for="bankName">Bank Name</label>
+          <input class="input" id="bankName" placeholder="e.g. Emirates NBD, ADCB, FAB..." autocomplete="organization" />
+          <div class="field-error" id="bankNameErr">Bank Name is required</div>
+        </div>
+
+        <div class="form-group">
+          <label>Payment Method</label>
+          <div class="segmented" id="payMethodSeg">
+            <button type="button" data-method="iban" id="btnIban">IBAN</button>
+            <button type="button" data-method="card" id="btnCard">Credit Card</button>
+          </div>
+        </div>
+
+        <div id="ibanBlock" style="display:none;">
+          <div class="upload-zone" id="ibanUploadZone">
+            <input type="file" id="ibanFile" accept=".jpg,.jpeg,.png,.pdf,image/jpeg,image/png,application/pdf" />
+            <div class="upload-inner upload-prompt">
+              <i data-lucide="upload-cloud"></i>
+              <p>Upload IBAN document</p>
+              <p class="upload-note">JPG, PNG or PDF</p>
+            </div>
+            <div class="upload-inner upload-success" id="ibanUploadOk">
+              <i data-lucide="check-circle-2"></i>
+              <p id="ibanFileName">document.pdf</p>
+            </div>
+          </div>
+          <button type="button" class="link-ocr" id="ibanOcrFailBtn">Simulate OCR failure</button>
+          <div class="ocr-fail-actions" id="ibanOcrFailActions">
+            <button type="button" class="btn-secondary" id="ibanReupload">Re-upload photo</button>
+            <button type="button" class="btn-secondary" id="ibanManual">Enter manually</button>
+          </div>
+          <div id="ibanFieldWrap" style="display:none;margin-top:16px;">
+            <div class="form-group">
+              <label for="ibanInput">IBAN</label>
+              <input class="input" id="ibanInput" placeholder="AE00 0000 0000 0000 0000 000" inputmode="text" />
+              <div class="field-error" id="ibanErr">IBAN is required</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="cardBlock" style="display:none;">
+          <div class="form-group">
+            <label for="ccInput">Credit Card Number</label>
+            <input class="input" id="ccInput" placeholder="XXXX XXXX XXXX XXXX" inputmode="numeric" autocomplete="cc-number" />
+            <div class="field-error" id="ccErr">Credit card number is required</div>
+          </div>
+        </div>
+
+        <button type="button" class="btn-primary" id="sec2Confirm" style="margin-top:8px;">Confirm Details</button>
+      </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="section-block hidden" id="sec3Block" data-step-anchor="3">
+      <div class="summary-row" id="sec3Summary">
+        <i data-lucide="check-circle-2" class="sum-icon"></i>
+        <span class="sum-text">5 signatures completed</span>
+        <button type="button" class="btn-edit" id="sec3Edit">Edit</button>
+      </div>
+      <div class="card hidden" id="sec3Card">
+        <h2 class="card-title">Digital Signature</h2>
+        <p class="card-sub">Sign in each of the 5 boxes below</p>
+        <div class="sig-grid" id="sigGrid"></div>
+        <div class="field-error" id="sigFormErr">Please complete all 5 signatures before submitting</div>
+        <button type="button" class="btn-primary" id="sec3Submit" style="margin-top:12px;">Submit Signatures</button>
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="section-block hidden" id="sec4Block" data-step-anchor="4">
+      <div class="summary-row" id="sec4Summary">
+        <i data-lucide="check-circle-2" class="sum-icon"></i>
+        <span class="sum-text">Mandate confirmed &amp; signed</span>
+      </div>
+      <div class="card hidden" id="sec4Card">
+        <h2 class="card-title">Review &amp; Confirm</h2>
+        <p class="card-sub">Review your mandate details before signing</p>
+        <div class="review-list" id="reviewList"></div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="tcCheck" />
+          <label for="tcCheck">I confirm that I have read and understood the terms and conditions of this Direct Debit mandate.</label>
+        </div>
+        <button type="button" class="btn-primary" id="sec4Confirm">
+          <span id="sec4BtnLabel">Confirm &amp; Sign</span>
+          <i data-lucide="loader-2" class="spinner hidden" id="sec4Spinner" style="width:20px;height:20px;"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="section-block hidden" id="sec5Block" data-step-anchor="5">
+      <div class="card" id="sec5Card">
+        <h2 class="card-title">Your Signed Mandate</h2>
+        <p class="card-sub">Your mandate has been successfully signed</p>
+        <div class="success-banner">
+          <i data-lucide="check-circle-2"></i>
+          <div>
+            <h3>Mandate Signed Successfully — Reference: MND-2026-00847</h3>
+          </div>
+        </div>
+
+        <div class="pdf-viewer-wrapper" role="region" aria-label="Signed Direct Debit Authority Form preview">
+          <div class="pdf-page">
+            <header class="pdf-dd-header">
+              <div class="pdf-dd-header-left">
+                <p class="pdf-dd-title">Direct Debit Authority</p>
+                <p class="pdf-dd-sub">Others</p>
+                <p class="pdf-dd-ar-red">توكيل الخصم المباشر / آخرون</p>
+              </div>
+              <div class="pdf-dd-header-right">
+                <p class="pdf-dd-logo-ar">الاصم المباشر / DIRECT DEBIT</p>
+                <p class="pdf-dd-rev">UAEDDS/DDAO/Rev20140131</p>
+              </div>
+            </header>
+
+            <table class="pdf-oic-table">
+              <tr>
+                <td class="pdf-oic-label-cell">OIC</td>
+                <td>5</td>
+                <td>6</td>
+                <td>9</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>4</td>
+                <td>6</td>
+              </tr>
+            </table>
+
+            <table>
+              <tr>
+                <td class="field-label">Originator Name</td>
+                <td class="field-value">Demo Merchant LLC</td>
+                <td class="field-arabic">اسم المنشئ</td>
+              </tr>
+              <tr>
+                <td class="field-label">Primary Sponsoring Bank</td>
+                <td class="field-value">Emirates NBD</td>
+                <td class="field-arabic">البنك الراعي الأساسي</td>
+              </tr>
+              <tr>
+                <td class="field-label">DDA Purpose Code</td>
+                <td class="field-value">Others</td>
+                <td class="field-arabic">رمز الغرض</td>
+              </tr>
+            </table>
+
+            <table>
+              <tr>
+                <td class="field-label">Consumer/Premises/etc<span class="required">*</span></td>
+                <td class="field-value">Individual</td>
+                <td class="field-arabic">المستهلك/المباني/الخ</td>
+              </tr>
+              <tr>
+                <td class="field-label">Customer Type<span class="required">*</span></td>
+                <td class="field-value">Individual — فردي ✓</td>
+                <td class="field-arabic">نوع العميل</td>
+              </tr>
+              <tr>
+                <td class="field-label">Customer ID Type<span class="required">*</span> + Number<span class="required">*</span></td>
+                <td class="field-value">EIDAC — 784-1990-1234567-8</td>
+                <td class="field-arabic">نوع بطاقة تعريف العميل</td>
+              </tr>
+            </table>
+
+            <table>
+              <tr>
+                <td class="field-num">1</td>
+                <td class="field-label"><span class="required">*</span> Bank Name</td>
+                <td class="field-value">Emirates NBD</td>
+                <td class="field-arabic">اسم البنك</td>
+              </tr>
+              <tr>
+                <td class="field-num">2</td>
+                <td class="field-label"><span class="required">*</span> Title of Account</td>
+                <td class="field-value">Ahmed Al Mansouri</td>
+                <td class="field-arabic">اسم الحساب</td>
+              </tr>
+              <tr>
+                <td class="field-num">3</td>
+                <td class="field-label"><span class="required">*</span> Account Type</td>
+                <td class="field-value">Current/Savings Account ✓</td>
+                <td class="field-arabic">نوع الحساب</td>
+              </tr>
+              <tr>
+                <td class="field-num">4</td>
+                <td class="field-label"><span class="required">*</span> IBAN / Card Number</td>
+                <td class="field-value">AE07 0331 2345 6789 0123 456</td>
+                <td class="field-arabic">رقم الحساب الدولي</td>
+              </tr>
+              <tr>
+                <td class="field-num">5</td>
+                <td class="field-label">Mobile Number</td>
+                <td class="field-value">+971 50 123 4567</td>
+                <td class="field-arabic">رقم الهاتف المحمول</td>
+              </tr>
+              <tr>
+                <td class="field-num">6</td>
+                <td class="field-label">Email Address</td>
+                <td class="field-value">ahmed.mansouri@email.com</td>
+                <td class="field-arabic">عنوان البريد الإلكتروني</td>
+              </tr>
+              <tr>
+                <td class="field-num">7</td>
+                <td class="field-label"><span class="required">*</span> Issued for</td>
+                <td class="field-value">Demo Merchant LLC</td>
+                <td class="field-arabic">اصدر لـ</td>
+              </tr>
+              <tr>
+                <td class="field-num">8</td>
+                <td class="field-label"><span class="required">*</span> Commences On</td>
+                <td class="field-value">01 / 09 / 2026</td>
+                <td class="field-arabic">تبدأ في</td>
+              </tr>
+              <tr>
+                <td class="field-num">9</td>
+                <td class="field-label"><span class="required">*</span> Expires On</td>
+                <td class="field-value">01 / 09 / 2027</td>
+                <td class="field-arabic">تنتهي في</td>
+              </tr>
+              <tr>
+                <td class="field-num">10</td>
+                <td class="field-label"><span class="required">*</span> Fixed/Variable Amount</td>
+                <td class="field-value">Fixed: ✓</td>
+                <td class="field-arabic">المبلغ الثابت/المتغير</td>
+              </tr>
+              <tr>
+                <td class="field-num">11</td>
+                <td class="field-label"><span class="required">*</span> Payment Frequency</td>
+                <td class="field-value">Monthly ✓</td>
+                <td class="field-arabic">طريقة الخصم</td>
+              </tr>
+              <tr>
+                <td class="field-num">12</td>
+                <td class="field-label"><span class="required">*</span> Fixed Amount 1 / Minimum Amount</td>
+                <td class="field-value">500.00</td>
+                <td class="field-arabic">المبلغ الثابت 1 / الحد الأدنى</td>
+              </tr>
+              <tr>
+                <td class="field-num">13</td>
+                <td class="field-label"><span class="required">*</span> Fixed Amount 2 / Maximum Amount</td>
+                <td class="field-value">500.00</td>
+                <td class="field-arabic">المبلغ الثابت 2 / الحد الأقصى</td>
+              </tr>
+              <tr>
+                <td class="field-num">14</td>
+                <td class="field-label"><span class="required">*</span> Currency Code</td>
+                <td class="field-value">AED</td>
+                <td class="field-arabic">رمز العملة</td>
+              </tr>
+            </table>
+
+            <div class="pdf-agreement">
+              <div>
+                <p>
+                  <strong>Agreement and Authorization</strong>
+                </p>
+                <p>
+                  The undersigned payer hereby authorizes the Originator named above and the Sponsoring Bank to debit the account identified in this Direct Debit Authority for the amounts and frequency specified, in accordance with the UAE Direct Debit System Rules and regulatory instructions issued by the Central Bank of the UAE. The payer confirms that the information provided is true and complete and understands that this mandate remains effective until cancelled in accordance with applicable procedures or until the expiry date shown above.
+                </p>
+                <p>
+                  By signing below, the payer acknowledges receipt of the terms governing direct debits and agrees that debits may be processed as described herein. Any amendment or revocation shall be subject to the timelines and requirements prescribed under the UAE Direct Debit System.
+                </p>
+              </div>
+              <div dir="rtl" style="text-align: right;">
+                <p>
+                  <strong>الاتفاق والتفويض</strong>
+                </p>
+                <p>
+                  يقر الدافع الموقع أدناه بتفويض المنشئ المذكور أعلاه والبنك الراعي بخصم الحساب الموضح في توكيل الخصم المباشر هذا وفقاً للمبالغ وتكرار الدفع المحددين، وذلك بموجب قواعد نظام الخصم المباشر في دولة الإمارات والتعليمات التنظيمية الصادرة عن البنك المركزي لدولة الإمارات العربية المتحدة. يؤكد الدافع صحة واكتمال البيانات المقدمة وعلمه بأن هذا التوكيل يظل نافذاً حتى إلغاؤه وفق الإجراءات المعمول بها أو حتى تاريخ الانتهاء الموضح أعلاه.
+                </p>
+                <p>
+                  بالتوقيع أدناه يقر الدافع باستلامه الشروط الحاكمة للخصم المباشر وموافقته على معالجة الخصومات كما هو منصوص عليه. أي تعديل أو إلغاء يخضع للمدد والمتطلبات المنصوص عليها ضمن نظام الخصم المباشر في دولة الإمارات.
+                </p>
+              </div>
+            </div>
+
+            <div class="pdf-sig-row">
+              <div class="pdf-sig-cell">
+                <p class="pdf-sig-cap">Payer Name, Signature &amp; Date<span class="required">*</span> — اسم الدافع، التوقيع والتاريخ</p>
+                <p class="pdf-sig-name">Ahmed Al Mansouri</p>
+                <svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path
+                    d="M5,30 C20,10 30,35 50,20 C70,5 80,30 100,15 C110,10 115,20 118,18"
+                    stroke="#1A1A1A"
+                    stroke-width="1.5"
+                    fill="none"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </div>
+              <div class="pdf-sig-cell">
+                <p class="pdf-sig-cap">Signature Verified — التوقيع</p>
+                <div class="pdf-sig-placeholder"></div>
+              </div>
+              <div class="pdf-sig-cell">
+                <p class="pdf-sig-cap">Name / الاسم</p>
+                <p class="pdf-sig-name">Ahmed Al Mansouri</p>
+              </div>
+            </div>
+
+            <div class="pdf-footer-check">✓ I have ✓ <strong>not</strong> left the Minimum amount as blank</div>
+            <div class="pdf-footer-check">✓ I have ✓ <strong>not</strong> left the Maximum amount as blank</div>
+          </div>
+        </div>
+
+        <p style="text-align:center; font-size:12px; color:#4E465E; margin-top:8px;">🔒 View only — this document cannot be downloaded</p>
+      </div>
+    </div>
+
+    <footer class="page-footer">
+      <svg class="footer-mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="autoraFooterGrad" x1="8" y1="54" x2="54" y2="10" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#7A5CFF"/><stop offset="45%" stop-color="#FF6B68"/><stop offset="100%" stop-color="#B36CFF"/>
+          </linearGradient>
+        </defs>
+        <path fill="url(#autoraFooterGrad)" d="M32 6 C22 6 13 12 10 22 C8 28 9 36 13 42 L19 38 C16 33 15 27 17 22 C19 15 26 10 34 11 C42 12 49 19 51 27 C52 32 51 38 48 43 L54 47 C58 40 60 31 58 23 C55 12 44 6 32 6 Z"/>
+      </svg>
+      <span>Secured by Autora · Regulated by the Central Bank of the UAE</span>
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      const PRE_FULL = "Ahmed Al Mansouri";
+      const PRE_EID = "784-1990-1234567-8";
+      const PRE_IBAN = "AE07 0331 2345 6789 0123 456";
+
+      const state = {
+        s1: false,
+        s2: false,
+        s3: false,
+        s4: false,
+        flowLocked: false,
+        eid: { hasFile: false, fileName: "", ocrFail: false, manual: false },
+        bank: { method: null, ibanHasFile: false, ibanFileName: "", ibanOcrFail: false, ibanManual: false },
+      };
+
+      const sigInk = [false, false, false, false, false];
+
+      let allowScrollIntoView = false;
+
+      const $ = (id) => document.getElementById(id);
+      const qs = (sel, root) => (root || document).querySelector(sel);
+
+      function isStepBlockVisible(n) {
+        if (n === 1) return true;
+        if (n === 2) return state.s1;
+        if (n === 3) return state.s1 && state.s2;
+        if (n === 4) return state.s1 && state.s2 && state.s3;
+        if (n === 5) return state.s1 && state.s2 && state.s3 && state.s4;
+        return false;
+      }
+
+      function scrollToActiveSection() {
+        let target = null;
+        if (!state.s1) target = $("sec1Card");
+        else if (!state.s2) target = $("sec2Card");
+        else if (!state.s3) target = $("sec3Card");
+        else if (!state.s4) target = $("sec4Card");
+        else target = $("sec5Card");
+        if (target && !target.classList.contains("hidden")) {
+          target.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      }
+
+      function updateStepPills() {
+        document.querySelectorAll("[data-step-scroll]").forEach(function (pill) {
+          const n = +pill.getAttribute("data-step-scroll");
+          pill.disabled = !isStepBlockVisible(n);
+        });
+      }
+
+      function updateDemoBar() {
+        const next = $("demoNextBtn");
+        if (!next) return;
+        if (state.flowLocked) {
+          next.disabled = true;
+          next.textContent = "Demo: flow complete";
+        } else {
+          next.disabled = false;
+          next.textContent = "Demo: next step";
+        }
+      }
+
+      function demoStrokeAllSignatures() {
+        document.querySelectorAll("#sigGrid canvas").forEach(function (canvas) {
+          const idx = +canvas.getAttribute("data-idx");
+          resizeCanvas(canvas);
+          const ctx = canvas.getContext("2d");
+          const w = canvas.getBoundingClientRect().width;
+          ctx.beginPath();
+          ctx.moveTo(10, 60);
+          ctx.lineTo(Math.max(w - 10, 30), 58);
+          ctx.stroke();
+          sigInk[idx] = true;
+        });
+        updateSec3Button();
+      }
+
+      function demoAdvanceOneStep() {
+        if (state.flowLocked) return;
+        if (!state.s1) {
+          onEidFile({ name: "demo-emirates-id.jpg" });
+          $("sec1Confirm").click();
+          return;
+        }
+        if (!state.s2) {
+          $("bankName").value = "Emirates NBD";
+          setPayMethod("iban");
+          onIbanFile({ name: "demo-iban-document.pdf" });
+          $("sec2Confirm").click();
+          return;
+        }
+        if (!state.s3) {
+          demoStrokeAllSignatures();
+          $("sec3Submit").click();
+          return;
+        }
+        if (!state.s4) {
+          buildReview();
+          $("tcCheck").checked = true;
+          updateSec4Button();
+          $("sec4Confirm").click();
+        }
+      }
+
+      function demoResetFlow() {
+        state.s1 = false;
+        state.s2 = false;
+        state.s3 = false;
+        state.s4 = false;
+        state.flowLocked = false;
+        state.eid = { hasFile: false, fileName: "", ocrFail: false, manual: false };
+        state.bank = { method: null, ibanHasFile: false, ibanFileName: "", ibanOcrFail: false, ibanManual: false };
+        document.body.classList.remove("flow-locked");
+        resetEidUpload();
+        $("bankName").value = "";
+        $("ccInput").value = "";
+        $("tcCheck").checked = false;
+        $("sec4Spinner").classList.add("hidden");
+        $("sec4BtnLabel").textContent = "Confirm & Sign";
+        $("sec4Confirm").disabled = false;
+        setPayMethod(null);
+        for (let i = 0; i < 5; i++) sigInk[i] = false;
+        buildSignatureGrid();
+        render();
+        refreshLucide();
+      }
+
+      function setSummaryVisible(row, v) {
+        row.classList.toggle("visible", v);
+      }
+
+      function clearErrors() {
+        document.querySelectorAll(".field-error").forEach((e) => e.classList.remove("show"));
+        document.querySelectorAll(".input-invalid").forEach((i) => i.classList.remove("input-invalid"));
+      }
+
+      function setErr(inputId, errId, msg) {
+        const inp = $(inputId);
+        const er = $(errId);
+        if (msg && er) er.textContent = msg;
+        if (inp) inp.classList.add("input-invalid");
+        if (er) er.classList.add("show");
+      }
+
+      function refreshLucide() {
+        try {
+          if (window.lucide && lucide.createIcons) lucide.createIcons();
+        } catch (e) {
+          /* CDN or icon API blocked — page still works */
+        }
+      }
+
+      function activeStepIndex() {
+        if (state.flowLocked) return 5;
+        if (!state.s1) return 0;
+        if (!state.s2) return 1;
+        if (!state.s3) return 2;
+        if (!state.s4) return 3;
+        return 4;
+      }
+
+      function updateProgress() {
+        const idx = activeStepIndex();
+        document.querySelectorAll(".progress-step").forEach((step, i) => {
+          step.classList.remove("active", "done");
+          if (idx >= 5) {
+            step.classList.add("done");
+          } else if (i < idx) {
+            step.classList.add("done");
+          } else if (i === idx) {
+            step.classList.add("active");
+          }
+        });
+        refreshLucide();
+      }
+
+      function paymentFieldReady() {
+        if (state.bank.method === "iban") {
+          const v = ($("ibanInput") && $("ibanInput").value.trim()) || "";
+          return v.length > 0;
+        }
+        if (state.bank.method === "card") {
+          const digits = ($("ccInput") && $("ccInput").value.replace(/\D/g, "")) || "";
+          return digits.length > 0;
+        }
+        return false;
+      }
+
+      function updateSec2Button() {
+        const bn = ($("bankName") && $("bankName").value.trim()) || "";
+        const btn = $("sec2Confirm");
+        if (!btn) return;
+        btn.disabled = !(bn.length > 0 && state.bank.method && paymentFieldReady());
+      }
+
+      function updateSec1Button() {
+        const fn = ($("fullName") && $("fullName").value.trim()) || "";
+        const en = ($("eidNumber") && $("eidNumber").value.trim()) || "";
+        const btn = $("sec1Confirm");
+        if (btn) btn.disabled = !(fn && en);
+      }
+
+      function updateSec3Button() {
+        const btn = $("sec3Submit");
+        if (!btn) return;
+        btn.disabled = !sigInk.every(Boolean);
+      }
+
+      function updateSec4Button() {
+        const btn = $("sec4Confirm");
+        if (!btn) return;
+        btn.disabled = !$("tcCheck").checked || state.flowLocked;
+      }
+
+      function last4Digits(str) {
+        const d = (str || "").replace(/\D/g, "");
+        if (d.length < 4) return d;
+        return d.slice(-4);
+      }
+
+      function buildReview() {
+        const fn = $("fullName").value.trim();
+        const eid = $("eidNumber").value.trim();
+        const bankName = $("bankName").value.trim();
+        const method = state.bank.method;
+        const iban = $("ibanInput").value.trim();
+        const cc = $("ccInput").value.trim();
+
+        const rows = [
+          ["Full Name", fn],
+          ["Emirates ID Number", eid],
+          ["Bank Name", bankName],
+          ["Payment Method", method === "card" ? "Credit Card" : "IBAN"],
+        ];
+        if (method === "iban") rows.push(["IBAN", iban]);
+        if (method === "card") rows.push(["Credit Card", "•••• " + last4Digits(cc)]);
+
+        rows.push(
+          ["Merchant", "Demo Merchant LLC"],
+          ["Frequency", "Monthly"],
+          ["Collection Day", "5th of each month"],
+          ["Collection Amount", "AED 500.00"],
+          ["Amount Type", "Fixed"],
+          ["Start Date", "01/09/2026"],
+          ["End Date", "01/09/2027"],
+          ["Lifetime", "1 Year"]
+        );
+
+        const list = $("reviewList");
+        list.innerHTML = "";
+        rows.forEach(([k, v]) => {
+          const r = document.createElement("div");
+          r.className = "review-row";
+          r.innerHTML = '<span class="review-k"></span><span class="review-v"></span>';
+          r.querySelector(".review-k").textContent = k + ":";
+          r.querySelector(".review-v").textContent = v;
+          list.appendChild(r);
+        });
+      }
+
+      function render() {
+        const locked = state.flowLocked;
+
+        document.body.classList.toggle("flow-locked", locked);
+
+        const showBlock = (n) => {
+          if (n === 1) return true;
+          if (n === 2) return state.s1;
+          if (n === 3) return state.s1 && state.s2;
+          if (n === 4) return state.s1 && state.s2 && state.s3;
+          if (n === 5) return state.s1 && state.s2 && state.s3 && state.s4;
+          return false;
+        };
+
+        $("sec2Block").classList.toggle("hidden", !showBlock(2));
+        $("sec3Block").classList.toggle("hidden", !showBlock(3));
+        $("sec4Block").classList.toggle("hidden", !showBlock(4));
+        $("sec5Block").classList.toggle("hidden", !showBlock(5));
+
+        setSummaryVisible($("sec1Summary"), state.s1);
+        setSummaryVisible($("sec2Summary"), state.s2);
+        setSummaryVisible($("sec3Summary"), state.s3);
+        setSummaryVisible($("sec4Summary"), state.s4);
+
+        const e1 = !state.s1 && showBlock(1);
+        $("sec1Card").classList.toggle("hidden", !e1);
+
+        const e2 = showBlock(2) && !state.s2;
+        $("sec2Card").classList.toggle("hidden", !e2);
+
+        const e3 = showBlock(3) && !state.s3;
+        $("sec3Card").classList.toggle("hidden", !e3);
+
+        const e4 = showBlock(4) && !state.s4;
+        $("sec4Card").classList.toggle("hidden", !e4);
+
+        $("sec1SummaryText").textContent = "Emirates ID — " + ($("fullName").value.trim() || "—");
+
+        const bn = $("bankName").value.trim();
+        let tail = "";
+        if (state.bank.method === "iban") tail = last4Digits($("ibanInput").value);
+        else if (state.bank.method === "card") tail = last4Digits($("ccInput").value);
+        $("sec2SummaryText").textContent =
+          "Banking Information — " + (bn || "—") + " · " + (tail ? "···· " + tail : "—");
+
+        updateProgress();
+        updateSec1Button();
+        updateSec2Button();
+        updateSec3Button();
+        updateSec4Button();
+        updateStepPills();
+        updateDemoBar();
+        if (allowScrollIntoView) {
+          requestAnimationFrame(scrollToActiveSection);
+        }
+        refreshLucide();
+      }
+
+      function resetEidUpload() {
+        state.eid = { hasFile: false, fileName: "", ocrFail: false, manual: false };
+        $("eidFile").value = "";
+        $("eidUploadZone").classList.remove("has-file");
+        $("eidOcrFailActions").classList.remove("visible");
+        $("eidFields").style.display = "none";
+        $("fullName").value = "";
+        $("eidNumber").value = "";
+        clearErrors();
+      }
+
+      function onEidFile(f) {
+        if (!f) return;
+        state.eid.manual = false;
+        state.eid.hasFile = true;
+        state.eid.fileName = f.name;
+        state.eid.ocrFail = false;
+        $("eidUploadZone").classList.add("has-file");
+        $("eidFileName").textContent = f.name;
+        $("eidOcrFailActions").classList.remove("visible");
+        $("eidFields").style.display = "block";
+        $("fullName").value = PRE_FULL;
+        $("eidNumber").value = PRE_EID;
+        updateSec1Button();
+        refreshLucide();
+      }
+
+      function resetIbanUpload() {
+        state.bank.ibanHasFile = false;
+        state.bank.ibanFileName = "";
+        state.bank.ibanOcrFail = false;
+        state.bank.ibanManual = false;
+        $("ibanFile").value = "";
+        $("ibanUploadZone").classList.remove("has-file");
+        $("ibanOcrFailActions").classList.remove("visible");
+        $("ibanFieldWrap").style.display = "none";
+        $("ibanInput").value = "";
+        updateSec2Button();
+      }
+
+      function onIbanFile(f) {
+        if (!f) return;
+        state.bank.ibanManual = false;
+        state.bank.ibanHasFile = true;
+        state.bank.ibanFileName = f.name;
+        state.bank.ibanOcrFail = false;
+        $("ibanUploadZone").classList.add("has-file");
+        $("ibanFileName").textContent = f.name;
+        $("ibanOcrFailActions").classList.remove("visible");
+        $("ibanFieldWrap").style.display = "block";
+        $("ibanInput").value = PRE_IBAN;
+        updateSec2Button();
+      }
+
+      function resetAllSignatures() {
+        for (let i = 0; i < 5; i++) {
+          sigInk[i] = false;
+          const canvas = qs('#sigGrid canvas[data-idx="' + i + '"]');
+          if (canvas) {
+            const ctx = canvas.getContext("2d");
+            resizeCanvas(canvas);
+          }
+        }
+        updateSec3Button();
+      }
+
+      function unlockFrom(editSection) {
+        if (state.flowLocked) return;
+        if (editSection <= 1) {
+          state.s1 = false;
+          state.s2 = false;
+          state.s3 = false;
+          state.s4 = false;
+          resetAllSignatures();
+        } else if (editSection === 2) {
+          state.s2 = false;
+          state.s3 = false;
+          state.s4 = false;
+          resetAllSignatures();
+        } else if (editSection === 3) {
+          state.s3 = false;
+          state.s4 = false;
+          resetAllSignatures();
+        }
+      }
+
+      $("eidFile").addEventListener("change", function () {
+        const f = this.files && this.files[0];
+        if (f) onEidFile(f);
+      });
+
+      $("eidOcrFailBtn").addEventListener("click", function (e) {
+        e.preventDefault();
+        if (!state.eid.hasFile) return;
+        state.eid.ocrFail = true;
+        $("eidFields").style.display = "none";
+        $("eidOcrFailActions").classList.add("visible");
+        clearErrors();
+      });
+
+      $("eidReupload").addEventListener("click", function () {
+        resetEidUpload();
+      });
+
+      $("eidManual").addEventListener("click", function () {
+        state.eid.manual = true;
+        state.eid.ocrFail = false;
+        $("eidOcrFailActions").classList.remove("visible");
+        $("eidFields").style.display = "block";
+        $("fullName").value = "";
+        $("eidNumber").value = "";
+        updateSec1Button();
+      });
+
+      ["fullName", "eidNumber"].forEach((id) => {
+        $(id).addEventListener("input", function () {
+          clearErrors();
+          updateSec1Button();
+        });
+      });
+
+      $("sec1Confirm").addEventListener("click", function () {
+        clearErrors();
+        const fn = $("fullName").value.trim();
+        const en = $("eidNumber").value.trim();
+        let ok = true;
+        if (!fn) {
+          setErr("fullName", "fullNameErr", "This field is required");
+          ok = false;
+        }
+        if (!en) {
+          setErr("eidNumber", "eidNumberErr", "This field is required");
+          ok = false;
+        }
+        if (!ok) return;
+        state.s1 = true;
+        render();
+      });
+
+      $("sec1Edit").addEventListener("click", function () {
+        if (state.flowLocked) return;
+        unlockFrom(1);
+        render();
+      });
+
+      $("bankName").addEventListener("input", function () {
+        clearErrors();
+        updateSec2Button();
+      });
+
+      function setPayMethod(m) {
+        state.bank.method = m;
+        qs("#payMethodSeg button[data-method='iban']").classList.toggle("active", m === "iban");
+        qs("#payMethodSeg button[data-method='card']").classList.toggle("active", m === "card");
+        $("ibanBlock").style.display = m === "iban" ? "block" : "none";
+        $("cardBlock").style.display = m === "card" ? "block" : "none";
+        if (m !== "iban") resetIbanUpload();
+        if (m !== "card") {
+          $("ccInput").value = "";
+          $("ccErr").classList.remove("show");
+          $("ccInput").classList.remove("input-invalid");
+        }
+        updateSec2Button();
+      }
+
+      qs("#payMethodSeg").addEventListener("click", function (e) {
+        const btn = e.target.closest("button[data-method]");
+        if (!btn) return;
+        setPayMethod(btn.getAttribute("data-method"));
+      });
+
+      $("ibanFile").addEventListener("change", function () {
+        const f = this.files && this.files[0];
+        if (f) onIbanFile(f);
+      });
+
+      $("ibanOcrFailBtn").addEventListener("click", function (e) {
+        e.preventDefault();
+        if (!state.bank.ibanHasFile) return;
+        state.bank.ibanOcrFail = true;
+        $("ibanFieldWrap").style.display = "none";
+        $("ibanOcrFailActions").classList.add("visible");
+        $("ibanInput").value = "";
+        updateSec2Button();
+      });
+
+      $("ibanReupload").addEventListener("click", function () {
+        resetIbanUpload();
+      });
+
+      $("ibanManual").addEventListener("click", function () {
+        state.bank.ibanManual = true;
+        state.bank.ibanOcrFail = false;
+        $("ibanOcrFailActions").classList.remove("visible");
+        $("ibanFieldWrap").style.display = "block";
+        $("ibanInput").value = "";
+        updateSec2Button();
+      });
+
+      $("ibanInput").addEventListener("input", function () {
+        $("ibanErr").classList.remove("show");
+        $("ibanInput").classList.remove("input-invalid");
+        updateSec2Button();
+      });
+
+      $("ccInput").addEventListener("input", function () {
+        $("ccErr").classList.remove("show");
+        $("ccInput").classList.remove("input-invalid");
+        updateSec2Button();
+      });
+
+      $("sec2Confirm").addEventListener("click", function () {
+        clearErrors();
+        const bn = $("bankName").value.trim();
+        if (!bn) {
+          setErr("bankName", "bankNameErr", "Bank Name is required");
+          return;
+        }
+        if (!state.bank.method) return;
+        if (state.bank.method === "iban") {
+          const ib = $("ibanInput").value.trim();
+          if (!ib) {
+            setErr("ibanInput", "ibanErr", "IBAN is required");
+            return;
+          }
+        } else {
+          const digits = $("ccInput").value.replace(/\D/g, "");
+          if (!digits) {
+            setErr("ccInput", "ccErr", "Credit card number is required");
+            return;
+          }
+        }
+        state.s2 = true;
+        buildReview();
+        render();
+      });
+
+      $("sec2Edit").addEventListener("click", function () {
+        if (state.flowLocked) return;
+        unlockFrom(2);
+        render();
+      });
+
+      function buildSignatureGrid() {
+        const grid = $("sigGrid");
+        grid.innerHTML = "";
+        for (let i = 0; i < 5; i++) {
+          const wrap = document.createElement("div");
+          wrap.className = "sig-wrap";
+          wrap.innerHTML =
+            '<div class="sig-head"><label>Signature ' +
+            (i + 1) +
+            '</label><button type="button" class="btn-clear" data-idx="' +
+            i +
+            '">Clear</button></div><div class="sig-canvas-box"><canvas data-idx="' +
+            i +
+            '"></canvas></div>';
+          grid.appendChild(wrap);
+        }
+        grid.querySelectorAll(".btn-clear").forEach((btn) => {
+          btn.addEventListener("click", function () {
+            const idx = +btn.getAttribute("data-idx");
+            clearSig(idx);
+          });
+        });
+        grid.querySelectorAll("canvas").forEach((canvas) => {
+          setupCanvas(canvas, +canvas.getAttribute("data-idx"));
+        });
+      }
+
+      function resizeCanvas(canvas) {
+        const box = canvas.parentElement;
+        const w = box.clientWidth;
+        const h = 120;
+        const ratio = window.devicePixelRatio || 1;
+        canvas.width = w * ratio;
+        canvas.height = h * ratio;
+        const ctx = canvas.getContext("2d");
+        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+        ctx.lineWidth = 2;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.strokeStyle = "#120C24";
+      }
+
+      function clearSig(idx) {
+        const canvas = qs('#sigGrid canvas[data-idx="' + idx + '"]');
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        resizeCanvas(canvas);
+        sigInk[idx] = false;
+        updateSec3Button();
+      }
+
+      function setupCanvas(canvas, idx) {
+        resizeCanvas(canvas);
+        const ctx = canvas.getContext("2d");
+        let drawing = false;
+
+        function pos(evt) {
+          const r = canvas.getBoundingClientRect();
+          const x = (evt.clientX !== undefined ? evt.clientX : evt.touches[0].clientX) - r.left;
+          const y = (evt.clientY !== undefined ? evt.clientY : evt.touches[0].clientY) - r.top;
+          return { x, y };
+        }
+
+        function start(evt) {
+          evt.preventDefault();
+          drawing = true;
+          const p = pos(evt);
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+        }
+
+        function move(evt) {
+          if (!drawing) return;
+          evt.preventDefault();
+          const p = pos(evt);
+          ctx.lineTo(p.x, p.y);
+          ctx.stroke();
+          sigInk[idx] = true;
+          updateSec3Button();
+        }
+
+        function end(evt) {
+          if (evt) evt.preventDefault();
+          drawing = false;
+        }
+
+        canvas.addEventListener("mousedown", start);
+        canvas.addEventListener("mousemove", move);
+        window.addEventListener("mouseup", end);
+
+        canvas.addEventListener("touchstart", start, { passive: false });
+        canvas.addEventListener("touchmove", move, { passive: false });
+        canvas.addEventListener("touchend", end);
+        canvas.addEventListener("touchcancel", end);
+      }
+
+      $("sec3Submit").addEventListener("click", function () {
+        $("sigFormErr").classList.remove("show");
+        if (!sigInk.every(Boolean)) {
+          $("sigFormErr").classList.add("show");
+          return;
+        }
+        state.s3 = true;
+        buildReview();
+        render();
+      });
+
+      $("sec3Edit").addEventListener("click", function () {
+        if (state.flowLocked) return;
+        unlockFrom(3);
+        render();
+      });
+
+      $("tcCheck").addEventListener("change", updateSec4Button);
+
+      $("sec4Confirm").addEventListener("click", function () {
+        if (!$("tcCheck").checked || state.flowLocked) return;
+        $("sec4Spinner").classList.remove("hidden");
+        $("sec4BtnLabel").textContent = "Signing…";
+        $("sec4Confirm").disabled = true;
+
+        setTimeout(function () {
+          state.s4 = true;
+          state.flowLocked = true;
+          $("sec4Spinner").classList.add("hidden");
+          $("sec4BtnLabel").textContent = "Confirm & Sign";
+          render();
+        }, 1500);
+      });
+
+      window.addEventListener("resize", function () {
+        document.querySelectorAll("#sigGrid canvas").forEach((c) => {
+          const ink = sigInk[+c.getAttribute("data-idx")];
+          if (!ink) resizeCanvas(c);
+        });
+      });
+
+      $("demoNextBtn").addEventListener("click", demoAdvanceOneStep);
+      $("demoResetBtn").addEventListener("click", demoResetFlow);
+      document.querySelectorAll("[data-step-scroll]").forEach(function (pill) {
+        pill.addEventListener("click", function () {
+          if (pill.disabled) return;
+          var n = +pill.getAttribute("data-step-scroll");
+          var block = $("sec" + n + "Block");
+          if (block) block.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      });
+
+      buildSignatureGrid();
+      resetEidUpload();
+      render();
+      allowScrollIntoView = true;
+      refreshLucide();
+    })();
+  </script>
+</body>
+</html>
