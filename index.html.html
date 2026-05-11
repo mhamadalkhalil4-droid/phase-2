@@ -166,7 +166,8 @@
     }
     .pen-toolbar.disabled .color-circle,
     .pen-toolbar.disabled .width-option,
-    .pen-toolbar.disabled .undo-btn {
+    .pen-toolbar.disabled .btn-undo,
+    .pen-toolbar.disabled .btn-clear {
       cursor: not-allowed;
     }
 
@@ -229,31 +230,60 @@
       width: 22px;
     }
 
-    .undo-btn {
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
-      border: 1px solid #EAE5F4;
-      background: white;
-      cursor: pointer;
+    .signature-main-column {
+      flex: 1;
+      min-width: 0;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      color: #4E465E;
-      margin-top: 8px;
-      padding: 0;
-      flex-shrink: 0;
+      flex-direction: column;
+      align-items: stretch;
     }
 
-    .undo-btn:disabled {
+    .sig-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+      justify-content: flex-start;
+    }
+    .btn-undo,
+    .btn-clear {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid #eae5f4;
+      background: white;
+      font-size: 13px;
+      font-family: Inter, sans-serif;
+      cursor: pointer;
+      color: #4e465e;
+      font-weight: 500;
+    }
+    .btn-clear {
+      border-color: #ffe8e7;
+      color: #ff6b68;
+    }
+    .btn-undo:disabled,
+    .btn-clear:disabled {
       opacity: 0.35;
       cursor: not-allowed;
+    }
+    .btn-undo:not(:disabled):hover {
+      background: #f8f7fb;
+    }
+    .btn-clear:not(:disabled):hover {
+      background: #fff5f5;
+    }
+
+    .rotate-hint {
+      font-size: 11px;
+      color: #9ca3af;
+      text-align: center;
+      margin: 4px 0 8px;
+      font-style: italic;
     }
 
     .signature-canvas-wrapper {
       flex: 1;
       min-width: 0;
+      min-height: 0;
     }
 
     .signature-canvas {
@@ -976,6 +1006,57 @@
       color: #7A5CFF;
       border-color: #7A5CFF;
     }
+
+    /* LANDSCAPE MODE — signature pages only */
+    @media screen and (orientation: landscape) and (max-height: 500px) {
+      .progress-bar-wrapper {
+        display: none !important;
+      }
+      .sig-page-title {
+        font-size: 13px !important;
+        margin-bottom: 4px !important;
+      }
+      .sig-instruction {
+        font-size: 11px !important;
+        margin-bottom: 4px !important;
+      }
+
+      .signature-body {
+        flex-direction: row !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+        height: calc(100vh - 120px) !important;
+      }
+
+      .pen-options {
+        width: 44px !important;
+        flex-direction: column !important;
+        flex-shrink: 0 !important;
+        overflow-y: auto !important;
+      }
+
+      .signature-canvas-wrapper {
+        flex: 1 !important;
+        height: 100% !important;
+      }
+
+      .signature-canvas {
+        height: 100% !important;
+        width: 100% !important;
+        min-height: 0 !important;
+      }
+
+      .rotate-hint {
+        display: none !important;
+      }
+
+      .sig-actions {
+        margin-top: 6px !important;
+      }
+      .nav-buttons {
+        padding: 6px 16px !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -998,7 +1079,7 @@
       <p class="payer-subtitle">Secure Mandate Authorization</p>
     </header>
 
-    <div id="progressWrap">
+    <div id="progressWrap" class="progress-bar-wrapper">
       <nav class="progress-bar" id="progressBarNav" aria-label="Mandate steps">
         <div class="progress-bar-inner" id="progressBarInner">
           <div class="step" data-step-id="0">
@@ -1168,8 +1249,11 @@
     <!-- Page 2: Signature 1 -->
     <div class="flow-page signature-page" data-page="2" id="flowPage2" data-sig-index="0">
       <div class="flow-scroll sig-page-body">
-        <h2 class="card-title sig-page-heading" style="margin-bottom:6px;">Signature 1 of 5</h2>
+        <h2 class="card-title sig-page-heading sig-page-title" style="margin-bottom:6px;">Signature 1 of 5</h2>
         <p class="card-sub sig-instruction" id="sigInstr0">Please sign below exactly as you would sign at your bank.</p>
+        <p class="rotate-hint">
+          📱 Rotate your phone sideways for a wider signing area.
+        </p>
         <div class="signature-body">
           <div class="pen-options pen-toolbar" id="penBar0" data-sig-toolbar="0">
             <div class="color-options" id="penColors0">
@@ -1185,15 +1269,20 @@
               <button type="button" class="width-option selected" data-width="3" aria-label="Medium"><span class="width-line" style="height:4px"></span></button>
               <button type="button" class="width-option" data-width="5" aria-label="Thick"><span class="width-line" style="height:6px"></span></button>
             </div>
-            <button type="button" class="undo-btn" id="sigUndo0" disabled aria-label="Undo last stroke">↩</button>
           </div>
-          <div class="signature-canvas-wrapper">
-            <canvas class="signature-canvas" id="sigCanvas0"></canvas>
+          <div class="signature-main-column">
+            <div class="signature-canvas-wrapper">
+              <canvas class="signature-canvas" id="sigCanvas0"></canvas>
+            </div>
+            <div class="sig-actions">
+              <button type="button" class="btn-undo" id="sigUndo0" disabled aria-label="Undo last stroke">↩ Undo</button>
+              <button type="button" class="btn-clear" id="sigClear0" disabled aria-label="Clear canvas">✕ Clear</button>
+            </div>
           </div>
         </div>
         <div class="field-error" id="sigErr0">Please draw your signature before continuing.</div>
       </div>
-      <div class="nav-footer">
+      <div class="nav-footer nav-buttons">
         <button type="button" class="btn-secondary" id="btnBackSig0">Back</button>
         <button type="button" class="btn-primary" id="btnNextSig0"><span id="btnNextSig0Label">Next Signature</span></button>
       </div>
@@ -1215,8 +1304,11 @@
     <!-- Page 3: Signature 2 -->
     <div class="flow-page signature-page" data-page="3" id="flowPage3" data-sig-index="1">
       <div class="flow-scroll sig-page-body">
-        <h2 class="card-title sig-page-heading" style="margin-bottom:6px;">Signature 2 of 5</h2>
+        <h2 class="card-title sig-page-heading sig-page-title" style="margin-bottom:6px;">Signature 2 of 5</h2>
         <p class="card-sub sig-instruction" id="sigInstr1">Please sign identically to your previous signature.</p>
+        <p class="rotate-hint">
+          📱 Rotate your phone sideways for a wider signing area.
+        </p>
         <div class="signature-body">
           <div class="pen-options pen-toolbar" id="penBar1" data-sig-toolbar="1">
             <div class="color-options" id="penColors1">
@@ -1232,15 +1324,20 @@
               <button type="button" class="width-option selected" data-width="3" aria-label="Medium"><span class="width-line" style="height:4px"></span></button>
               <button type="button" class="width-option" data-width="5" aria-label="Thick"><span class="width-line" style="height:6px"></span></button>
             </div>
-            <button type="button" class="undo-btn" id="sigUndo1" disabled aria-label="Undo last stroke">↩</button>
           </div>
-          <div class="signature-canvas-wrapper">
-            <canvas class="signature-canvas" id="sigCanvas1"></canvas>
+          <div class="signature-main-column">
+            <div class="signature-canvas-wrapper">
+              <canvas class="signature-canvas" id="sigCanvas1"></canvas>
+            </div>
+            <div class="sig-actions">
+              <button type="button" class="btn-undo" id="sigUndo1" disabled aria-label="Undo last stroke">↩ Undo</button>
+              <button type="button" class="btn-clear" id="sigClear1" disabled aria-label="Clear canvas">✕ Clear</button>
+            </div>
           </div>
         </div>
         <div class="field-error" id="sigErr1">Please draw your signature before continuing.</div>
       </div>
-      <div class="nav-footer">
+      <div class="nav-footer nav-buttons">
         <button type="button" class="btn-secondary" id="btnBackSig1">Back</button>
         <button type="button" class="btn-primary" id="btnNextSig1"><span id="btnNextSig1Label">Next Signature</span></button>
       </div>
@@ -1262,8 +1359,11 @@
     <!-- Page 4: Signature 3 -->
     <div class="flow-page signature-page" data-page="4" id="flowPage4" data-sig-index="2">
       <div class="flow-scroll sig-page-body">
-        <h2 class="card-title sig-page-heading" style="margin-bottom:6px;">Signature 3 of 5</h2>
+        <h2 class="card-title sig-page-heading sig-page-title" style="margin-bottom:6px;">Signature 3 of 5</h2>
         <p class="card-sub sig-instruction" id="sigInstr2">Please sign identically to your previous signature.</p>
+        <p class="rotate-hint">
+          📱 Rotate your phone sideways for a wider signing area.
+        </p>
         <div class="signature-body">
           <div class="pen-options pen-toolbar" id="penBar2" data-sig-toolbar="2">
             <div class="color-options" id="penColors2">
@@ -1279,15 +1379,20 @@
               <button type="button" class="width-option selected" data-width="3" aria-label="Medium"><span class="width-line" style="height:4px"></span></button>
               <button type="button" class="width-option" data-width="5" aria-label="Thick"><span class="width-line" style="height:6px"></span></button>
             </div>
-            <button type="button" class="undo-btn" id="sigUndo2" disabled aria-label="Undo last stroke">↩</button>
           </div>
-          <div class="signature-canvas-wrapper">
-            <canvas class="signature-canvas" id="sigCanvas2"></canvas>
+          <div class="signature-main-column">
+            <div class="signature-canvas-wrapper">
+              <canvas class="signature-canvas" id="sigCanvas2"></canvas>
+            </div>
+            <div class="sig-actions">
+              <button type="button" class="btn-undo" id="sigUndo2" disabled aria-label="Undo last stroke">↩ Undo</button>
+              <button type="button" class="btn-clear" id="sigClear2" disabled aria-label="Clear canvas">✕ Clear</button>
+            </div>
           </div>
         </div>
         <div class="field-error" id="sigErr2">Please draw your signature before continuing.</div>
       </div>
-      <div class="nav-footer">
+      <div class="nav-footer nav-buttons">
         <button type="button" class="btn-secondary" id="btnBackSig2">Back</button>
         <button type="button" class="btn-primary" id="btnNextSig2"><span id="btnNextSig2Label">Next Signature</span></button>
       </div>
@@ -1309,8 +1414,11 @@
     <!-- Page 5: Signature 4 -->
     <div class="flow-page signature-page" data-page="5" id="flowPage5" data-sig-index="3">
       <div class="flow-scroll sig-page-body">
-        <h2 class="card-title sig-page-heading" style="margin-bottom:6px;">Signature 4 of 5</h2>
+        <h2 class="card-title sig-page-heading sig-page-title" style="margin-bottom:6px;">Signature 4 of 5</h2>
         <p class="card-sub sig-instruction" id="sigInstr3">Please sign identically to your previous signature.</p>
+        <p class="rotate-hint">
+          📱 Rotate your phone sideways for a wider signing area.
+        </p>
         <div class="signature-body">
           <div class="pen-options pen-toolbar" id="penBar3" data-sig-toolbar="3">
             <div class="color-options" id="penColors3">
@@ -1326,15 +1434,20 @@
               <button type="button" class="width-option selected" data-width="3" aria-label="Medium"><span class="width-line" style="height:4px"></span></button>
               <button type="button" class="width-option" data-width="5" aria-label="Thick"><span class="width-line" style="height:6px"></span></button>
             </div>
-            <button type="button" class="undo-btn" id="sigUndo3" disabled aria-label="Undo last stroke">↩</button>
           </div>
-          <div class="signature-canvas-wrapper">
-            <canvas class="signature-canvas" id="sigCanvas3"></canvas>
+          <div class="signature-main-column">
+            <div class="signature-canvas-wrapper">
+              <canvas class="signature-canvas" id="sigCanvas3"></canvas>
+            </div>
+            <div class="sig-actions">
+              <button type="button" class="btn-undo" id="sigUndo3" disabled aria-label="Undo last stroke">↩ Undo</button>
+              <button type="button" class="btn-clear" id="sigClear3" disabled aria-label="Clear canvas">✕ Clear</button>
+            </div>
           </div>
         </div>
         <div class="field-error" id="sigErr3">Please draw your signature before continuing.</div>
       </div>
-      <div class="nav-footer">
+      <div class="nav-footer nav-buttons">
         <button type="button" class="btn-secondary" id="btnBackSig3">Back</button>
         <button type="button" class="btn-primary" id="btnNextSig3"><span id="btnNextSig3Label">Next Signature</span></button>
       </div>
@@ -1356,8 +1469,11 @@
     <!-- Page 6: Signature 5 -->
     <div class="flow-page signature-page" data-page="6" id="flowPage6" data-sig-index="4">
       <div class="flow-scroll sig-page-body">
-        <h2 class="card-title sig-page-heading" style="margin-bottom:6px;">Signature 5 of 5</h2>
+        <h2 class="card-title sig-page-heading sig-page-title" style="margin-bottom:6px;">Signature 5 of 5</h2>
         <p class="card-sub sig-instruction" id="sigInstr4">Please sign identically to your previous signature.</p>
+        <p class="rotate-hint">
+          📱 Rotate your phone sideways for a wider signing area.
+        </p>
         <div class="signature-body">
           <div class="pen-options pen-toolbar" id="penBar4" data-sig-toolbar="4">
             <div class="color-options" id="penColors4">
@@ -1373,15 +1489,20 @@
               <button type="button" class="width-option selected" data-width="3" aria-label="Medium"><span class="width-line" style="height:4px"></span></button>
               <button type="button" class="width-option" data-width="5" aria-label="Thick"><span class="width-line" style="height:6px"></span></button>
             </div>
-            <button type="button" class="undo-btn" id="sigUndo4" disabled aria-label="Undo last stroke">↩</button>
           </div>
-          <div class="signature-canvas-wrapper">
-            <canvas class="signature-canvas" id="sigCanvas4"></canvas>
+          <div class="signature-main-column">
+            <div class="signature-canvas-wrapper">
+              <canvas class="signature-canvas" id="sigCanvas4"></canvas>
+            </div>
+            <div class="sig-actions">
+              <button type="button" class="btn-undo" id="sigUndo4" disabled aria-label="Undo last stroke">↩ Undo</button>
+              <button type="button" class="btn-clear" id="sigClear4" disabled aria-label="Clear canvas">✕ Clear</button>
+            </div>
           </div>
         </div>
         <div class="field-error" id="sigErr4">Please draw your signature before continuing.</div>
       </div>
-      <div class="nav-footer">
+      <div class="nav-footer nav-buttons">
         <button type="button" class="btn-secondary" id="btnBackSig4">Back</button>
         <button type="button" class="btn-primary" id="btnNextSig4"><span id="btnNextSig4Label">Next</span></button>
       </div>
@@ -1704,6 +1825,7 @@
 
   /** @type {Array<Array<{color:string,baseWidth:number,points:Array<{x:number,y:number,t:number}>}>>} */
   const sigStrokes = [[], [], [], [], []];
+  const sigDrawActive = [false, false, false, false, false];
   let sig1ImageData = null;
   /** @type {{aspect:number,strokeCount:number,cx:number,cy:number,bbox:any}|null} */
   let sig1Meta = null;
@@ -1746,8 +1868,29 @@
     return $("flowPage" + pageIndex);
   }
 
-  function updateLandscapeBodyClass() {
-    /* layout scrolls naturally; no body overflow lock */
+  function updateSigStrokeButtons(sigIndex) {
+    const has = sigStrokes[sigIndex].length > 0;
+    const u = $("sigUndo" + sigIndex);
+    const cl = $("sigClear" + sigIndex);
+    if (u) u.disabled = !has;
+    if (cl) cl.disabled = !has;
+  }
+
+  function enableSigStrokeButtons(sigIndex) {
+    const u = $("sigUndo" + sigIndex);
+    const cl = $("sigClear" + sigIndex);
+    if (u) u.disabled = false;
+    if (cl) cl.disabled = false;
+  }
+
+  let orientationRedrawTimer = null;
+  function handleOrientationChange() {
+    clearTimeout(orientationRedrawTimer);
+    orientationRedrawTimer = setTimeout(function () {
+      for (let i = 0; i < 5; i++) {
+        redrawSigCanvas(i);
+      }
+    }, 300);
   }
 
   function updateProgressUI() {
@@ -1943,7 +2086,6 @@
     if (!canvas || canvas.dataset.bound === "1") return;
     canvas.dataset.bound = "1";
 
-    let isDrawing = false;
     let lastX = 0;
     let lastY = 0;
     let currentPath = [];
@@ -1954,7 +2096,7 @@
       redrawSigCanvas(sigIndex);
       const ctx = canvas.getContext("2d");
       const pos = getCanvasPos(e, canvas);
-      isDrawing = true;
+      sigDrawActive[sigIndex] = true;
       lastX = pos.x;
       lastY = pos.y;
       currentPath = [{ x: pos.x, y: pos.y, t: Date.now() }];
@@ -1968,7 +2110,7 @@
     }
 
     function drawMove(e) {
-      if (!isDrawing) return;
+      if (!sigDrawActive[sigIndex]) return;
       e.preventDefault();
       const ctx = canvas.getContext("2d");
       const pos = getCanvasPos(e, canvas);
@@ -1985,13 +2127,13 @@
       ctx.moveTo(midX, midY);
       lastX = pos.x;
       lastY = pos.y;
-      $("sigUndo" + sigIndex).disabled = false;
+      enableSigStrokeButtons(sigIndex);
     }
 
     function endDraw(e) {
       if (e && e.preventDefault) e.preventDefault();
-      if (!isDrawing) return;
-      isDrawing = false;
+      if (!sigDrawActive[sigIndex]) return;
+      sigDrawActive[sigIndex] = false;
       if (currentPath.length >= 2) {
         sigStrokes[sigIndex].push({
           color: penColor,
@@ -2001,7 +2143,7 @@
       }
       currentPath = [];
       redrawSigCanvas(sigIndex);
-      $("sigUndo" + sigIndex).disabled = sigStrokes[sigIndex].length === 0;
+      updateSigStrokeButtons(sigIndex);
       canvas.getContext("2d").beginPath();
     }
 
@@ -2066,7 +2208,6 @@
     if ($("btnBack0")) $("btnBack0").classList.toggle("hidden", n === 0);
 
     updateProgressUI();
-    updateLandscapeBodyClass();
 
     if (n >= 2 && n <= 6) {
       const idx = n - 2;
@@ -2074,7 +2215,7 @@
       bindPenControls();
       syncPenToolbars();
       redrawSigCanvas(idx);
-      $("sigUndo" + idx).disabled = sigStrokes[idx].length === 0;
+      updateSigStrokeButtons(idx);
     }
 
     if (n === 7) {
@@ -2381,7 +2522,7 @@
         $("sigMismatchModal").classList.add("show");
         sigStrokes[sigIndex] = [];
         redrawSigCanvas(sigIndex);
-        $("sigUndo" + sigIndex).disabled = true;
+        updateSigStrokeButtons(sigIndex);
         return;
       }
     } else {
@@ -2416,7 +2557,13 @@
       $("sigUndo" + i).addEventListener("click", function () {
         sigStrokes[i].pop();
         redrawSigCanvas(i);
-        $("sigUndo" + i).disabled = sigStrokes[i].length === 0;
+        updateSigStrokeButtons(i);
+      });
+      $("sigClear" + i).addEventListener("click", function () {
+        sigDrawActive[i] = false;
+        sigStrokes[i] = [];
+        redrawSigCanvas(i);
+        updateSigStrokeButtons(i);
       });
     }
 
@@ -2510,15 +2657,8 @@
     });
   }
 
-  window.addEventListener("resize", function () {
-    for (let i = 0; i < 5; i++) {
-      redrawSigCanvas(i);
-    }
-    updateLandscapeBodyClass();
-  });
-  if (window.matchMedia) {
-    window.matchMedia("(orientation: landscape)").addEventListener("change", updateLandscapeBodyClass);
-  }
+  window.addEventListener("orientationchange", handleOrientationChange);
+  window.addEventListener("resize", handleOrientationChange);
 
   function cubicBezierPoint(t, x0, y0, x1, y1, x2, y2, x3, y3) {
     const mt = 1 - t;
@@ -2601,8 +2741,7 @@
       };
     });
     drawSampleSignature(canvas);
-    const undo = $("sigUndo" + sigIndex);
-    if (undo) undo.disabled = sigStrokes[sigIndex].length === 0;
+    updateSigStrokeButtons(sigIndex);
   }
 
   function drawSampleSignature(canvas) {
@@ -2729,6 +2868,7 @@
     sig1Meta = null;
     for (let i = 0; i < 5; i++) {
       sigStrokes[i] = [];
+      sigDrawActive[i] = false;
     }
     state.bankVerifying = false;
     state.bank = { method: null, ibanHasFile: false, ibanFileName: "", ibanOcrFail: false, ibanManual: false };
@@ -2762,8 +2902,7 @@
         ctx.fillStyle = "#ffffff";
         ctx.fillRect(0, 0, c.width, c.height);
       }
-      const u = $("sigUndo" + i);
-      if (u) u.disabled = true;
+      updateSigStrokeButtons(i);
       const er = $("sigErr" + i);
       if (er) er.classList.remove("show");
     }
