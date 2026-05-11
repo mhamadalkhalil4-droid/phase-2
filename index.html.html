@@ -25,9 +25,9 @@
     *, *::before, *::after { box-sizing: border-box; }
     html {
       margin: 0;
-      scroll-behavior: smooth;
-      overflow-y: scroll;
-      -webkit-overflow-scrolling: touch;
+      min-height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
     }
     body {
       margin: 0;
@@ -36,10 +36,9 @@
       color: var(--near-black);
       font-size: 15px;
       line-height: 1.45;
-      min-height: 100%;
-      overflow-x: hidden;
+      min-height: 100vh;
       overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
+      overflow-x: hidden;
     }
     button { font-family: inherit; cursor: pointer; }
     a { color: var(--ultraviolet); }
@@ -47,7 +46,271 @@
     .page {
       max-width: 480px;
       margin: 0 auto;
-      padding: 20px 16px calc(32px + env(safe-area-inset-bottom, 0px));
+      width: 100%;
+      display: block;
+      min-height: min-content;
+      padding: 20px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .progress-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 24px 0;
+      gap: 0;
+      flex-shrink: 0;
+    }
+    .progress-bar-inner {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      width: 100%;
+      max-width: 420px;
+    }
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      flex: 0 0 auto;
+    }
+    .step-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .step-circle.done { background: #7A5CFF; color: white; }
+    .step-circle.active { background: #7A5CFF; color: white; }
+    .step-circle.upcoming { background: #EAE5F4; color: #9CA3AF; }
+    .step-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #4E465E;
+      text-align: center;
+      max-width: 72px;
+      line-height: 1.2;
+    }
+    .step-label.active { color: #7A5CFF; }
+    .step-label.upcoming { color: #9CA3AF; }
+    .step-label.done { color: #4E465E; }
+    .step-sublabel {
+      font-size: 10px;
+      color: #9CA3AF;
+      margin-top: 2px;
+      text-align: center;
+      min-height: 14px;
+    }
+    .step-line {
+      flex: 1;
+      height: 2px;
+      background: #EAE5F4;
+      min-width: 24px;
+      margin-bottom: 18px;
+      margin-top: 15px;
+      align-self: center;
+    }
+    .step-line.done { background: #7A5CFF; }
+
+    .flow-page {
+      display: none;
+      min-height: min-content;
+    }
+    .flow-page.active {
+      display: block;
+    }
+    .flow-scroll {
+      display: block;
+      overflow: visible;
+    }
+
+    .nav-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 0 8px;
+      flex-shrink: 0;
+    }
+    .nav-footer .btn-primary { width: auto; flex: 1; max-width: 220px; margin-left: auto; }
+    .nav-footer .btn-secondary { width: auto; flex: 0 0 auto; min-width: 100px; }
+
+    .sig-page-body {
+      padding-bottom: 8px;
+    }
+    .signature-body {
+      display: flex;
+      flex-direction: row;
+      gap: 12px;
+      padding: 0 24px;
+      align-items: flex-start;
+    }
+
+    .pen-options {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      width: 44px;
+      flex-shrink: 0;
+      padding-top: 8px;
+    }
+
+    .pen-toolbar.disabled {
+      pointer-events: none;
+      opacity: 0.45;
+    }
+    .pen-toolbar.disabled .color-circle,
+    .pen-toolbar.disabled .width-option,
+    .pen-toolbar.disabled .undo-btn {
+      cursor: not-allowed;
+    }
+
+    .color-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .color-circle {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+      padding: 0;
+      flex-shrink: 0;
+    }
+
+    .color-circle.selected {
+      border-color: #7A5CFF;
+      box-shadow: 0 0 0 2px white, 0 0 0 4px #7A5CFF;
+    }
+
+    .options-divider {
+      width: 32px;
+      height: 1px;
+      background: #EAE5F4;
+    }
+
+    .width-options {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .width-option {
+      width: 36px;
+      height: 28px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      padding: 0;
+      background: transparent;
+    }
+
+    .width-option.selected {
+      border-color: #7A5CFF;
+      background: #F3F0FF;
+    }
+
+    .width-line {
+      background: #1A1A1A;
+      border-radius: 99px;
+      width: 22px;
+    }
+
+    .undo-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      border: 1px solid #EAE5F4;
+      background: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: #4E465E;
+      margin-top: 8px;
+      padding: 0;
+      flex-shrink: 0;
+    }
+
+    .undo-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .signature-canvas-wrapper {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .signature-canvas {
+      width: 100%;
+      display: block;
+      border: 1px solid #D8D3E3;
+      border-radius: 8px;
+      background: white;
+      touch-action: none;
+      cursor: crosshair;
+      min-height: 480px;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(18, 12, 36, 0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 24px;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal-box {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 20px 18px;
+      max-width: 360px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+      border: 1px solid var(--mist-lavender);
+    }
+    .modal-box p { margin: 0 0 16px; font-size: 15px; color: var(--midnight-plum); line-height: 1.45; }
+    .pdf-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .btn-download {
+      min-height: 44px;
+      padding: 0 18px;
+      border-radius: 8px;
+      border: none;
+      background: #7A5CFF;
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .verify-inline {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .demo-bar {
@@ -488,6 +751,19 @@
       border-radius: 4px;
     }
 
+    .pdf-disclaimer-box {
+      border: 2px solid #f59e0b;
+      background: #fffbea;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 11px;
+      color: #92400e;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 16px;
+      font-family: Arial, sans-serif;
+    }
+
     .pdf-page {
       background: white;
       width: 750px;
@@ -687,9 +963,23 @@
     .hidden { display: none !important; }
 
     body.flow-locked .btn-edit { display: none; }
+
+    #progressWrap.hidden { display: none !important; }
+
+    .demo-skip {
+      font-size: 12px;
+      color: #9CA3AF;
+      text-decoration: none;
+      border-bottom: 1px dashed #9CA3AF;
+    }
+    .demo-skip:hover {
+      color: #7A5CFF;
+      border-color: #7A5CFF;
+    }
   </style>
 </head>
 <body>
+  <button type="button" onclick="resetDemo()" style="position:fixed; top:12px; right:16px; background:none; border:1px solid #D1D5DB; border-radius:6px; padding:4px 10px; font-size:11px; color:#6B7280; cursor:pointer; z-index:999;">↺ Reset</button>
   <div class="page">
     <header class="payer-header">
       <div class="brand-row">
@@ -708,190 +998,447 @@
       <p class="payer-subtitle">Secure Mandate Authorization</p>
     </header>
 
-    <nav class="progress" id="progressBar" aria-label="Mandate steps">
-      <div class="progress-step active" data-step="0">
-        <div class="progress-dot"><span class="step-num">1</span><i data-lucide="check" class="step-check"></i></div>
-      </div>
-      <div class="progress-step" data-step="1">
-        <div class="progress-dot"><span class="step-num">2</span><i data-lucide="check" class="step-check"></i></div>
-      </div>
-      <div class="progress-step" data-step="2">
-        <div class="progress-dot"><span class="step-num">3</span><i data-lucide="check" class="step-check"></i></div>
-      </div>
-      <div class="progress-step" data-step="3">
-        <div class="progress-dot"><span class="step-num">4</span><i data-lucide="check" class="step-check"></i></div>
-      </div>
-      <div class="progress-step" data-step="4">
-        <div class="progress-dot"><span class="step-num">5</span><i data-lucide="check" class="step-check"></i></div>
-      </div>
-    </nav>
-
-    <div class="demo-bar" id="demoBar">
-      <p class="demo-bar-hint">
-        Scroll the page for all steps. If your browser blocks file uploads, use <strong>Demo: next step</strong> to advance with sample data.
-      </p>
-      <div class="demo-bar-actions">
-        <button type="button" class="btn-demo" id="demoNextBtn">Demo: next step</button>
-        <button type="button" class="btn-demo-outline" id="demoResetBtn" title="Start over">Reset</button>
-      </div>
-      <div class="step-scroll" role="navigation" aria-label="Scroll to step">
-        <span class="step-scroll-label">Go to:</span>
-        <button type="button" class="step-pill" data-step-scroll="1">1</button>
-        <button type="button" class="step-pill" data-step-scroll="2">2</button>
-        <button type="button" class="step-pill" data-step-scroll="3">3</button>
-        <button type="button" class="step-pill" data-step-scroll="4">4</button>
-        <button type="button" class="step-pill" data-step-scroll="5">5</button>
-      </div>
+    <div id="progressWrap">
+      <nav class="progress-bar" id="progressBarNav" aria-label="Mandate steps">
+        <div class="progress-bar-inner" id="progressBarInner">
+          <div class="step" data-step-id="0">
+            <div class="step-circle active" id="progCircle0"><span id="progNum0">1</span><span id="progCheck0" class="hidden">✓</span></div>
+            <span class="step-label active" id="progLabel0">Emirates ID</span>
+            <span class="step-sublabel" id="progSub0" aria-hidden="true"></span>
+          </div>
+          <div class="step-line" id="progLine0"></div>
+          <div class="step" data-step-id="1">
+            <div class="step-circle upcoming" id="progCircle1"><span id="progNum1">2</span><span id="progCheck1" class="hidden">✓</span></div>
+            <span class="step-label upcoming" id="progLabel1">Banking</span>
+            <span class="step-sublabel" id="progSub1" aria-hidden="true"></span>
+          </div>
+          <div class="step-line" id="progLine1"></div>
+          <div class="step" data-step-id="2">
+            <div class="step-circle upcoming" id="progCircle2"><span id="progNum2">3</span><span id="progCheck2" class="hidden">✓</span></div>
+            <span class="step-label upcoming" id="progLabel2">Signatures</span>
+            <span class="step-sublabel" id="progSub2" aria-hidden="true"></span>
+          </div>
+          <div class="step-line" id="progLine2"></div>
+          <div class="step" data-step-id="3">
+            <div class="step-circle upcoming" id="progCircle3"><span id="progNum3">4</span><span id="progCheck3" class="hidden">✓</span></div>
+            <span class="step-label upcoming" id="progLabel3">Review</span>
+            <span class="step-sublabel" id="progSub3" aria-hidden="true"></span>
+          </div>
+        </div>
+      </nav>
     </div>
 
-    <!-- Section 1 -->
-    <div class="section-block" id="sec1Block" data-step-anchor="1">
-      <div class="summary-row" id="sec1Summary">
-        <i data-lucide="check-circle-2" class="sum-icon"></i>
-        <span class="summary-text sum-text" id="sec1SummaryText">Emirates ID</span>
-        <button type="button" class="btn-edit" id="sec1Edit">Edit</button>
-      </div>
-      <div class="card" id="sec1Card">
-        <h2 class="card-title">Emirates ID</h2>
-        <p class="card-sub">Upload a photo of your Emirates ID</p>
+    <div id="flowPages">
+    <!-- Page 0: Emirates ID -->
+    <div class="flow-page active" data-page="0" id="flowPage0">
+      <div class="flow-scroll">
+        <div class="card" id="sec1Card">
+          <h2 class="card-title">Emirates ID</h2>
+          <p class="card-sub">Upload a photo of your Emirates ID</p>
 
-        <div class="upload-zone" id="eidUploadZone">
-          <input type="file" id="eidFile" accept=".jpg,.jpeg,.png,.pdf,image/jpeg,image/png,application/pdf" />
-          <div class="upload-inner upload-prompt">
-            <i data-lucide="upload-cloud"></i>
-            <p>Tap to upload your Emirates ID</p>
-            <p class="upload-note">JPG, PNG or PDF</p>
-          </div>
-          <div class="upload-inner upload-success" id="eidUploadOk">
-            <i data-lucide="check-circle-2"></i>
-            <p id="eidFileName">document.pdf</p>
-          </div>
-        </div>
-        <button type="button" class="link-ocr" id="eidOcrFailBtn">Simulate OCR failure</button>
-        <div class="ocr-fail-actions" id="eidOcrFailActions">
-          <button type="button" class="btn-secondary" id="eidReupload">Re-upload photo</button>
-          <button type="button" class="btn-secondary" id="eidManual">Enter manually</button>
-        </div>
-
-        <div id="eidFields" style="display:none;margin-top:16px;">
-          <div class="form-group">
-            <label for="fullName">Full Name</label>
-            <input class="input" id="fullName" placeholder="As on your Emirates ID" autocomplete="name" />
-            <div class="field-error" id="fullNameErr">This field is required</div>
-          </div>
-          <div class="form-group">
-            <label for="eidNumber">Emirates ID Number</label>
-            <input class="input" id="eidNumber" placeholder="784-YYYY-XXXXXXX-X" inputmode="text" />
-            <div class="field-error" id="eidNumberErr">This field is required</div>
-          </div>
-          <button type="button" class="btn-primary" id="sec1Confirm">Confirm Details</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Section 2 -->
-    <div class="section-block hidden" id="sec2Block" data-step-anchor="2">
-      <div class="summary-row" id="sec2Summary">
-        <i data-lucide="check-circle-2" class="sum-icon"></i>
-        <span class="sum-text" id="sec2SummaryText">Banking Information</span>
-        <button type="button" class="btn-edit" id="sec2Edit">Edit</button>
-      </div>
-      <div class="card hidden" id="sec2Card">
-        <h2 class="card-title">Banking Information</h2>
-        <p class="card-sub">Enter your bank details</p>
-
-        <div class="form-group">
-          <label for="bankName">Bank Name</label>
-          <input class="input" id="bankName" placeholder="e.g. Emirates NBD, ADCB, FAB..." autocomplete="organization" />
-          <div class="field-error" id="bankNameErr">Bank Name is required</div>
-        </div>
-
-        <div class="form-group">
-          <label>Payment Method</label>
-          <div class="segmented" id="payMethodSeg">
-            <button type="button" data-method="iban" id="btnIban">IBAN</button>
-            <button type="button" data-method="card" id="btnCard">Credit Card</button>
-          </div>
-        </div>
-
-        <div id="ibanBlock" style="display:none;">
-          <div class="upload-zone" id="ibanUploadZone">
-            <input type="file" id="ibanFile" accept=".jpg,.jpeg,.png,.pdf,image/jpeg,image/png,application/pdf" />
+          <div class="upload-zone" id="eidUploadZone">
+            <input type="file" id="eidFile" accept=".jpg,.jpeg,.png,.pdf,image/jpeg,image/png,application/pdf" />
             <div class="upload-inner upload-prompt">
               <i data-lucide="upload-cloud"></i>
-              <p>Upload IBAN document</p>
+              <p>Tap to upload your Emirates ID</p>
               <p class="upload-note">JPG, PNG or PDF</p>
             </div>
-            <div class="upload-inner upload-success" id="ibanUploadOk">
+            <div class="upload-inner upload-success" id="eidUploadOk">
               <i data-lucide="check-circle-2"></i>
-              <p id="ibanFileName">document.pdf</p>
+              <p id="eidFileName">document.pdf</p>
             </div>
           </div>
-          <button type="button" class="link-ocr" id="ibanOcrFailBtn">Simulate OCR failure</button>
-          <div class="ocr-fail-actions" id="ibanOcrFailActions">
-            <button type="button" class="btn-secondary" id="ibanReupload">Re-upload photo</button>
-            <button type="button" class="btn-secondary" id="ibanManual">Enter manually</button>
+          <button type="button" class="link-ocr" id="eidOcrFailBtn">Simulate OCR failure</button>
+          <div class="ocr-fail-actions" id="eidOcrFailActions">
+            <button type="button" class="btn-secondary" id="eidReupload">Re-upload photo</button>
+            <button type="button" class="btn-secondary" id="eidManual">Enter manually</button>
           </div>
-          <div id="ibanFieldWrap" style="display:none;margin-top:16px;">
+
+          <div id="eidFields" style="display:none;margin-top:16px;">
             <div class="form-group">
-              <label for="ibanInput">IBAN</label>
-              <input class="input" id="ibanInput" placeholder="AE00 0000 0000 0000 0000 000" inputmode="text" />
-              <div class="field-error" id="ibanErr">IBAN is required</div>
+              <label for="fullName">Full Name</label>
+              <input class="input" id="fullName" placeholder="As on your Emirates ID" autocomplete="name" />
+              <div class="field-error" id="fullNameErr">This field is required</div>
+            </div>
+            <div class="form-group">
+              <label for="eidNumber">Emirates ID Number</label>
+              <input class="input" id="eidNumber" placeholder="784-YYYY-XXXXXXX-X" inputmode="text" />
+              <div class="field-error" id="eidNumberErr">This field is required</div>
             </div>
           </div>
         </div>
+      </div>
+      <div class="nav-footer" id="navFooter0">
+        <button type="button" class="btn-secondary hidden" id="btnBack0">Back</button>
+        <button type="button" class="btn-primary" id="btnNext0"><span id="btnNext0Label">Next</span></button>
+      </div>
+      <div style="text-align:center; margin-top:12px;">
+        <a href="#" class="demo-skip" onclick="demoSkip(event); return false;">🎬 Demo — Skip to next step</a>
+      </div>
+      <footer class="page-footer">
+        <svg class="footer-mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="autoraFooterGrad0" x1="8" y1="54" x2="54" y2="10" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#7A5CFF"/><stop offset="45%" stop-color="#FF6B68"/><stop offset="100%" stop-color="#B36CFF"/>
+            </linearGradient>
+          </defs>
+          <path fill="url(#autoraFooterGrad0)" d="M32 6 C22 6 13 12 10 22 C8 28 9 36 13 42 L19 38 C16 33 15 27 17 22 C19 15 26 10 34 11 C42 12 49 19 51 27 C52 32 51 38 48 43 L54 47 C58 40 60 31 58 23 C55 12 44 6 32 6 Z"/>
+        </svg>
+        <span>Secured by Autora · Regulated by the Central Bank of the UAE</span>
+      </footer>
+    </div>
 
-        <div id="cardBlock" style="display:none;">
+    <!-- Page 1: Banking -->
+    <div class="flow-page" data-page="1" id="flowPage1">
+      <div class="flow-scroll">
+        <div class="card" id="sec2Card">
+          <h2 class="card-title">Banking Information</h2>
+          <p class="card-sub">Add your payment details</p>
+
           <div class="form-group">
-            <label for="ccInput">Credit Card Number</label>
-            <input class="input" id="ccInput" placeholder="XXXX XXXX XXXX XXXX" inputmode="numeric" autocomplete="cc-number" />
-            <div class="field-error" id="ccErr">Credit card number is required</div>
+            <label>Payment Method</label>
+            <div class="segmented" id="payMethodSeg">
+              <button type="button" data-method="iban" id="btnIban">IBAN</button>
+              <button type="button" data-method="card" id="btnCard">Credit Card</button>
+            </div>
+            <div class="field-error" id="payMethodErr">Please select a payment method</div>
+          </div>
+
+          <div id="ibanBlock" style="display:none;">
+            <div class="upload-zone" id="ibanUploadZone">
+              <input type="file" id="ibanFile" accept=".jpg,.jpeg,.png,.pdf,image/jpeg,image/png,application/pdf" />
+              <div class="upload-inner upload-prompt">
+                <i data-lucide="upload-cloud"></i>
+                <p>Upload IBAN document</p>
+                <p class="upload-note">JPG, PNG or PDF</p>
+              </div>
+              <div class="upload-inner upload-success" id="ibanUploadOk">
+                <i data-lucide="check-circle-2"></i>
+                <p id="ibanFileName">document.pdf</p>
+              </div>
+            </div>
+            <button type="button" class="link-ocr" id="ibanOcrFailBtn">Simulate OCR failure</button>
+            <div class="ocr-fail-actions" id="ibanOcrFailActions">
+              <button type="button" class="btn-secondary" id="ibanReupload">Re-upload photo</button>
+              <button type="button" class="btn-secondary" id="ibanManual">Enter manually</button>
+            </div>
+            <div id="ibanFieldWrap" style="display:none;margin-top:16px;">
+              <div class="form-group">
+                <label for="ibanInput">IBAN</label>
+                <input class="input" id="ibanInput" placeholder="AE00 0000 0000 0000 0000 000" inputmode="text" />
+                <div class="field-error" id="ibanErr">This IBAN number is not valid. Please check and enter it again.</div>
+              </div>
+            </div>
+          </div>
+
+          <div id="cardBlock" style="display:none;">
+            <div class="form-group">
+              <label for="ccInput">Credit Card Number</label>
+              <input class="input" id="ccInput" placeholder="XXXX XXXX XXXX XXXX" inputmode="numeric" autocomplete="cc-number" />
+              <div class="field-error" id="ccErr">This card number is not valid. Please check and enter it again.</div>
+            </div>
           </div>
         </div>
-
-        <button type="button" class="btn-primary" id="sec2Confirm" style="margin-top:8px;">Confirm Details</button>
       </div>
+      <div class="nav-footer" id="navFooter1">
+        <button type="button" class="btn-secondary" id="btnBack1">Back</button>
+        <button type="button" class="btn-primary" id="btnVerifyNext" disabled>
+          <span class="verify-inline">
+            <span id="btnVerifyLabel">Verify &amp; Next</span>
+            <i data-lucide="loader-2" class="spinner hidden" id="bankVerifySpinner" style="width:18px;height:18px;"></i>
+          </span>
+        </button>
+      </div>
+      <div style="text-align:center; margin-top:12px;">
+        <a href="#" class="demo-skip" onclick="demoSkip(event); return false;">🎬 Demo — Skip to next step</a>
+      </div>
+      <footer class="page-footer">
+        <svg class="footer-mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="autoraFooterGrad1" x1="8" y1="54" x2="54" y2="10" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#7A5CFF"/><stop offset="45%" stop-color="#FF6B68"/><stop offset="100%" stop-color="#B36CFF"/>
+            </linearGradient>
+          </defs>
+          <path fill="url(#autoraFooterGrad1)" d="M32 6 C22 6 13 12 10 22 C8 28 9 36 13 42 L19 38 C16 33 15 27 17 22 C19 15 26 10 34 11 C42 12 49 19 51 27 C52 32 51 38 48 43 L54 47 C58 40 60 31 58 23 C55 12 44 6 32 6 Z"/>
+        </svg>
+        <span>Secured by Autora · Regulated by the Central Bank of the UAE</span>
+      </footer>
     </div>
 
-    <!-- Section 3 -->
-    <div class="section-block hidden" id="sec3Block" data-step-anchor="3">
-      <div class="summary-row" id="sec3Summary">
-        <i data-lucide="check-circle-2" class="sum-icon"></i>
-        <span class="sum-text">5 signatures completed</span>
-        <button type="button" class="btn-edit" id="sec3Edit">Edit</button>
-      </div>
-      <div class="card hidden" id="sec3Card">
-        <h2 class="card-title">Digital Signature</h2>
-        <p class="card-sub">Sign in each of the 5 boxes below</p>
-        <div class="sig-grid" id="sigGrid"></div>
-        <div class="field-error" id="sigFormErr">Please complete all 5 signatures before submitting</div>
-        <button type="button" class="btn-primary" id="sec3Submit" style="margin-top:12px;">Submit Signatures</button>
-      </div>
-    </div>
-
-    <!-- Section 4 -->
-    <div class="section-block hidden" id="sec4Block" data-step-anchor="4">
-      <div class="summary-row" id="sec4Summary">
-        <i data-lucide="check-circle-2" class="sum-icon"></i>
-        <span class="sum-text">Mandate confirmed &amp; signed</span>
-      </div>
-      <div class="card hidden" id="sec4Card">
-        <h2 class="card-title">Review &amp; Confirm</h2>
-        <p class="card-sub">Review your mandate details before signing</p>
-        <div class="review-list" id="reviewList"></div>
-        <div class="checkbox-row">
-          <input type="checkbox" id="tcCheck" />
-          <label for="tcCheck">I confirm that I have read and understood the terms and conditions of this Direct Debit mandate.</label>
+    <!-- Page 2: Signature 1 -->
+    <div class="flow-page signature-page" data-page="2" id="flowPage2" data-sig-index="0">
+      <div class="flow-scroll sig-page-body">
+        <h2 class="card-title sig-page-heading" style="margin-bottom:6px;">Signature 1 of 5</h2>
+        <p class="card-sub sig-instruction" id="sigInstr0">Please sign below exactly as you would sign at your bank.</p>
+        <div class="signature-body">
+          <div class="pen-options pen-toolbar" id="penBar0" data-sig-toolbar="0">
+            <div class="color-options" id="penColors0">
+              <button type="button" class="color-circle selected" data-color="#000000" style="background:#000000" aria-label="Black"></button>
+              <button type="button" class="color-circle" data-color="#1E3A5F" style="background:#1E3A5F" aria-label="Dark blue"></button>
+              <button type="button" class="color-circle" data-color="#8B0000" style="background:#8B0000" aria-label="Dark red"></button>
+              <button type="button" class="color-circle" data-color="#1B5E20" style="background:#1B5E20" aria-label="Dark green"></button>
+              <button type="button" class="color-circle" data-color="#4A0072" style="background:#4A0072" aria-label="Dark purple"></button>
+            </div>
+            <div class="options-divider"></div>
+            <div class="width-options" id="penWidths0">
+              <button type="button" class="width-option" data-width="1.5" aria-label="Thin"><span class="width-line" style="height:2px"></span></button>
+              <button type="button" class="width-option selected" data-width="3" aria-label="Medium"><span class="width-line" style="height:4px"></span></button>
+              <button type="button" class="width-option" data-width="5" aria-label="Thick"><span class="width-line" style="height:6px"></span></button>
+            </div>
+            <button type="button" class="undo-btn" id="sigUndo0" disabled aria-label="Undo last stroke">↩</button>
+          </div>
+          <div class="signature-canvas-wrapper">
+            <canvas class="signature-canvas" id="sigCanvas0"></canvas>
+          </div>
         </div>
-        <button type="button" class="btn-primary" id="sec4Confirm">
+        <div class="field-error" id="sigErr0">Please draw your signature before continuing.</div>
+      </div>
+      <div class="nav-footer">
+        <button type="button" class="btn-secondary" id="btnBackSig0">Back</button>
+        <button type="button" class="btn-primary" id="btnNextSig0"><span id="btnNextSig0Label">Next Signature</span></button>
+      </div>
+      <div style="text-align:center; margin-top:12px;">
+        <a href="#" class="demo-skip" onclick="demoSkip(event); return false;">🎬 Demo — Skip to next step</a>
+      </div>
+      <footer class="page-footer">
+        <svg class="footer-mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="autoraFooterGradSIG0" x1="8" y1="54" x2="54" y2="10" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#7A5CFF"/><stop offset="45%" stop-color="#FF6B68"/><stop offset="100%" stop-color="#B36CFF"/>
+            </linearGradient>
+          </defs>
+          <path fill="url(#autoraFooterGradSIG0)" d="M32 6 C22 6 13 12 10 22 C8 28 9 36 13 42 L19 38 C16 33 15 27 17 22 C19 15 26 10 34 11 C42 12 49 19 51 27 C52 32 51 38 48 43 L54 47 C58 40 60 31 58 23 C55 12 44 6 32 6 Z"/>
+        </svg>
+        <span>Secured by Autora · Regulated by the Central Bank of the UAE</span>
+      </footer>
+    </div>
+    <!-- Page 3: Signature 2 -->
+    <div class="flow-page signature-page" data-page="3" id="flowPage3" data-sig-index="1">
+      <div class="flow-scroll sig-page-body">
+        <h2 class="card-title sig-page-heading" style="margin-bottom:6px;">Signature 2 of 5</h2>
+        <p class="card-sub sig-instruction" id="sigInstr1">Please sign identically to your previous signature.</p>
+        <div class="signature-body">
+          <div class="pen-options pen-toolbar" id="penBar1" data-sig-toolbar="1">
+            <div class="color-options" id="penColors1">
+              <button type="button" class="color-circle selected" data-color="#000000" style="background:#000000" aria-label="Black"></button>
+              <button type="button" class="color-circle" data-color="#1E3A5F" style="background:#1E3A5F" aria-label="Dark blue"></button>
+              <button type="button" class="color-circle" data-color="#8B0000" style="background:#8B0000" aria-label="Dark red"></button>
+              <button type="button" class="color-circle" data-color="#1B5E20" style="background:#1B5E20" aria-label="Dark green"></button>
+              <button type="button" class="color-circle" data-color="#4A0072" style="background:#4A0072" aria-label="Dark purple"></button>
+            </div>
+            <div class="options-divider"></div>
+            <div class="width-options" id="penWidths1">
+              <button type="button" class="width-option" data-width="1.5" aria-label="Thin"><span class="width-line" style="height:2px"></span></button>
+              <button type="button" class="width-option selected" data-width="3" aria-label="Medium"><span class="width-line" style="height:4px"></span></button>
+              <button type="button" class="width-option" data-width="5" aria-label="Thick"><span class="width-line" style="height:6px"></span></button>
+            </div>
+            <button type="button" class="undo-btn" id="sigUndo1" disabled aria-label="Undo last stroke">↩</button>
+          </div>
+          <div class="signature-canvas-wrapper">
+            <canvas class="signature-canvas" id="sigCanvas1"></canvas>
+          </div>
+        </div>
+        <div class="field-error" id="sigErr1">Please draw your signature before continuing.</div>
+      </div>
+      <div class="nav-footer">
+        <button type="button" class="btn-secondary" id="btnBackSig1">Back</button>
+        <button type="button" class="btn-primary" id="btnNextSig1"><span id="btnNextSig1Label">Next Signature</span></button>
+      </div>
+      <div style="text-align:center; margin-top:12px;">
+        <a href="#" class="demo-skip" onclick="demoSkip(event); return false;">🎬 Demo — Skip to next step</a>
+      </div>
+      <footer class="page-footer">
+        <svg class="footer-mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="autoraFooterGradSIG1" x1="8" y1="54" x2="54" y2="10" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#7A5CFF"/><stop offset="45%" stop-color="#FF6B68"/><stop offset="100%" stop-color="#B36CFF"/>
+            </linearGradient>
+          </defs>
+          <path fill="url(#autoraFooterGradSIG1)" d="M32 6 C22 6 13 12 10 22 C8 28 9 36 13 42 L19 38 C16 33 15 27 17 22 C19 15 26 10 34 11 C42 12 49 19 51 27 C52 32 51 38 48 43 L54 47 C58 40 60 31 58 23 C55 12 44 6 32 6 Z"/>
+        </svg>
+        <span>Secured by Autora · Regulated by the Central Bank of the UAE</span>
+      </footer>
+    </div>
+    <!-- Page 4: Signature 3 -->
+    <div class="flow-page signature-page" data-page="4" id="flowPage4" data-sig-index="2">
+      <div class="flow-scroll sig-page-body">
+        <h2 class="card-title sig-page-heading" style="margin-bottom:6px;">Signature 3 of 5</h2>
+        <p class="card-sub sig-instruction" id="sigInstr2">Please sign identically to your previous signature.</p>
+        <div class="signature-body">
+          <div class="pen-options pen-toolbar" id="penBar2" data-sig-toolbar="2">
+            <div class="color-options" id="penColors2">
+              <button type="button" class="color-circle selected" data-color="#000000" style="background:#000000" aria-label="Black"></button>
+              <button type="button" class="color-circle" data-color="#1E3A5F" style="background:#1E3A5F" aria-label="Dark blue"></button>
+              <button type="button" class="color-circle" data-color="#8B0000" style="background:#8B0000" aria-label="Dark red"></button>
+              <button type="button" class="color-circle" data-color="#1B5E20" style="background:#1B5E20" aria-label="Dark green"></button>
+              <button type="button" class="color-circle" data-color="#4A0072" style="background:#4A0072" aria-label="Dark purple"></button>
+            </div>
+            <div class="options-divider"></div>
+            <div class="width-options" id="penWidths2">
+              <button type="button" class="width-option" data-width="1.5" aria-label="Thin"><span class="width-line" style="height:2px"></span></button>
+              <button type="button" class="width-option selected" data-width="3" aria-label="Medium"><span class="width-line" style="height:4px"></span></button>
+              <button type="button" class="width-option" data-width="5" aria-label="Thick"><span class="width-line" style="height:6px"></span></button>
+            </div>
+            <button type="button" class="undo-btn" id="sigUndo2" disabled aria-label="Undo last stroke">↩</button>
+          </div>
+          <div class="signature-canvas-wrapper">
+            <canvas class="signature-canvas" id="sigCanvas2"></canvas>
+          </div>
+        </div>
+        <div class="field-error" id="sigErr2">Please draw your signature before continuing.</div>
+      </div>
+      <div class="nav-footer">
+        <button type="button" class="btn-secondary" id="btnBackSig2">Back</button>
+        <button type="button" class="btn-primary" id="btnNextSig2"><span id="btnNextSig2Label">Next Signature</span></button>
+      </div>
+      <div style="text-align:center; margin-top:12px;">
+        <a href="#" class="demo-skip" onclick="demoSkip(event); return false;">🎬 Demo — Skip to next step</a>
+      </div>
+      <footer class="page-footer">
+        <svg class="footer-mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="autoraFooterGradSIG2" x1="8" y1="54" x2="54" y2="10" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#7A5CFF"/><stop offset="45%" stop-color="#FF6B68"/><stop offset="100%" stop-color="#B36CFF"/>
+            </linearGradient>
+          </defs>
+          <path fill="url(#autoraFooterGradSIG2)" d="M32 6 C22 6 13 12 10 22 C8 28 9 36 13 42 L19 38 C16 33 15 27 17 22 C19 15 26 10 34 11 C42 12 49 19 51 27 C52 32 51 38 48 43 L54 47 C58 40 60 31 58 23 C55 12 44 6 32 6 Z"/>
+        </svg>
+        <span>Secured by Autora · Regulated by the Central Bank of the UAE</span>
+      </footer>
+    </div>
+    <!-- Page 5: Signature 4 -->
+    <div class="flow-page signature-page" data-page="5" id="flowPage5" data-sig-index="3">
+      <div class="flow-scroll sig-page-body">
+        <h2 class="card-title sig-page-heading" style="margin-bottom:6px;">Signature 4 of 5</h2>
+        <p class="card-sub sig-instruction" id="sigInstr3">Please sign identically to your previous signature.</p>
+        <div class="signature-body">
+          <div class="pen-options pen-toolbar" id="penBar3" data-sig-toolbar="3">
+            <div class="color-options" id="penColors3">
+              <button type="button" class="color-circle selected" data-color="#000000" style="background:#000000" aria-label="Black"></button>
+              <button type="button" class="color-circle" data-color="#1E3A5F" style="background:#1E3A5F" aria-label="Dark blue"></button>
+              <button type="button" class="color-circle" data-color="#8B0000" style="background:#8B0000" aria-label="Dark red"></button>
+              <button type="button" class="color-circle" data-color="#1B5E20" style="background:#1B5E20" aria-label="Dark green"></button>
+              <button type="button" class="color-circle" data-color="#4A0072" style="background:#4A0072" aria-label="Dark purple"></button>
+            </div>
+            <div class="options-divider"></div>
+            <div class="width-options" id="penWidths3">
+              <button type="button" class="width-option" data-width="1.5" aria-label="Thin"><span class="width-line" style="height:2px"></span></button>
+              <button type="button" class="width-option selected" data-width="3" aria-label="Medium"><span class="width-line" style="height:4px"></span></button>
+              <button type="button" class="width-option" data-width="5" aria-label="Thick"><span class="width-line" style="height:6px"></span></button>
+            </div>
+            <button type="button" class="undo-btn" id="sigUndo3" disabled aria-label="Undo last stroke">↩</button>
+          </div>
+          <div class="signature-canvas-wrapper">
+            <canvas class="signature-canvas" id="sigCanvas3"></canvas>
+          </div>
+        </div>
+        <div class="field-error" id="sigErr3">Please draw your signature before continuing.</div>
+      </div>
+      <div class="nav-footer">
+        <button type="button" class="btn-secondary" id="btnBackSig3">Back</button>
+        <button type="button" class="btn-primary" id="btnNextSig3"><span id="btnNextSig3Label">Next Signature</span></button>
+      </div>
+      <div style="text-align:center; margin-top:12px;">
+        <a href="#" class="demo-skip" onclick="demoSkip(event); return false;">🎬 Demo — Skip to next step</a>
+      </div>
+      <footer class="page-footer">
+        <svg class="footer-mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="autoraFooterGradSIG3" x1="8" y1="54" x2="54" y2="10" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#7A5CFF"/><stop offset="45%" stop-color="#FF6B68"/><stop offset="100%" stop-color="#B36CFF"/>
+            </linearGradient>
+          </defs>
+          <path fill="url(#autoraFooterGradSIG3)" d="M32 6 C22 6 13 12 10 22 C8 28 9 36 13 42 L19 38 C16 33 15 27 17 22 C19 15 26 10 34 11 C42 12 49 19 51 27 C52 32 51 38 48 43 L54 47 C58 40 60 31 58 23 C55 12 44 6 32 6 Z"/>
+        </svg>
+        <span>Secured by Autora · Regulated by the Central Bank of the UAE</span>
+      </footer>
+    </div>
+    <!-- Page 6: Signature 5 -->
+    <div class="flow-page signature-page" data-page="6" id="flowPage6" data-sig-index="4">
+      <div class="flow-scroll sig-page-body">
+        <h2 class="card-title sig-page-heading" style="margin-bottom:6px;">Signature 5 of 5</h2>
+        <p class="card-sub sig-instruction" id="sigInstr4">Please sign identically to your previous signature.</p>
+        <div class="signature-body">
+          <div class="pen-options pen-toolbar" id="penBar4" data-sig-toolbar="4">
+            <div class="color-options" id="penColors4">
+              <button type="button" class="color-circle selected" data-color="#000000" style="background:#000000" aria-label="Black"></button>
+              <button type="button" class="color-circle" data-color="#1E3A5F" style="background:#1E3A5F" aria-label="Dark blue"></button>
+              <button type="button" class="color-circle" data-color="#8B0000" style="background:#8B0000" aria-label="Dark red"></button>
+              <button type="button" class="color-circle" data-color="#1B5E20" style="background:#1B5E20" aria-label="Dark green"></button>
+              <button type="button" class="color-circle" data-color="#4A0072" style="background:#4A0072" aria-label="Dark purple"></button>
+            </div>
+            <div class="options-divider"></div>
+            <div class="width-options" id="penWidths4">
+              <button type="button" class="width-option" data-width="1.5" aria-label="Thin"><span class="width-line" style="height:2px"></span></button>
+              <button type="button" class="width-option selected" data-width="3" aria-label="Medium"><span class="width-line" style="height:4px"></span></button>
+              <button type="button" class="width-option" data-width="5" aria-label="Thick"><span class="width-line" style="height:6px"></span></button>
+            </div>
+            <button type="button" class="undo-btn" id="sigUndo4" disabled aria-label="Undo last stroke">↩</button>
+          </div>
+          <div class="signature-canvas-wrapper">
+            <canvas class="signature-canvas" id="sigCanvas4"></canvas>
+          </div>
+        </div>
+        <div class="field-error" id="sigErr4">Please draw your signature before continuing.</div>
+      </div>
+      <div class="nav-footer">
+        <button type="button" class="btn-secondary" id="btnBackSig4">Back</button>
+        <button type="button" class="btn-primary" id="btnNextSig4"><span id="btnNextSig4Label">Next</span></button>
+      </div>
+      <div style="text-align:center; margin-top:12px;">
+        <a href="#" class="demo-skip" onclick="demoSkip(event); return false;">🎬 Demo — Skip to next step</a>
+      </div>
+      <footer class="page-footer">
+        <svg class="footer-mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="autoraFooterGradSIG4" x1="8" y1="54" x2="54" y2="10" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#7A5CFF"/><stop offset="45%" stop-color="#FF6B68"/><stop offset="100%" stop-color="#B36CFF"/>
+            </linearGradient>
+          </defs>
+          <path fill="url(#autoraFooterGradSIG4)" d="M32 6 C22 6 13 12 10 22 C8 28 9 36 13 42 L19 38 C16 33 15 27 17 22 C19 15 26 10 34 11 C42 12 49 19 51 27 C52 32 51 38 48 43 L54 47 C58 40 60 31 58 23 C55 12 44 6 32 6 Z"/>
+        </svg>
+        <span>Secured by Autora · Regulated by the Central Bank of the UAE</span>
+      </footer>
+    </div>
+    <!-- Page 7: Review -->
+    <div class="flow-page" data-page="7" id="flowPage7">
+      <div class="flow-scroll">
+        <div class="card" id="sec4Card">
+          <h2 class="card-title">Review &amp; Confirm</h2>
+          <p class="card-sub">Review your mandate details before signing</p>
+          <div class="review-list" id="reviewList"></div>
+          <div class="checkbox-row">
+            <input type="checkbox" id="tcCheck" />
+            <label for="tcCheck">I confirm that I have read and understood the terms and conditions of this Direct Debit mandate.</label>
+          </div>
+        </div>
+      </div>
+      <div class="nav-footer" id="navFooterReview">
+        <button type="button" class="btn-secondary" id="btnBackReview">Back</button>
+        <button type="button" class="btn-primary" id="sec4Confirm" disabled>
           <span id="sec4BtnLabel">Confirm &amp; Sign</span>
           <i data-lucide="loader-2" class="spinner hidden" id="sec4Spinner" style="width:20px;height:20px;"></i>
         </button>
       </div>
+      <div style="text-align:center; margin-top:12px;">
+        <a href="#" class="demo-skip" onclick="demoSkip(event); return false;">🎬 Demo — Skip to next step</a>
+      </div>
+      <footer class="page-footer">
+        <svg class="footer-mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="autoraFooterGradRev" x1="8" y1="54" x2="54" y2="10" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#7A5CFF"/><stop offset="45%" stop-color="#FF6B68"/><stop offset="100%" stop-color="#B36CFF"/>
+            </linearGradient>
+          </defs>
+          <path fill="url(#autoraFooterGradRev)" d="M32 6 C22 6 13 12 10 22 C8 28 9 36 13 42 L19 38 C16 33 15 27 17 22 C19 15 26 10 34 11 C42 12 49 19 51 27 C52 32 51 38 48 43 L54 47 C58 40 60 31 58 23 C55 12 44 6 32 6 Z"/>
+        </svg>
+        <span>Secured by Autora · Regulated by the Central Bank of the UAE</span>
+      </footer>
     </div>
 
-    <!-- Section 5 -->
-    <div class="section-block hidden" id="sec5Block" data-step-anchor="5">
+    <!-- Page 8: PDF / Complete -->
+    <div class="flow-page" data-page="8" id="flowPage8">
+      <div class="flow-scroll">
       <div class="card" id="sec5Card">
         <h2 class="card-title">Your Signed Mandate</h2>
         <p class="card-sub">Your mandate has been successfully signed</p>
@@ -904,6 +1451,9 @@
 
         <div class="pdf-viewer-wrapper" role="region" aria-label="Signed Direct Debit Authority Form preview">
           <div class="pdf-page">
+            <div class="pdf-disclaimer-box">
+              ⚠️ This document is generated by Autora for reference purposes only and is not an official Direct Debit Authority form.
+            </div>
             <header class="pdf-dd-header">
               <div class="pdf-dd-header-left">
                 <p class="pdf-dd-title">Direct Debit Authority</p>
@@ -938,7 +1488,7 @@
               </tr>
               <tr>
                 <td class="field-label">Primary Sponsoring Bank</td>
-                <td class="field-value">Emirates NBD</td>
+                <td class="field-value" id="pdfBankNameCell">Emirates NBD</td>
                 <td class="field-arabic">البنك الراعي الأساسي</td>
               </tr>
               <tr>
@@ -988,7 +1538,7 @@
               <tr>
                 <td class="field-num">4</td>
                 <td class="field-label"><span class="required">*</span> IBAN / Card Number</td>
-                <td class="field-value">AE07 0331 2345 6789 0123 456</td>
+                <td class="field-value" id="pdfPayInstrumentCell">AE07 0331 2345 6789 0123 456</td>
                 <td class="field-arabic">رقم الحساب الدولي</td>
               </tr>
               <tr>
@@ -1107,739 +1657,1138 @@
           </div>
         </div>
 
-        <p style="text-align:center; font-size:12px; color:#4E465E; margin-top:8px;">🔒 View only — this document cannot be downloaded</p>
+        <div class="pdf-actions">
+          <button type="button" class="btn-download" onclick="downloadPDF()">⬇ Download PDF</button>
+        </div>
       </div>
+      </div>
+      <div style="text-align:center; margin-top:12px;">
+        <a href="#" class="demo-skip" onclick="demoSkip(event); return false;">🎬 Demo — Skip to next step</a>
+      </div>
+      <footer class="page-footer">
+        <svg class="footer-mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="autoraFooterGradPdf" x1="8" y1="54" x2="54" y2="10" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#7A5CFF"/><stop offset="45%" stop-color="#FF6B68"/><stop offset="100%" stop-color="#B36CFF"/>
+            </linearGradient>
+          </defs>
+          <path fill="url(#autoraFooterGradPdf)" d="M32 6 C22 6 13 12 10 22 C8 28 9 36 13 42 L19 38 C16 33 15 27 17 22 C19 15 26 10 34 11 C42 12 49 19 51 27 C52 32 51 38 48 43 L54 47 C58 40 60 31 58 23 C55 12 44 6 32 6 Z"/>
+        </svg>
+        <span>Secured by Autora · Regulated by the Central Bank of the UAE</span>
+      </footer>
+    </div>
     </div>
 
-    <footer class="page-footer">
-      <svg class="footer-mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <defs>
-          <linearGradient id="autoraFooterGrad" x1="8" y1="54" x2="54" y2="10" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#7A5CFF"/><stop offset="45%" stop-color="#FF6B68"/><stop offset="100%" stop-color="#B36CFF"/>
-          </linearGradient>
-        </defs>
-        <path fill="url(#autoraFooterGrad)" d="M32 6 C22 6 13 12 10 22 C8 28 9 36 13 42 L19 38 C16 33 15 27 17 22 C19 15 26 10 34 11 C42 12 49 19 51 27 C52 32 51 38 48 43 L54 47 C58 40 60 31 58 23 C55 12 44 6 32 6 Z"/>
-      </svg>
-      <span>Secured by Autora · Regulated by the Central Bank of the UAE</span>
-    </footer>
+  <div id="sigMismatchModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="sigMismatchTitle">
+    <div class="modal-box">
+      <p id="sigMismatchTitle">Your signature looks different from your first signature. Please try again to make sure all signatures match.</p>
+      <button type="button" class="btn-primary" id="sigMismatchOk" style="width:100%;">OK</button>
+    </div>
+  </div>
+
   </div>
 
   <script>
-    (function () {
-      const PRE_FULL = "Ahmed Al Mansouri";
-      const PRE_EID = "784-1990-1234567-8";
-      const PRE_IBAN = "AE07 0331 2345 6789 0123 456";
+(function () {
+  const PRE_FULL = "Ahmed Al Mansouri";
+  const PRE_EID = "784-1990-1234567-8";
+  const PRE_IBAN = "AE07 0331 2345 6789 0123 456";
+  const PRE_CC = "4111 1111 1111 1111";
 
-      const state = {
-        s1: false,
-        s2: false,
-        s3: false,
-        s4: false,
-        flowLocked: false,
-        eid: { hasFile: false, fileName: "", ocrFail: false, manual: false },
-        bank: { method: null, ibanHasFile: false, ibanFileName: "", ibanOcrFail: false, ibanManual: false },
-      };
+  let currentPage = 0;
+  /** @type {string|null} */
+  let bankName = null;
+  let penColor = "#000000";
+  let penWidth = 3;
+  let penLocked = false;
 
-      const sigInk = [false, false, false, false, false];
+  /** @type {Array<Array<{color:string,baseWidth:number,points:Array<{x:number,y:number,t:number}>}>>} */
+  const sigStrokes = [[], [], [], [], []];
+  let sig1ImageData = null;
+  /** @type {{aspect:number,strokeCount:number,cx:number,cy:number,bbox:any}|null} */
+  let sig1Meta = null;
 
-      let allowScrollIntoView = false;
 
-      const $ = (id) => document.getElementById(id);
-      const qs = (sel, root) => (root || document).querySelector(sel);
+  const $ = function (id) {
+    return document.getElementById(id);
+  };
 
-      function isStepBlockVisible(n) {
-        if (n === 1) return true;
-        if (n === 2) return state.s1;
-        if (n === 3) return state.s1 && state.s2;
-        if (n === 4) return state.s1 && state.s2 && state.s3;
-        if (n === 5) return state.s1 && state.s2 && state.s3 && state.s4;
-        return false;
+  function refreshLucide() {
+    try {
+      if (window.lucide && lucide.createIcons) lucide.createIcons();
+    } catch (e) {}
+  }
+
+  function clearFieldErrors() {
+    document.querySelectorAll(".field-error").forEach(function (el) {
+      el.classList.remove("show");
+    });
+    document.querySelectorAll(".input-invalid").forEach(function (el) {
+      el.classList.remove("input-invalid");
+    });
+  }
+
+  function showFieldError(inputId, errId, msg) {
+    const inp = $(inputId);
+    const er = $(errId);
+    if (msg && er) er.textContent = msg;
+    if (inp) inp.classList.add("input-invalid");
+    if (er) er.classList.add("show");
+  }
+
+  const state = {
+    eid: { hasFile: false, fileName: "", ocrFail: false, manual: false },
+    bank: { method: null, ibanHasFile: false, ibanFileName: "", ibanOcrFail: false, ibanManual: false },
+    bankVerifying: false,
+  };
+
+  function pageEl(pageIndex) {
+    return $("flowPage" + pageIndex);
+  }
+
+  function updateLandscapeBodyClass() {
+    /* layout scrolls naturally; no body overflow lock */
+  }
+
+  function updateProgressUI() {
+    const wrap = $("progressWrap");
+    if (!wrap) return;
+    if (currentPage >= 8) {
+      wrap.classList.add("hidden");
+      return;
+    }
+    wrap.classList.remove("hidden");
+
+    let phase = 0;
+    if (currentPage === 0) phase = 0;
+    else if (currentPage === 1) phase = 1;
+    else if (currentPage >= 2 && currentPage <= 6) phase = 2;
+    else if (currentPage === 7) phase = 3;
+
+    const sigNum = currentPage >= 2 && currentPage <= 6 ? currentPage - 1 : null;
+
+    for (let i = 0; i < 4; i++) {
+      const done = i < phase;
+      const active = i === phase;
+      const upcoming = i > phase;
+
+      const circle = $("progCircle" + i);
+      const num = $("progNum" + i);
+      const chk = $("progCheck" + i);
+      const lbl = $("progLabel" + i);
+      const sub = $("progSub" + i);
+
+      if (circle) {
+        circle.classList.remove("done", "active", "upcoming");
+        if (done) circle.classList.add("done");
+        else if (active) circle.classList.add("active");
+        else circle.classList.add("upcoming");
       }
-
-      function scrollToActiveSection() {
-        let target = null;
-        if (!state.s1) target = $("sec1Card");
-        else if (!state.s2) target = $("sec2Card");
-        else if (!state.s3) target = $("sec3Card");
-        else if (!state.s4) target = $("sec4Card");
-        else target = $("sec5Card");
-        if (target && !target.classList.contains("hidden")) {
-          target.scrollIntoView({ behavior: "smooth", block: "center" });
-        }
-      }
-
-      function updateStepPills() {
-        document.querySelectorAll("[data-step-scroll]").forEach(function (pill) {
-          const n = +pill.getAttribute("data-step-scroll");
-          pill.disabled = !isStepBlockVisible(n);
-        });
-      }
-
-      function updateDemoBar() {
-        const next = $("demoNextBtn");
-        if (!next) return;
-        if (state.flowLocked) {
-          next.disabled = true;
-          next.textContent = "Demo: flow complete";
+      if (num && chk) {
+        if (done) {
+          num.classList.add("hidden");
+          chk.classList.remove("hidden");
         } else {
-          next.disabled = false;
-          next.textContent = "Demo: next step";
+          num.classList.remove("hidden");
+          chk.classList.add("hidden");
         }
       }
+      if (lbl) {
+        lbl.classList.remove("active", "upcoming", "done");
+        if (done) lbl.classList.add("done");
+        else if (active) lbl.classList.add("active");
+        else if (upcoming) lbl.classList.add("upcoming");
+      }
+      if (sub) {
+        sub.textContent = "";
+        if (i === 2 && active && sigNum !== null) {
+          sub.textContent = "Signature " + sigNum + " of 5";
+        }
+      }
+    }
+    for (let i = 0; i < 3; i++) {
+      const line = $("progLine" + i);
+      if (line) {
+        line.classList.toggle("done", i < phase);
+      }
+    }
+  }
 
-      function demoStrokeAllSignatures() {
-        document.querySelectorAll("#sigGrid canvas").forEach(function (canvas) {
-          const idx = +canvas.getAttribute("data-idx");
-          resizeCanvas(canvas);
-          const ctx = canvas.getContext("2d");
-          const w = canvas.getBoundingClientRect().width;
-          ctx.beginPath();
-          ctx.moveTo(10, 60);
-          ctx.lineTo(Math.max(w - 10, 30), 58);
-          ctx.stroke();
-          sigInk[idx] = true;
+  function resizeCanvasEl(canvas) {
+    const rect = canvas.getBoundingClientRect();
+    const w = Math.max(1, Math.floor(rect.width));
+    const h = Math.max(1, Math.floor(rect.height));
+    canvas.width = w;
+    canvas.height = h;
+  }
+
+  function getCanvasPos(e, canvas) {
+    const rect = canvas.getBoundingClientRect();
+    const clientX = e.touches && e.touches[0] ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches && e.touches[0] ? e.touches[0].clientY : e.clientY;
+    return {
+      x: (clientX - rect.left) * (canvas.width / rect.width),
+      y: (clientY - rect.top) * (canvas.height / rect.height),
+    };
+  }
+
+  function redrawSigCanvas(sigIndex) {
+    const canvas = $("sigCanvas" + sigIndex);
+    if (!canvas) return;
+    resizeCanvasEl(canvas);
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    sigStrokes[sigIndex].forEach(function (stroke) {
+      replayStrokeSmooth(ctx, stroke);
+    });
+  }
+
+  function replayStrokeSmooth(ctx, stroke) {
+    const pts = stroke.points;
+    if (pts.length < 2) return;
+    ctx.strokeStyle = stroke.color;
+    ctx.lineWidth = stroke.baseWidth;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    let lastX = pts[0].x;
+    let lastY = pts[0].y;
+    let curX = pts[0].x;
+    let curY = pts[0].y;
+    for (let i = 1; i < pts.length; i++) {
+      const pos = pts[i];
+      const midX = (lastX + pos.x) / 2;
+      const midY = (lastY + pos.y) / 2;
+      ctx.beginPath();
+      ctx.moveTo(curX, curY);
+      ctx.quadraticCurveTo(lastX, lastY, midX, midY);
+      ctx.stroke();
+      curX = midX;
+      curY = midY;
+      lastX = pos.x;
+      lastY = pos.y;
+    }
+  }
+
+  function extractAllPoints(strokes) {
+    const pts = [];
+    strokes.forEach(function (s) {
+      s.points.forEach(function (p) {
+        pts.push({ x: p.x, y: p.y });
+      });
+    });
+    return pts;
+  }
+
+  function computeMeta(strokes) {
+    const pts = extractAllPoints(strokes);
+    if (!pts.length) return null;
+    let minX = Infinity,
+      minY = Infinity,
+      maxX = -Infinity,
+      maxY = -Infinity;
+    pts.forEach(function (p) {
+      minX = Math.min(minX, p.x);
+      minY = Math.min(minY, p.y);
+      maxX = Math.max(maxX, p.x);
+      maxY = Math.max(maxY, p.y);
+    });
+    const bw = Math.max(1, maxX - minX);
+    const bh = Math.max(1, maxY - minY);
+    let sx = 0,
+      sy = 0;
+    pts.forEach(function (p) {
+      sx += p.x;
+      sy += p.y;
+    });
+    return {
+      aspect: bw / bh,
+      strokeCount: strokes.length,
+      cx: sx / pts.length,
+      cy: sy / pts.length,
+      bbox: { minX: minX, minY: minY, maxX: maxX, maxY: maxY, w: bw, h: bh },
+      pts: pts,
+    };
+  }
+
+  function signaturesRoughlyMatch(sigIndex) {
+    const m1 = sig1Meta;
+    const m2 = computeMeta(sigStrokes[sigIndex]);
+    if (!m1 || !m2) return false;
+    const ar1 = m1.aspect,
+      ar2 = m2.aspect;
+    const denom = Math.max(ar1, ar2, 0.001);
+    if (Math.abs(ar1 - ar2) / denom > 0.4) return false;
+    if (Math.abs(m1.strokeCount - m2.strokeCount) > 3) return false;
+    const bw = Math.max(m1.bbox.w, m2.bbox.w, 1);
+    const bh = Math.max(m1.bbox.h, m2.bbox.h, 1);
+    const nx = Math.abs(m1.cx - m2.cx) / bw;
+    const ny = Math.abs(m1.cy - m2.cy) / bh;
+    if (Math.hypot(nx, ny) > 0.55) return false;
+
+    const pts1 = m1.pts;
+    const pts2 = m2.pts;
+    let sum = 0;
+    for (let k = 0; k < 20; k++) {
+      const a = pts1[Math.floor(Math.random() * pts1.length)];
+      const b = pts2[Math.floor(Math.random() * pts2.length)];
+      sum += Math.hypot((a.x - b.x) / bw, (a.y - b.y) / bh);
+    }
+    if (sum / 20 > 0.65) return false;
+    return true;
+  }
+
+  function setupSigCanvas(sigIndex) {
+    const canvas = $("sigCanvas" + sigIndex);
+    if (!canvas || canvas.dataset.bound === "1") return;
+    canvas.dataset.bound = "1";
+
+    let isDrawing = false;
+    let lastX = 0;
+    let lastY = 0;
+    let currentPath = [];
+
+    function startDraw(e) {
+      e.preventDefault();
+      resizeCanvasEl(canvas);
+      redrawSigCanvas(sigIndex);
+      const ctx = canvas.getContext("2d");
+      const pos = getCanvasPos(e, canvas);
+      isDrawing = true;
+      lastX = pos.x;
+      lastY = pos.y;
+      currentPath = [{ x: pos.x, y: pos.y, t: Date.now() }];
+      ctx.strokeStyle = penColor;
+      ctx.lineWidth = penWidth;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.beginPath();
+      ctx.moveTo(lastX, lastY);
+      $("sigErr" + sigIndex).classList.remove("show");
+    }
+
+    function drawMove(e) {
+      if (!isDrawing) return;
+      e.preventDefault();
+      const ctx = canvas.getContext("2d");
+      const pos = getCanvasPos(e, canvas);
+      currentPath.push({ x: pos.x, y: pos.y, t: Date.now() });
+      ctx.strokeStyle = penColor;
+      ctx.lineWidth = penWidth;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      const midX = (lastX + pos.x) / 2;
+      const midY = (lastY + pos.y) / 2;
+      ctx.quadraticCurveTo(lastX, lastY, midX, midY);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(midX, midY);
+      lastX = pos.x;
+      lastY = pos.y;
+      $("sigUndo" + sigIndex).disabled = false;
+    }
+
+    function endDraw(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      if (!isDrawing) return;
+      isDrawing = false;
+      if (currentPath.length >= 2) {
+        sigStrokes[sigIndex].push({
+          color: penColor,
+          baseWidth: penWidth,
+          points: currentPath.slice(),
         });
-        updateSec3Button();
+      }
+      currentPath = [];
+      redrawSigCanvas(sigIndex);
+      $("sigUndo" + sigIndex).disabled = sigStrokes[sigIndex].length === 0;
+      canvas.getContext("2d").beginPath();
+    }
+
+    canvas.addEventListener("mousedown", startDraw);
+    canvas.addEventListener("mousemove", drawMove);
+    canvas.addEventListener("mouseleave", endDraw);
+    window.addEventListener("mouseup", endDraw);
+    canvas.addEventListener("touchstart", startDraw, { passive: false });
+    canvas.addEventListener("touchmove", drawMove, { passive: false });
+    canvas.addEventListener("touchend", endDraw);
+    canvas.addEventListener("touchcancel", endDraw);
+  }
+
+  function syncPenToolbars() {
+    for (let i = 0; i < 5; i++) {
+      const bar = $("penBar" + i);
+      if (!bar) continue;
+      const locked = penLocked;
+      bar.classList.toggle("disabled", locked);
+      bar.title = locked ? "Pen settings are locked to match Signature 1." : "";
+      const tip = locked ? "Pen settings are locked to match Signature 1." : "";
+      bar.querySelectorAll(".color-circle").forEach(function (btn) {
+        btn.classList.toggle("selected", btn.getAttribute("data-color") === penColor);
+        btn.title = tip;
+      });
+      bar.querySelectorAll(".width-option").forEach(function (btn) {
+        btn.classList.toggle("selected", btn.getAttribute("data-width") === String(penWidth));
+        btn.title = tip;
+      });
+    }
+  }
+
+  function bindPenControls() {
+    for (let i = 0; i < 5; i++) {
+      const bar = $("penBar" + i);
+      if (!bar || bar.dataset.listeners === "1") continue;
+      bar.dataset.listeners = "1";
+      bar.addEventListener("click", function (e) {
+        if (penLocked) return;
+        const cbtn = e.target.closest(".color-circle");
+        const wbtn = e.target.closest(".width-option");
+        if (cbtn) {
+          penColor = cbtn.getAttribute("data-color") || "#000000";
+          syncPenToolbars();
+        }
+        if (wbtn) {
+          penWidth = parseFloat(wbtn.getAttribute("data-width") || "3", 10);
+          syncPenToolbars();
+        }
+      });
+    }
+  }
+
+  function showPage(n) {
+    currentPage = n;
+    document.querySelectorAll(".flow-page").forEach(function (el) {
+      el.classList.remove("active");
+    });
+    const page = pageEl(n);
+    if (page) page.classList.add("active");
+
+    if ($("btnBack0")) $("btnBack0").classList.toggle("hidden", n === 0);
+
+    updateProgressUI();
+    updateLandscapeBodyClass();
+
+    if (n >= 2 && n <= 6) {
+      const idx = n - 2;
+      setupSigCanvas(idx);
+      bindPenControls();
+      syncPenToolbars();
+      redrawSigCanvas(idx);
+      $("sigUndo" + idx).disabled = sigStrokes[idx].length === 0;
+    }
+
+    if (n === 7) {
+      buildReview();
+      updateReviewConfirmState();
+    }
+
+    if (n === 8) {
+      updatePdfPreviewCells();
+    }
+
+    refreshLucide();
+    window.requestAnimationFrame(function () {
+      if (n >= 2 && n <= 6) {
+        redrawSigCanvas(n - 2);
+      }
+    });
+  }
+
+  function updatePdfPreviewCells() {
+    const b = $("pdfBankNameCell");
+    const p = $("pdfPayInstrumentCell");
+    if (b && bankName) b.textContent = bankName;
+    const method = state.bank.method;
+    if (p) {
+      if (method === "iban") p.textContent = $("ibanInput").value.trim();
+      else if (method === "card") p.textContent = $("ccInput").value.trim();
+    }
+  }
+
+  window.downloadPDF = function () {
+    const pdfEl = document.querySelector(".pdf-page");
+    if (!pdfEl) return;
+    const pdfContent = pdfEl.outerHTML;
+
+    const pdfStyles = `
+    body { font-family: Arial, sans-serif; font-size: 10px; margin: 20px; color: #1A1A1A; background: white; }
+    .pdf-page { width: 750px; margin: 0 auto; padding: 24px; }
+    table { border-collapse: collapse; width: 100%; margin-bottom: 4px; }
+    td { border: 1px solid #333; padding: 4px 6px; vertical-align: middle; font-size: 10px; }
+    .pdf-dd-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
+    .pdf-dd-title { font-size: 14px; font-weight: bold; margin: 0 0 2px; }
+    .pdf-dd-sub { margin: 0 0 2px; font-size: 11px; }
+    .pdf-dd-ar-red { color: red; margin: 0; font-size: 10px; }
+    .pdf-dd-logo-ar { font-size: 13px; font-weight: bold; margin: 0 0 2px; text-align: right; }
+    .pdf-dd-rev { font-size: 9px; margin: 0; text-align: right; }
+    .pdf-oic-table td { width: 30px; text-align: center; font-weight: bold; }
+    .pdf-oic-label-cell { font-weight: bold; width: 60px; }
+    .field-label { font-weight: bold; width: 180px; background: #f9f9f9; }
+    .field-value { background: white; }
+    .field-arabic { text-align: right; font-size: 9px; width: 120px; background: #f9f9f9; }
+    .field-num { width: 20px; text-align: center; font-weight: bold; background: #f9f9f9; }
+    .required { color: red; }
+    .pdf-agreement { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; font-size: 9px; line-height: 1.4; border: 1px solid #333; padding: 8px; }
+    .pdf-sig-row { display: flex; border: 1px solid #333; margin-top: 8px; }
+    .pdf-sig-cell { flex: 1; border-right: 1px solid #333; padding: 6px; min-height: 80px; }
+    .pdf-sig-cell:last-child { border-right: none; }
+    .pdf-sig-cap { font-size: 9px; font-weight: bold; margin: 0 0 6px; }
+    .pdf-sig-name { font-size: 10px; margin: 0 0 4px; }
+    .pdf-sig-placeholder { height: 50px; background: #f5f5f5; }
+    .pdf-footer-check { font-size: 9px; margin-top: 4px; }
+    .pdf-disclaimer-box { border: 2px solid #F59E0B; background: #FFFBEA; border-radius: 6px; padding: 8px 12px; font-size: 11px; color: #92400E; font-weight: 600; text-align: center; margin-bottom: 16px; }
+  `;
+
+    const fullHtml = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Autora Mandate - MND-2026-00847</title>
+  <style>${pdfStyles}</style>
+</head>
+<body>
+  ${pdfContent}
+</body>
+</html>`;
+
+    const blob = new Blob([fullHtml], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "Autora-Mandate-MND-2026-00847.html";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  function last4Digits(str) {
+    const d = (str || "").replace(/\D/g, "");
+    return d.length < 4 ? d : d.slice(-4);
+  }
+
+  function buildReview() {
+    const fn = $("fullName").value.trim();
+    const eid = $("eidNumber").value.trim();
+    const method = state.bank.method;
+    const iban = $("ibanInput").value.trim();
+    const cc = $("ccInput").value.trim();
+
+    const rows = [
+      ["Full Name", fn],
+      ["Emirates ID", eid],
+      ["Bank Name", bankName || "—"],
+      ["Payment Method", method === "card" ? "Credit Card" : "IBAN"],
+    ];
+    if (method === "iban") rows.push(["IBAN / CC Number", iban]);
+    if (method === "card")
+      rows.push([
+        "IBAN / CC Number",
+        cc
+          .replace(/\s/g, "")
+          .replace(/(\d{4})/g, "$1 ")
+          .trim(),
+      ]);
+
+    rows.push(
+      ["Merchant", "Demo Merchant LLC"],
+      ["Frequency", "Monthly"],
+      ["Collection Amount", "AED 500.00"],
+      ["Start Date", "01/09/2026"],
+      ["End Date", "01/09/2027"]
+    );
+
+    const list = $("reviewList");
+    list.innerHTML = "";
+    rows.forEach(function (row) {
+      const r = document.createElement("div");
+      r.className = "review-row";
+      r.innerHTML = '<span class="review-k"></span><span class="review-v"></span>';
+      r.querySelector(".review-k").textContent = row[0] + ":";
+      r.querySelector(".review-v").textContent = row[1];
+      list.appendChild(r);
+    });
+  }
+
+  function updateReviewConfirmState() {
+    const btn = $("sec4Confirm");
+    if (!btn) return;
+    btn.disabled = !$("tcCheck").checked;
+  }
+
+  function paymentFieldFilled() {
+    if (state.bank.method === "iban") return ($("ibanInput").value.trim().length > 0);
+    if (state.bank.method === "card") return ($("ccInput").value.replace(/\D/g, "").length > 0);
+    return false;
+  }
+
+  function updateBankVerifyButton() {
+    const btn = $("btnVerifyNext");
+    if (!btn || state.bankVerifying) return;
+    const ok = state.bank.method && paymentFieldFilled();
+    btn.disabled = !ok;
+  }
+
+  function setPayMethod(m) {
+    state.bank.method = m;
+    const seg = document.querySelector("#payMethodSeg");
+    if (seg) {
+      seg.querySelector("[data-method='iban']").classList.toggle("active", m === "iban");
+      seg.querySelector("[data-method='card']").classList.toggle("active", m === "card");
+    }
+    $("ibanBlock").style.display = m === "iban" ? "block" : "none";
+    $("cardBlock").style.display = m === "card" ? "block" : "none";
+    $("payMethodErr").classList.remove("show");
+    if (m !== "iban") {
+      resetIbanUpload(false);
+    }
+    if (m === "card") {
+      const cc = $("ccInput");
+      if (!cc.value.trim()) cc.value = PRE_CC;
+    }
+    clearFieldErrors();
+    updateBankVerifyButton();
+  }
+
+  function resetEidUpload() {
+    state.eid = { hasFile: false, fileName: "", ocrFail: false, manual: false };
+    $("eidFile").value = "";
+    $("eidUploadZone").classList.remove("has-file");
+    $("eidOcrFailActions").classList.remove("visible");
+    $("eidFields").style.display = "none";
+    $("fullName").value = "";
+    $("eidNumber").value = "";
+    clearFieldErrors();
+  }
+
+  function onEidFile(f) {
+    if (!f) return;
+    state.eid.manual = false;
+    state.eid.hasFile = true;
+    state.eid.fileName = f.name;
+    state.eid.ocrFail = false;
+    $("eidUploadZone").classList.add("has-file");
+    $("eidFileName").textContent = f.name;
+    $("eidOcrFailActions").classList.remove("visible");
+    $("eidFields").style.display = "block";
+    $("fullName").value = PRE_FULL;
+    $("eidNumber").value = PRE_EID;
+    clearFieldErrors();
+    refreshLucide();
+  }
+
+  function resetIbanUpload(clearMethod) {
+    state.bank.ibanHasFile = false;
+    state.bank.ibanFileName = "";
+    state.bank.ibanOcrFail = false;
+    state.bank.ibanManual = false;
+    $("ibanFile").value = "";
+    $("ibanUploadZone").classList.remove("has-file");
+    $("ibanOcrFailActions").classList.remove("visible");
+    $("ibanFieldWrap").style.display = "none";
+    $("ibanInput").value = "";
+    if (clearMethod) updateBankVerifyButton();
+  }
+
+  function onIbanFile(f) {
+    if (!f) return;
+    state.bank.ibanManual = false;
+    state.bank.ibanHasFile = true;
+    state.bank.ibanFileName = f.name;
+    state.bank.ibanOcrFail = false;
+    $("ibanUploadZone").classList.add("has-file");
+    $("ibanFileName").textContent = f.name;
+    $("ibanOcrFailActions").classList.remove("visible");
+    $("ibanFieldWrap").style.display = "block";
+    $("ibanInput").value = PRE_IBAN;
+    updateBankVerifyButton();
+  }
+
+  function validateEidAndAdvance() {
+    clearFieldErrors();
+    const fn = $("fullName").value.trim();
+    const en = $("eidNumber").value.trim();
+    let ok = true;
+    if (!fn) {
+      showFieldError("fullName", "fullNameErr", "This field is required");
+      ok = false;
+    }
+    if (!en) {
+      showFieldError("eidNumber", "eidNumberErr", "This field is required");
+      ok = false;
+    }
+    if (!ok) return;
+    showPage(1);
+  }
+
+  function runBankVerification() {
+    clearFieldErrors();
+    $("payMethodErr").classList.remove("show");
+    if (!state.bank.method) {
+      $("payMethodErr").classList.add("show");
+      return;
+    }
+    if (!paymentFieldFilled()) return;
+
+    const btn = $("btnVerifyNext");
+    const sp = $("bankVerifySpinner");
+    const lbl = $("btnVerifyLabel");
+    state.bankVerifying = true;
+    btn.disabled = true;
+    sp.classList.remove("hidden");
+    lbl.textContent = "Verifying...";
+
+    window.setTimeout(function () {
+      let pass = false;
+      if (state.bank.method === "iban") {
+        const raw = $("ibanInput").value.trim();
+        const compact = raw.replace(/\s/g, "");
+        if (compact.substring(0, 2).toUpperCase() === "AE" && compact.length >= 23) {
+          pass = true;
+          bankName = "Emirates NBD";
+        } else {
+          showFieldError("ibanInput", "ibanErr", "This IBAN number is not valid. Please check and enter it again.");
+        }
+      } else {
+        const digits = $("ccInput").value.replace(/\D/g, "");
+        if (digits.length === 16) {
+          pass = true;
+          bankName = "Visa";
+        } else {
+          showFieldError("ccInput", "ccErr", "This card number is not valid. Please check and enter it again.");
+        }
       }
 
-      function demoAdvanceOneStep() {
-        if (state.flowLocked) return;
-        if (!state.s1) {
-          onEidFile({ name: "demo-emirates-id.jpg" });
-          $("sec1Confirm").click();
-          return;
-        }
-        if (!state.s2) {
-          $("bankName").value = "Emirates NBD";
-          setPayMethod("iban");
-          onIbanFile({ name: "demo-iban-document.pdf" });
-          $("sec2Confirm").click();
-          return;
-        }
-        if (!state.s3) {
-          demoStrokeAllSignatures();
-          $("sec3Submit").click();
-          return;
-        }
-        if (!state.s4) {
-          buildReview();
-          $("tcCheck").checked = true;
-          updateSec4Button();
-          $("sec4Confirm").click();
-        }
-      }
+      state.bankVerifying = false;
+      sp.classList.add("hidden");
+      lbl.textContent = "Verify & Next";
+      btn.disabled = false;
+      updateBankVerifyButton();
 
-      function demoResetFlow() {
-        state.s1 = false;
-        state.s2 = false;
-        state.s3 = false;
-        state.s4 = false;
-        state.flowLocked = false;
-        state.eid = { hasFile: false, fileName: "", ocrFail: false, manual: false };
-        state.bank = { method: null, ibanHasFile: false, ibanFileName: "", ibanOcrFail: false, ibanManual: false };
-        document.body.classList.remove("flow-locked");
-        resetEidUpload();
-        $("bankName").value = "";
-        $("ccInput").value = "";
-        $("tcCheck").checked = false;
+      if (pass) showPage(2);
+    }, 2000);
+  }
+
+  function validateSignatureAndAdvance(sigIndex) {
+    const err = $("sigErr" + sigIndex);
+    err.classList.remove("show");
+    if (sigStrokes[sigIndex].length === 0) {
+      err.classList.add("show");
+      return;
+    }
+    if (sigIndex > 0) {
+      if (!signaturesRoughlyMatch(sigIndex)) {
+        $("sigMismatchModal").classList.add("show");
+        sigStrokes[sigIndex] = [];
+        redrawSigCanvas(sigIndex);
+        $("sigUndo" + sigIndex).disabled = true;
+        return;
+      }
+    } else {
+      const canvas = $("sigCanvas0");
+      resizeCanvasEl(canvas);
+      const ctx = canvas.getContext("2d");
+      sig1ImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      sig1Meta = computeMeta(sigStrokes[0]);
+      penLocked = true;
+      syncPenToolbars();
+    }
+    showPage(3 + sigIndex);
+  }
+
+  function goBack() {
+    if (currentPage <= 0) return;
+    showPage(currentPage - 1);
+  }
+
+  function wireNav() {
+    $("btnNext0").addEventListener("click", validateEidAndAdvance);
+    $("btnBack1").addEventListener("click", goBack);
+    $("btnVerifyNext").addEventListener("click", function () {
+      if (!state.bankVerifying) runBankVerification();
+    });
+
+    for (let i = 0; i < 5; i++) {
+      $("btnBackSig" + i).addEventListener("click", goBack);
+      $("btnNextSig" + i).addEventListener("click", function () {
+        validateSignatureAndAdvance(i);
+      });
+      $("sigUndo" + i).addEventListener("click", function () {
+        sigStrokes[i].pop();
+        redrawSigCanvas(i);
+        $("sigUndo" + i).disabled = sigStrokes[i].length === 0;
+      });
+    }
+
+    $("btnBackReview").addEventListener("click", goBack);
+
+    $("tcCheck").addEventListener("change", updateReviewConfirmState);
+
+    $("sec4Confirm").addEventListener("click", function () {
+      if (!$("tcCheck").checked) return;
+      $("sec4Spinner").classList.remove("hidden");
+      $("sec4BtnLabel").textContent = "Signing…";
+      $("sec4Confirm").disabled = true;
+      window.setTimeout(function () {
         $("sec4Spinner").classList.add("hidden");
         $("sec4BtnLabel").textContent = "Confirm & Sign";
-        $("sec4Confirm").disabled = false;
-        setPayMethod(null);
-        for (let i = 0; i < 5; i++) sigInk[i] = false;
-        buildSignatureGrid();
-        render();
-        refreshLucide();
-      }
-
-      function setSummaryVisible(row, v) {
-        row.classList.toggle("visible", v);
-      }
-
-      function clearErrors() {
-        document.querySelectorAll(".field-error").forEach((e) => e.classList.remove("show"));
-        document.querySelectorAll(".input-invalid").forEach((i) => i.classList.remove("input-invalid"));
-      }
-
-      function setErr(inputId, errId, msg) {
-        const inp = $(inputId);
-        const er = $(errId);
-        if (msg && er) er.textContent = msg;
-        if (inp) inp.classList.add("input-invalid");
-        if (er) er.classList.add("show");
-      }
-
-      function refreshLucide() {
-        try {
-          if (window.lucide && lucide.createIcons) lucide.createIcons();
-        } catch (e) {
-          /* CDN or icon API blocked — page still works */
-        }
-      }
-
-      function activeStepIndex() {
-        if (state.flowLocked) return 5;
-        if (!state.s1) return 0;
-        if (!state.s2) return 1;
-        if (!state.s3) return 2;
-        if (!state.s4) return 3;
-        return 4;
-      }
-
-      function updateProgress() {
-        const idx = activeStepIndex();
-        document.querySelectorAll(".progress-step").forEach((step, i) => {
-          step.classList.remove("active", "done");
-          if (idx >= 5) {
-            step.classList.add("done");
-          } else if (i < idx) {
-            step.classList.add("done");
-          } else if (i === idx) {
-            step.classList.add("active");
-          }
-        });
-        refreshLucide();
-      }
-
-      function paymentFieldReady() {
-        if (state.bank.method === "iban") {
-          const v = ($("ibanInput") && $("ibanInput").value.trim()) || "";
-          return v.length > 0;
-        }
-        if (state.bank.method === "card") {
-          const digits = ($("ccInput") && $("ccInput").value.replace(/\D/g, "")) || "";
-          return digits.length > 0;
-        }
-        return false;
-      }
-
-      function updateSec2Button() {
-        const bn = ($("bankName") && $("bankName").value.trim()) || "";
-        const btn = $("sec2Confirm");
-        if (!btn) return;
-        btn.disabled = !(bn.length > 0 && state.bank.method && paymentFieldReady());
-      }
-
-      function updateSec1Button() {
-        const fn = ($("fullName") && $("fullName").value.trim()) || "";
-        const en = ($("eidNumber") && $("eidNumber").value.trim()) || "";
-        const btn = $("sec1Confirm");
-        if (btn) btn.disabled = !(fn && en);
-      }
-
-      function updateSec3Button() {
-        const btn = $("sec3Submit");
-        if (!btn) return;
-        btn.disabled = !sigInk.every(Boolean);
-      }
-
-      function updateSec4Button() {
-        const btn = $("sec4Confirm");
-        if (!btn) return;
-        btn.disabled = !$("tcCheck").checked || state.flowLocked;
-      }
-
-      function last4Digits(str) {
-        const d = (str || "").replace(/\D/g, "");
-        if (d.length < 4) return d;
-        return d.slice(-4);
-      }
-
-      function buildReview() {
-        const fn = $("fullName").value.trim();
-        const eid = $("eidNumber").value.trim();
-        const bankName = $("bankName").value.trim();
-        const method = state.bank.method;
-        const iban = $("ibanInput").value.trim();
-        const cc = $("ccInput").value.trim();
-
-        const rows = [
-          ["Full Name", fn],
-          ["Emirates ID Number", eid],
-          ["Bank Name", bankName],
-          ["Payment Method", method === "card" ? "Credit Card" : "IBAN"],
-        ];
-        if (method === "iban") rows.push(["IBAN", iban]);
-        if (method === "card") rows.push(["Credit Card", "•••• " + last4Digits(cc)]);
-
-        rows.push(
-          ["Merchant", "Demo Merchant LLC"],
-          ["Frequency", "Monthly"],
-          ["Collection Day", "5th of each month"],
-          ["Collection Amount", "AED 500.00"],
-          ["Amount Type", "Fixed"],
-          ["Start Date", "01/09/2026"],
-          ["End Date", "01/09/2027"],
-          ["Lifetime", "1 Year"]
-        );
-
-        const list = $("reviewList");
-        list.innerHTML = "";
-        rows.forEach(([k, v]) => {
-          const r = document.createElement("div");
-          r.className = "review-row";
-          r.innerHTML = '<span class="review-k"></span><span class="review-v"></span>';
-          r.querySelector(".review-k").textContent = k + ":";
-          r.querySelector(".review-v").textContent = v;
-          list.appendChild(r);
-        });
-      }
-
-      function render() {
-        const locked = state.flowLocked;
-
-        document.body.classList.toggle("flow-locked", locked);
-
-        const showBlock = (n) => {
-          if (n === 1) return true;
-          if (n === 2) return state.s1;
-          if (n === 3) return state.s1 && state.s2;
-          if (n === 4) return state.s1 && state.s2 && state.s3;
-          if (n === 5) return state.s1 && state.s2 && state.s3 && state.s4;
-          return false;
-        };
-
-        $("sec2Block").classList.toggle("hidden", !showBlock(2));
-        $("sec3Block").classList.toggle("hidden", !showBlock(3));
-        $("sec4Block").classList.toggle("hidden", !showBlock(4));
-        $("sec5Block").classList.toggle("hidden", !showBlock(5));
-
-        setSummaryVisible($("sec1Summary"), state.s1);
-        setSummaryVisible($("sec2Summary"), state.s2);
-        setSummaryVisible($("sec3Summary"), state.s3);
-        setSummaryVisible($("sec4Summary"), state.s4);
-
-        const e1 = !state.s1 && showBlock(1);
-        $("sec1Card").classList.toggle("hidden", !e1);
-
-        const e2 = showBlock(2) && !state.s2;
-        $("sec2Card").classList.toggle("hidden", !e2);
-
-        const e3 = showBlock(3) && !state.s3;
-        $("sec3Card").classList.toggle("hidden", !e3);
-
-        const e4 = showBlock(4) && !state.s4;
-        $("sec4Card").classList.toggle("hidden", !e4);
-
-        $("sec1SummaryText").textContent = "Emirates ID — " + ($("fullName").value.trim() || "—");
-
-        const bn = $("bankName").value.trim();
-        let tail = "";
-        if (state.bank.method === "iban") tail = last4Digits($("ibanInput").value);
-        else if (state.bank.method === "card") tail = last4Digits($("ccInput").value);
-        $("sec2SummaryText").textContent =
-          "Banking Information — " + (bn || "—") + " · " + (tail ? "···· " + tail : "—");
-
-        updateProgress();
-        updateSec1Button();
-        updateSec2Button();
-        updateSec3Button();
-        updateSec4Button();
-        updateStepPills();
-        updateDemoBar();
-        if (allowScrollIntoView) {
-          requestAnimationFrame(scrollToActiveSection);
-        }
-        refreshLucide();
-      }
-
-      function resetEidUpload() {
-        state.eid = { hasFile: false, fileName: "", ocrFail: false, manual: false };
-        $("eidFile").value = "";
-        $("eidUploadZone").classList.remove("has-file");
-        $("eidOcrFailActions").classList.remove("visible");
-        $("eidFields").style.display = "none";
-        $("fullName").value = "";
-        $("eidNumber").value = "";
-        clearErrors();
-      }
-
-      function onEidFile(f) {
-        if (!f) return;
-        state.eid.manual = false;
-        state.eid.hasFile = true;
-        state.eid.fileName = f.name;
-        state.eid.ocrFail = false;
-        $("eidUploadZone").classList.add("has-file");
-        $("eidFileName").textContent = f.name;
-        $("eidOcrFailActions").classList.remove("visible");
-        $("eidFields").style.display = "block";
-        $("fullName").value = PRE_FULL;
-        $("eidNumber").value = PRE_EID;
-        updateSec1Button();
-        refreshLucide();
-      }
-
-      function resetIbanUpload() {
-        state.bank.ibanHasFile = false;
-        state.bank.ibanFileName = "";
-        state.bank.ibanOcrFail = false;
-        state.bank.ibanManual = false;
-        $("ibanFile").value = "";
-        $("ibanUploadZone").classList.remove("has-file");
-        $("ibanOcrFailActions").classList.remove("visible");
-        $("ibanFieldWrap").style.display = "none";
-        $("ibanInput").value = "";
-        updateSec2Button();
-      }
-
-      function onIbanFile(f) {
-        if (!f) return;
-        state.bank.ibanManual = false;
-        state.bank.ibanHasFile = true;
-        state.bank.ibanFileName = f.name;
-        state.bank.ibanOcrFail = false;
-        $("ibanUploadZone").classList.add("has-file");
-        $("ibanFileName").textContent = f.name;
-        $("ibanOcrFailActions").classList.remove("visible");
-        $("ibanFieldWrap").style.display = "block";
-        $("ibanInput").value = PRE_IBAN;
-        updateSec2Button();
-      }
-
-      function resetAllSignatures() {
-        for (let i = 0; i < 5; i++) {
-          sigInk[i] = false;
-          const canvas = qs('#sigGrid canvas[data-idx="' + i + '"]');
-          if (canvas) {
-            const ctx = canvas.getContext("2d");
-            resizeCanvas(canvas);
-          }
-        }
-        updateSec3Button();
-      }
-
-      function unlockFrom(editSection) {
-        if (state.flowLocked) return;
-        if (editSection <= 1) {
-          state.s1 = false;
-          state.s2 = false;
-          state.s3 = false;
-          state.s4 = false;
-          resetAllSignatures();
-        } else if (editSection === 2) {
-          state.s2 = false;
-          state.s3 = false;
-          state.s4 = false;
-          resetAllSignatures();
-        } else if (editSection === 3) {
-          state.s3 = false;
-          state.s4 = false;
-          resetAllSignatures();
-        }
-      }
-
-      $("eidFile").addEventListener("change", function () {
-        const f = this.files && this.files[0];
-        if (f) onEidFile(f);
-      });
-
-      $("eidOcrFailBtn").addEventListener("click", function (e) {
-        e.preventDefault();
-        if (!state.eid.hasFile) return;
-        state.eid.ocrFail = true;
-        $("eidFields").style.display = "none";
-        $("eidOcrFailActions").classList.add("visible");
-        clearErrors();
-      });
-
-      $("eidReupload").addEventListener("click", function () {
-        resetEidUpload();
-      });
-
-      $("eidManual").addEventListener("click", function () {
-        state.eid.manual = true;
-        state.eid.ocrFail = false;
-        $("eidOcrFailActions").classList.remove("visible");
-        $("eidFields").style.display = "block";
-        $("fullName").value = "";
-        $("eidNumber").value = "";
-        updateSec1Button();
-      });
-
-      ["fullName", "eidNumber"].forEach((id) => {
-        $(id).addEventListener("input", function () {
-          clearErrors();
-          updateSec1Button();
-        });
-      });
-
-      $("sec1Confirm").addEventListener("click", function () {
-        clearErrors();
-        const fn = $("fullName").value.trim();
-        const en = $("eidNumber").value.trim();
-        let ok = true;
-        if (!fn) {
-          setErr("fullName", "fullNameErr", "This field is required");
-          ok = false;
-        }
-        if (!en) {
-          setErr("eidNumber", "eidNumberErr", "This field is required");
-          ok = false;
-        }
-        if (!ok) return;
-        state.s1 = true;
-        render();
-      });
-
-      $("sec1Edit").addEventListener("click", function () {
-        if (state.flowLocked) return;
-        unlockFrom(1);
-        render();
-      });
-
-      $("bankName").addEventListener("input", function () {
-        clearErrors();
-        updateSec2Button();
-      });
-
-      function setPayMethod(m) {
-        state.bank.method = m;
-        qs("#payMethodSeg button[data-method='iban']").classList.toggle("active", m === "iban");
-        qs("#payMethodSeg button[data-method='card']").classList.toggle("active", m === "card");
-        $("ibanBlock").style.display = m === "iban" ? "block" : "none";
-        $("cardBlock").style.display = m === "card" ? "block" : "none";
-        if (m !== "iban") resetIbanUpload();
-        if (m !== "card") {
-          $("ccInput").value = "";
-          $("ccErr").classList.remove("show");
-          $("ccInput").classList.remove("input-invalid");
-        }
-        updateSec2Button();
-      }
-
-      qs("#payMethodSeg").addEventListener("click", function (e) {
-        const btn = e.target.closest("button[data-method]");
-        if (!btn) return;
-        setPayMethod(btn.getAttribute("data-method"));
-      });
-
-      $("ibanFile").addEventListener("change", function () {
-        const f = this.files && this.files[0];
-        if (f) onIbanFile(f);
-      });
-
-      $("ibanOcrFailBtn").addEventListener("click", function (e) {
-        e.preventDefault();
-        if (!state.bank.ibanHasFile) return;
-        state.bank.ibanOcrFail = true;
-        $("ibanFieldWrap").style.display = "none";
-        $("ibanOcrFailActions").classList.add("visible");
-        $("ibanInput").value = "";
-        updateSec2Button();
-      });
-
-      $("ibanReupload").addEventListener("click", function () {
-        resetIbanUpload();
-      });
-
-      $("ibanManual").addEventListener("click", function () {
-        state.bank.ibanManual = true;
-        state.bank.ibanOcrFail = false;
-        $("ibanOcrFailActions").classList.remove("visible");
-        $("ibanFieldWrap").style.display = "block";
-        $("ibanInput").value = "";
-        updateSec2Button();
-      });
-
-      $("ibanInput").addEventListener("input", function () {
-        $("ibanErr").classList.remove("show");
-        $("ibanInput").classList.remove("input-invalid");
-        updateSec2Button();
-      });
-
-      $("ccInput").addEventListener("input", function () {
-        $("ccErr").classList.remove("show");
-        $("ccInput").classList.remove("input-invalid");
-        updateSec2Button();
-      });
-
-      $("sec2Confirm").addEventListener("click", function () {
-        clearErrors();
-        const bn = $("bankName").value.trim();
-        if (!bn) {
-          setErr("bankName", "bankNameErr", "Bank Name is required");
-          return;
-        }
-        if (!state.bank.method) return;
-        if (state.bank.method === "iban") {
-          const ib = $("ibanInput").value.trim();
-          if (!ib) {
-            setErr("ibanInput", "ibanErr", "IBAN is required");
-            return;
-          }
-        } else {
-          const digits = $("ccInput").value.replace(/\D/g, "");
-          if (!digits) {
-            setErr("ccInput", "ccErr", "Credit card number is required");
-            return;
-          }
-        }
-        state.s2 = true;
-        buildReview();
-        render();
-      });
-
-      $("sec2Edit").addEventListener("click", function () {
-        if (state.flowLocked) return;
-        unlockFrom(2);
-        render();
-      });
-
-      function buildSignatureGrid() {
-        const grid = $("sigGrid");
-        grid.innerHTML = "";
-        for (let i = 0; i < 5; i++) {
-          const wrap = document.createElement("div");
-          wrap.className = "sig-wrap";
-          wrap.innerHTML =
-            '<div class="sig-head"><label>Signature ' +
-            (i + 1) +
-            '</label><button type="button" class="btn-clear" data-idx="' +
-            i +
-            '">Clear</button></div><div class="sig-canvas-box"><canvas data-idx="' +
-            i +
-            '"></canvas></div>';
-          grid.appendChild(wrap);
-        }
-        grid.querySelectorAll(".btn-clear").forEach((btn) => {
-          btn.addEventListener("click", function () {
-            const idx = +btn.getAttribute("data-idx");
-            clearSig(idx);
-          });
-        });
-        grid.querySelectorAll("canvas").forEach((canvas) => {
-          setupCanvas(canvas, +canvas.getAttribute("data-idx"));
-        });
-      }
-
-      function resizeCanvas(canvas) {
-        const box = canvas.parentElement;
-        const w = box.clientWidth;
-        const h = 120;
-        const ratio = window.devicePixelRatio || 1;
-        canvas.width = w * ratio;
-        canvas.height = h * ratio;
-        const ctx = canvas.getContext("2d");
-        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-        ctx.lineWidth = 2;
-        ctx.lineCap = "round";
-        ctx.lineJoin = "round";
-        ctx.strokeStyle = "#120C24";
-      }
-
-      function clearSig(idx) {
-        const canvas = qs('#sigGrid canvas[data-idx="' + idx + '"]');
-        if (!canvas) return;
-        const ctx = canvas.getContext("2d");
-        resizeCanvas(canvas);
-        sigInk[idx] = false;
-        updateSec3Button();
-      }
-
-      function setupCanvas(canvas, idx) {
-        resizeCanvas(canvas);
-        const ctx = canvas.getContext("2d");
-        let drawing = false;
-
-        function pos(evt) {
-          const r = canvas.getBoundingClientRect();
-          const x = (evt.clientX !== undefined ? evt.clientX : evt.touches[0].clientX) - r.left;
-          const y = (evt.clientY !== undefined ? evt.clientY : evt.touches[0].clientY) - r.top;
-          return { x, y };
-        }
-
-        function start(evt) {
-          evt.preventDefault();
-          drawing = true;
-          const p = pos(evt);
-          ctx.beginPath();
-          ctx.moveTo(p.x, p.y);
-        }
-
-        function move(evt) {
-          if (!drawing) return;
-          evt.preventDefault();
-          const p = pos(evt);
-          ctx.lineTo(p.x, p.y);
-          ctx.stroke();
-          sigInk[idx] = true;
-          updateSec3Button();
-        }
-
-        function end(evt) {
-          if (evt) evt.preventDefault();
-          drawing = false;
-        }
-
-        canvas.addEventListener("mousedown", start);
-        canvas.addEventListener("mousemove", move);
-        window.addEventListener("mouseup", end);
-
-        canvas.addEventListener("touchstart", start, { passive: false });
-        canvas.addEventListener("touchmove", move, { passive: false });
-        canvas.addEventListener("touchend", end);
-        canvas.addEventListener("touchcancel", end);
-      }
-
-      $("sec3Submit").addEventListener("click", function () {
-        $("sigFormErr").classList.remove("show");
-        if (!sigInk.every(Boolean)) {
-          $("sigFormErr").classList.add("show");
-          return;
-        }
-        state.s3 = true;
-        buildReview();
-        render();
-      });
-
-      $("sec3Edit").addEventListener("click", function () {
-        if (state.flowLocked) return;
-        unlockFrom(3);
-        render();
-      });
-
-      $("tcCheck").addEventListener("change", updateSec4Button);
-
-      $("sec4Confirm").addEventListener("click", function () {
-        if (!$("tcCheck").checked || state.flowLocked) return;
-        $("sec4Spinner").classList.remove("hidden");
-        $("sec4BtnLabel").textContent = "Signing…";
-        $("sec4Confirm").disabled = true;
-
-        setTimeout(function () {
-          state.s4 = true;
-          state.flowLocked = true;
-          $("sec4Spinner").classList.add("hidden");
-          $("sec4BtnLabel").textContent = "Confirm & Sign";
-          render();
-        }, 1500);
-      });
-
-      window.addEventListener("resize", function () {
-        document.querySelectorAll("#sigGrid canvas").forEach((c) => {
-          const ink = sigInk[+c.getAttribute("data-idx")];
-          if (!ink) resizeCanvas(c);
-        });
-      });
-
-      $("demoNextBtn").addEventListener("click", demoAdvanceOneStep);
-      $("demoResetBtn").addEventListener("click", demoResetFlow);
-      document.querySelectorAll("[data-step-scroll]").forEach(function (pill) {
-        pill.addEventListener("click", function () {
-          if (pill.disabled) return;
-          var n = +pill.getAttribute("data-step-scroll");
-          var block = $("sec" + n + "Block");
-          if (block) block.scrollIntoView({ behavior: "smooth", block: "start" });
-        });
-      });
-
-      buildSignatureGrid();
-      resetEidUpload();
-      render();
-      allowScrollIntoView = true;
+        $("sec4Confirm").disabled = !$("tcCheck").checked;
+        showPage(8);
+      }, 1500);
+    });
+
+    $("sigMismatchOk").addEventListener("click", function () {
+      $("sigMismatchModal").classList.remove("show");
+    });
+  }
+
+  function wireBankingFields() {
+    document.querySelector("#payMethodSeg").addEventListener("click", function (e) {
+      const btn = e.target.closest("button[data-method]");
+      if (!btn) return;
+      setPayMethod(btn.getAttribute("data-method"));
+    });
+    $("ibanInput").addEventListener("input", function () {
+      $("ibanErr").classList.remove("show");
+      $("ibanInput").classList.remove("input-invalid");
+      updateBankVerifyButton();
+    });
+    $("ccInput").addEventListener("input", function () {
+      $("ccErr").classList.remove("show");
+      $("ccInput").classList.remove("input-invalid");
+      updateBankVerifyButton();
+    });
+    $("ibanFile").addEventListener("change", function () {
+      const f = this.files && this.files[0];
+      if (f) onIbanFile(f);
+    });
+    $("ibanOcrFailBtn").addEventListener("click", function (e) {
+      e.preventDefault();
+      if (!state.bank.ibanHasFile) return;
+      state.bank.ibanOcrFail = true;
+      $("ibanFieldWrap").style.display = "none";
+      $("ibanOcrFailActions").classList.add("visible");
+      $("ibanInput").value = "";
+      updateBankVerifyButton();
+    });
+    $("ibanReupload").addEventListener("click", function () {
+      resetIbanUpload(false);
+    });
+    $("ibanManual").addEventListener("click", function () {
+      state.bank.ibanManual = true;
+      state.bank.ibanOcrFail = false;
+      $("ibanOcrFailActions").classList.remove("visible");
+      $("ibanFieldWrap").style.display = "block";
+      $("ibanInput").value = "";
+      updateBankVerifyButton();
+    });
+  }
+
+  function wireEid() {
+    $("eidFile").addEventListener("change", function () {
+      const f = this.files && this.files[0];
+      if (f) onEidFile(f);
+    });
+    $("eidOcrFailBtn").addEventListener("click", function (e) {
+      e.preventDefault();
+      if (!state.eid.hasFile) return;
+      $("eidFields").style.display = "none";
+      $("eidOcrFailActions").classList.add("visible");
+      clearFieldErrors();
+    });
+    $("eidReupload").addEventListener("click", resetEidUpload);
+    $("eidManual").addEventListener("click", function () {
+      state.eid.manual = true;
+      $("eidOcrFailActions").classList.remove("visible");
+      $("eidFields").style.display = "block";
+      $("fullName").value = "";
+      $("eidNumber").value = "";
+      clearFieldErrors();
+    });
+    ["fullName", "eidNumber"].forEach(function (id) {
+      $(id).addEventListener("input", clearFieldErrors);
+    });
+  }
+
+  window.addEventListener("resize", function () {
+    for (let i = 0; i < 5; i++) {
+      redrawSigCanvas(i);
+    }
+    updateLandscapeBodyClass();
+  });
+  if (window.matchMedia) {
+    window.matchMedia("(orientation: landscape)").addEventListener("change", updateLandscapeBodyClass);
+  }
+
+  function cubicBezierPoint(t, x0, y0, x1, y1, x2, y2, x3, y3) {
+    const mt = 1 - t;
+    const mt2 = mt * mt;
+    const mt3 = mt2 * mt;
+    const t2 = t * t;
+    const t3 = t2 * t;
+    return {
+      x: mt3 * x0 + 3 * mt2 * t * x1 + 3 * mt * t2 * x2 + t3 * x3,
+      y: mt3 * y0 + 3 * mt2 * t * y1 + 3 * mt * t2 * y2 + t3 * y3,
+    };
+  }
+
+  function sampleCubicSegment(x0, y0, x1, y1, x2, y2, x3, y3, steps, tStart) {
+    const pts = [];
+    for (let i = 0; i <= steps; i++) {
+      const t = i / steps;
+      const p = cubicBezierPoint(t, x0, y0, x1, y1, x2, y2, x3, y3);
+      pts.push({ x: p.x, y: p.y, t: tStart + i });
+    }
+    return pts;
+  }
+
+  function buildDemoStrokesForSize(w, h) {
+    const col = penColor || "#000000";
+    const baseW = penWidth || 3;
+    const ax = w * 0.1,
+      ay = h * 0.6;
+    const bx = w * 0.2,
+      by = h * 0.2;
+    const cx = w * 0.35,
+      cy = h * 0.8;
+    const dx = w * 0.5,
+      dy = h * 0.5;
+    const ex = w * 0.65,
+      ey = h * 0.2;
+    const fx = w * 0.75,
+      fy = h * 0.7;
+    const gx = w * 0.9,
+      gy = h * 0.4;
+    let tBase = Date.now();
+    const partA = sampleCubicSegment(ax, ay, bx, by, cx, cy, dx, dy, 18, tBase);
+    tBase += partA.length;
+    const partB = sampleCubicSegment(dx, dy, ex, ey, fx, fy, gx, gy, 18, tBase).slice(1);
+    const strokeOnePts = partA.concat(partB);
+    tBase += partB.length + 1;
+    const hx = w * 0.1,
+      hy = h * 0.7;
+    const ix = w * 0.3,
+      iy = h * 0.75;
+    const jx = w * 0.6,
+      jy = h * 0.72;
+    const kx = w * 0.9,
+      ky = h * 0.7;
+    const strokeTwoPts = sampleCubicSegment(hx, hy, ix, iy, jx, jy, kx, ky, 22, tBase);
+    return [
+      { color: col, baseWidth: baseW, points: strokeOnePts },
+      { color: col, baseWidth: baseW, points: strokeTwoPts },
+    ];
+  }
+
+  function injectDemoSignature(sigIndex) {
+    const canvas = $("sigCanvas" + sigIndex);
+    if (!canvas) return;
+    resizeCanvasEl(canvas);
+    const rect = canvas.getBoundingClientRect();
+    const w = Math.max(1, rect.width);
+    const h = Math.max(1, rect.height);
+    const unitTpl = buildDemoStrokesForSize(1, 1);
+    const col = penColor || "#000000";
+    const baseW = penWidth || 3;
+    let tOff = Date.now();
+    sigStrokes[sigIndex] = unitTpl.map(function (st) {
+      return {
+        color: col,
+        baseWidth: baseW,
+        points: st.points.map(function (p) {
+          return { x: p.x * w, y: p.y * h, t: tOff++ };
+        }),
+      };
+    });
+    drawSampleSignature(canvas);
+    const undo = $("sigUndo" + sigIndex);
+    if (undo) undo.disabled = sigStrokes[sigIndex].length === 0;
+  }
+
+  function drawSampleSignature(canvas) {
+    resizeCanvasEl(canvas);
+    const ctx = canvas.getContext("2d");
+    const w = canvas.width;
+    const h = canvas.height;
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, w, h);
+    var currentPenColor = penColor || "#000000";
+    var currentPenWidth = penWidth || 3;
+    ctx.strokeStyle = currentPenColor;
+    ctx.lineWidth = currentPenWidth;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.beginPath();
+    ctx.moveTo(w * 0.1, h * 0.6);
+    ctx.bezierCurveTo(w * 0.2, h * 0.2, w * 0.35, h * 0.8, w * 0.5, h * 0.5);
+    ctx.bezierCurveTo(w * 0.65, h * 0.2, w * 0.75, h * 0.7, w * 0.9, h * 0.4);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(w * 0.1, h * 0.7);
+    ctx.bezierCurveTo(w * 0.3, h * 0.75, w * 0.6, h * 0.72, w * 0.9, h * 0.7);
+    ctx.stroke();
+  }
+
+  function demoSkipEid() {
+    state.eid.hasFile = true;
+    state.eid.fileName = "demo-emirates-id.jpg";
+    state.eid.ocrFail = false;
+    $("eidUploadZone").classList.add("has-file");
+    $("eidFileName").textContent = "demo-emirates-id.jpg";
+    $("eidOcrFailActions").classList.remove("visible");
+    $("eidFields").style.display = "block";
+    $("fullName").value = PRE_FULL;
+    $("eidNumber").value = PRE_EID;
+    clearFieldErrors();
+    refreshLucide();
+    showPage(1);
+  }
+
+  function demoSkipBank() {
+    setPayMethod("iban");
+    state.bank.ibanManual = false;
+    state.bank.ibanHasFile = true;
+    state.bank.ibanFileName = "demo-iban-doc.pdf";
+    state.bank.ibanOcrFail = false;
+    $("ibanUploadZone").classList.add("has-file");
+    $("ibanFileName").textContent = "demo-iban-doc.pdf";
+    $("ibanOcrFailActions").classList.remove("visible");
+    $("ibanFieldWrap").style.display = "block";
+    $("ibanInput").value = PRE_IBAN;
+    clearFieldErrors();
+    updateBankVerifyButton();
+
+    const btn = $("btnVerifyNext");
+    const sp = $("bankVerifySpinner");
+    const lbl = $("btnVerifyLabel");
+    state.bankVerifying = true;
+    if (btn) btn.disabled = true;
+    if (sp) sp.classList.remove("hidden");
+    if (lbl) lbl.textContent = "Verifying...";
+
+    window.setTimeout(function () {
+      bankName = "Emirates NBD";
+      state.bankVerifying = false;
+      if (sp) sp.classList.add("hidden");
+      if (lbl) lbl.textContent = "Verify & Next";
+      if (btn) btn.disabled = false;
+      updateBankVerifyButton();
+      showPage(2);
       refreshLucide();
-    })();
+    }, 1000);
+  }
+
+  function demoSkipReview() {
+    $("tcCheck").checked = true;
+    updateReviewConfirmState();
+    $("sec4Spinner").classList.remove("hidden");
+    $("sec4BtnLabel").textContent = "Signing…";
+    $("sec4Confirm").disabled = true;
+    window.setTimeout(function () {
+      $("sec4Spinner").classList.add("hidden");
+      $("sec4BtnLabel").textContent = "Confirm & Sign";
+      $("sec4Confirm").disabled = !$("tcCheck").checked;
+      showPage(8);
+      refreshLucide();
+    }, 1500);
+  }
+
+  function demoSkipImpl(ev) {
+    if (ev && ev.preventDefault) ev.preventDefault();
+    switch (currentPage) {
+      case 0:
+        demoSkipEid();
+        break;
+      case 1:
+        demoSkipBank();
+        break;
+      case 2:
+      case 3:
+      case 4:
+      case 5:
+      case 6:
+        injectDemoSignature(currentPage - 2);
+        validateSignatureAndAdvance(currentPage - 2);
+        break;
+      case 7:
+        demoSkipReview();
+        break;
+      case 8:
+      default:
+        break;
+    }
+  }
+
+  function resetDemoImpl() {
+    currentPage = 0;
+    bankName = null;
+    penColor = "#000000";
+    penWidth = 3;
+    penLocked = false;
+    sig1ImageData = null;
+    sig1Meta = null;
+    for (let i = 0; i < 5; i++) {
+      sigStrokes[i] = [];
+    }
+    state.bankVerifying = false;
+    state.bank = { method: null, ibanHasFile: false, ibanFileName: "", ibanOcrFail: false, ibanManual: false };
+    state.eid = { hasFile: false, fileName: "", ocrFail: false, manual: false };
+
+    resetEidUpload();
+    $("ccInput").value = "";
+    $("ibanInput").value = "";
+    $("tcCheck").checked = false;
+    $("sec4Spinner").classList.add("hidden");
+    $("sec4BtnLabel").textContent = "Confirm & Sign";
+    $("sec4Confirm").disabled = true;
+    $("bankVerifySpinner").classList.add("hidden");
+    $("btnVerifyLabel").textContent = "Verify & Next";
+    $("sigMismatchModal").classList.remove("show");
+    clearFieldErrors();
+    $("payMethodErr").classList.remove("show");
+
+    setPayMethod(null);
+    $("ibanUploadZone").classList.remove("has-file");
+    $("ibanOcrFailActions").classList.remove("visible");
+    $("ibanFieldWrap").style.display = "none";
+    updateBankVerifyButton();
+
+    for (let i = 0; i < 5; i++) {
+      const c = $("sigCanvas" + i);
+      if (c) {
+        delete c.dataset.bound;
+        resizeCanvasEl(c);
+        const ctx = c.getContext("2d");
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, c.width, c.height);
+      }
+      const u = $("sigUndo" + i);
+      if (u) u.disabled = true;
+      const er = $("sigErr" + i);
+      if (er) er.classList.remove("show");
+    }
+
+    showPage(0);
+    syncPenToolbars();
+    refreshLucide();
+  }
+
+  window.demoSkip = demoSkipImpl;
+  window.resetDemo = resetDemoImpl;
+  window.drawSampleSignature = drawSampleSignature;
+
+  resetEidUpload();
+  setPayMethod(null);
+  $("ccInput").value = "";
+  wireEid();
+  wireBankingFields();
+  wireNav();
+  bindPenControls();
+  syncPenToolbars();
+  showPage(0);
+  refreshLucide();
+})();
+
   </script>
 </body>
 </html>
