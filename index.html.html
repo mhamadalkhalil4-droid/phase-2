@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Payer Mandate Submission — Autora</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Payer Mandate Submission - Autora</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -17,2917 +17,1448 @@
       --warm-sand: #F6EFE8;
       --mist-lavender: #EAE5F4;
       --graphite-plum: #4E465E;
-      --white: #ffffff;
-      --near-black: #1a1a2e;
-      --input-border: #D8D3E3;
-      --success: #22c55e;
     }
-    *, *::before, *::after { box-sizing: border-box; }
-    html {
-      margin: 0;
-      min-height: 100%;
-      overflow-y: auto;
-      overflow-x: hidden;
-    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
     body {
-      margin: 0;
       font-family: "Inter", system-ui, sans-serif;
       background: var(--warm-sand);
-      color: var(--near-black);
-      font-size: 15px;
-      line-height: 1.45;
-      min-height: 100vh;
-      overflow-y: auto;
+      color: var(--midnight-plum);
       overflow-x: hidden;
     }
-    button { font-family: inherit; cursor: pointer; }
+    button, input { font: inherit; }
+    button { border: 0; cursor: pointer; }
+    button:disabled { cursor: not-allowed; }
     a { color: var(--ultraviolet); }
 
-    .page {
-      max-width: 480px;
-      margin: 0 auto;
+    .reset-btn {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      z-index: 1000;
+      border: 1px solid #D1D5DB;
+      background: rgba(255,255,255,0.86);
+      color: #6B7280;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .app-shell {
+      min-height: 100vh;
+      padding: 22px 16px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .autora-header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 9px;
+      margin: 0 auto 18px;
+    }
+    .autora-mark { flex: 0 0 auto; }
+    .card {
       width: 100%;
+      max-width: 430px;
+      background: white;
+      border: 1px solid var(--mist-lavender);
+      border-radius: 18px;
+      box-shadow: 0 12px 30px rgba(18,12,36,0.08);
+      padding: 24px;
+    }
+    .title {
+      margin: 0 0 8px;
+      color: var(--midnight-plum);
+      font-size: 20px;
+      font-weight: 700;
+      text-align: center;
+    }
+    .subtitle {
+      margin: 0 0 22px;
+      color: var(--graphite-plum);
+      font-size: 13px;
+      text-align: center;
+      line-height: 1.5;
+    }
+    .primary-btn, .secondary-action {
+      width: 100%;
+      min-height: 48px;
+      border-radius: 12px;
+      font-weight: 700;
+      color: white;
+      background: var(--ultraviolet);
+      font-size: 15px;
+    }
+    .primary-btn:disabled { background: #D1D5DB; }
+    .demo-skip {
       display: block;
-      min-height: min-content;
-      padding: 20px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+      margin: 14px auto 0;
+      width: max-content;
+      max-width: 100%;
+      background: transparent;
+      color: #6B7280;
+      border-bottom: 1px dashed #9CA3AF;
+      padding: 0 0 2px;
+      font-size: 12px;
+    }
+    .footer {
+      margin: 18px 0 0;
+      color: var(--graphite-plum);
+      font-size: 11px;
+      text-align: center;
     }
 
     .progress-bar {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px 24px 0;
-      gap: 0;
-      flex-shrink: 0;
-    }
-    .progress-bar-inner {
+      width: 100%;
+      max-width: 430px;
       display: flex;
       align-items: flex-start;
       justify-content: center;
-      width: 100%;
-      max-width: 420px;
+      margin: 0 auto 16px;
     }
     .step {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
-      flex: 0 0 auto;
+      width: 64px;
+      gap: 5px;
     }
     .step-circle {
-      width: 32px;
-      height: 32px;
+      width: 28px;
+      height: 28px;
       border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
+      display: grid;
+      place-items: center;
+      font-size: 12px;
       font-weight: 700;
     }
     .step-circle.done { background: #7A5CFF; color: white; }
     .step-circle.active { background: #7A5CFF; color: white; }
     .step-circle.upcoming { background: #EAE5F4; color: #9CA3AF; }
     .step-label {
-      font-size: 11px;
+      color: var(--graphite-plum);
+      font-size: 9px;
       font-weight: 600;
-      color: #4E465E;
+      line-height: 1.15;
       text-align: center;
-      max-width: 72px;
-      line-height: 1.2;
     }
-    .step-label.active { color: #7A5CFF; }
+    .step-label.active { color: var(--ultraviolet); }
     .step-label.upcoming { color: #9CA3AF; }
-    .step-label.done { color: #4E465E; }
-    .step-sublabel {
-      font-size: 10px;
-      color: #9CA3AF;
-      margin-top: 2px;
-      text-align: center;
-      min-height: 14px;
-    }
     .step-line {
       flex: 1;
       height: 2px;
+      min-width: 12px;
+      margin-top: 13px;
       background: #EAE5F4;
-      min-width: 24px;
-      margin-bottom: 18px;
-      margin-top: 15px;
-      align-self: center;
     }
     .step-line.done { background: #7A5CFF; }
 
-    .flow-page {
+    .method-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 20px 0;
+    }
+    .method-card {
+      position: relative;
+      min-height: 138px;
+      padding: 20px 12px;
+      border: 1.5px solid var(--mist-lavender);
+      border-radius: 12px;
+      background: white;
+      text-align: center;
+    }
+    .method-card.selected {
+      border: 2px solid var(--ultraviolet);
+      background: #F3F0FF;
+    }
+    .method-card .checkmark {
       display: none;
-      min-height: min-content;
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      color: var(--ultraviolet);
     }
-    .flow-page.active {
+    .method-card.selected .checkmark { display: block; }
+    .method-name {
+      margin-top: 11px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .method-copy {
+      margin-top: 4px;
+      color: #6B7280;
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .icon-hero {
+      display: grid;
+      place-items: center;
+      margin-bottom: 16px;
+      color: var(--ultraviolet);
+    }
+    .instruction-card, .purple-panel {
+      background: #F3F0FF;
+      border-radius: 10px;
+      padding: 14px;
+      color: var(--graphite-plum);
+      font-size: 13px;
+      line-height: 1.5;
+      margin: 16px 0 20px;
+    }
+    .upload-area {
+      border: 1.5px dashed var(--mist-lavender);
+      border-radius: 10px;
+      padding: 24px;
+      text-align: center;
+      color: var(--graphite-plum);
+      margin-bottom: 12px;
+    }
+    .upload-area.success {
+      border-style: solid;
+      border-color: #22C55E;
+      background: #DCFCE7;
+    }
+    .text-link {
       display: block;
+      margin: 6px auto 18px;
+      background: transparent;
+      color: var(--ultraviolet);
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: underline;
     }
-    .flow-scroll {
-      display: block;
-      overflow: visible;
-    }
-
-    .nav-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 16px 0 8px;
-      flex-shrink: 0;
-    }
-    .nav-footer .btn-primary { width: auto; flex: 1; max-width: 220px; margin-left: auto; }
-    .nav-footer .btn-secondary { width: auto; flex: 0 0 auto; min-width: 100px; }
-
-    .sig-page-body {
-      padding-bottom: 8px;
-    }
-    .signature-body {
-      display: flex;
-      flex-direction: row;
-      gap: 12px;
-      padding: 0 24px;
-      align-items: flex-start;
-    }
-
-    .pen-options {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 14px;
-      width: 44px;
-      flex-shrink: 0;
-      padding-top: 8px;
-    }
-
-    .pen-toolbar.disabled {
-      pointer-events: none;
-      opacity: 0.45;
-    }
-    .pen-toolbar.disabled .color-circle,
-    .pen-toolbar.disabled .width-option,
-    .pen-toolbar.disabled .btn-undo,
-    .pen-toolbar.disabled .btn-clear {
-      cursor: not-allowed;
-    }
-
-    .color-options {
-      display: flex;
-      flex-direction: column;
+    .field { margin-bottom: 14px; }
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
       gap: 10px;
-      align-items: center;
+      align-items: end;
     }
-
-    .color-circle {
-      width: 26px;
-      height: 26px;
+    .slash {
+      padding-bottom: 13px;
+      color: var(--graphite-plum);
+      font-weight: 700;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--graphite-plum);
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .input-wrap { position: relative; }
+    input {
+      width: 100%;
+      min-height: 44px;
+      border: 1.5px solid var(--mist-lavender);
+      border-radius: 10px;
+      padding: 0 38px 0 12px;
+      color: var(--midnight-plum);
+      background: white;
+      outline: none;
+      font-size: 14px;
+    }
+    input:focus { border-color: var(--ultraviolet); }
+    .field-state {
+      position: absolute;
+      top: 50%;
+      right: 12px;
+      transform: translateY(-50%);
+      display: grid;
+      place-items: center;
+      width: 18px;
+      height: 18px;
+    }
+    .field-state.valid { color: #22C55E; }
+    .field-error {
+      display: none;
+      margin: 5px 0 0;
+      color: var(--solar-coral);
+      font-size: 11px;
+    }
+    .field.error .field-error { display: block; }
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--mist-lavender);
+      border-top-color: var(--ultraviolet);
       border-radius: 50%;
-      cursor: pointer;
-      border: 2px solid transparent;
-      padding: 0;
-      flex-shrink: 0;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .warning {
+      margin: 0 0 18px;
+      padding: 12px;
+      border: 1px solid #F59E0B;
+      border-radius: 8px;
+      background: #FFFBEA;
+      color: var(--graphite-plum);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .section-block {
+      border: 1px solid var(--mist-lavender);
+      border-radius: 14px;
+      padding: 16px;
+      margin-top: 14px;
+    }
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .section-label {
+      color: var(--graphite-plum);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .outline-small {
+      border: 1px solid var(--ultraviolet);
+      background: white;
+      color: var(--ultraviolet);
+      border-radius: 9px;
+      padding: 7px 10px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .segmented {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      padding: 5px;
+      border-radius: 12px;
+      background: var(--mist-lavender);
+      margin-bottom: 14px;
+    }
+    .segmented button {
+      min-height: 36px;
+      border-radius: 9px;
+      background: white;
+      color: var(--graphite-plum);
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .segmented button.active {
+      background: var(--ultraviolet);
+      color: white;
+    }
+    .info-bank {
+      background: #EBF3FB;
+      border-left: 4px solid var(--ultraviolet);
+      border-radius: 10px;
+      padding: 16px;
+      margin: 18px 0;
+    }
+    .info-bank h3 {
+      margin: 0 0 7px;
+      color: var(--ultraviolet);
+      font-size: 13px;
+    }
+    .info-bank p {
+      margin: 0 0 14px;
+      color: var(--graphite-plum);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .eid-illustration {
+      position: relative;
+      border: 1.5px solid var(--mist-lavender);
+      border-radius: 12px;
+      padding: 12px;
+      background: white;
+      min-height: 130px;
+      overflow: hidden;
+    }
+    .eid-country {
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--midnight-plum);
+      letter-spacing: 0.04em;
+    }
+    .eid-body {
+      display: flex;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .eid-photo {
+      width: 46px;
+      height: 56px;
+      border-radius: 6px;
+      background: #F3F0FF;
+    }
+    .eid-lines { flex: 1; padding-top: 3px; }
+    .eid-line {
+      height: 8px;
+      background: var(--mist-lavender);
+      border-radius: 999px;
+      margin-bottom: 8px;
+    }
+    .sig-highlight {
+      position: absolute;
+      left: 12px;
+      bottom: 10px;
+      border: 1.5px solid var(--solar-coral);
+      color: var(--solar-coral);
+      border-radius: 7px;
+      padding: 5px 8px;
+      font-size: 10px;
+      font-weight: 800;
     }
 
-    .color-circle.selected {
-      border-color: #7A5CFF;
-      box-shadow: 0 0 0 2px white, 0 0 0 4px #7A5CFF;
+    .camera-page {
+      min-height: 100vh;
+      background: #1A1A1A;
+      color: white;
+      overflow: hidden;
     }
-
-    .options-divider {
-      width: 32px;
-      height: 1px;
-      background: #EAE5F4;
+    .top-strip {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: rgba(18,12,36,0.5);
+      z-index: 40;
     }
-
-    .width-options {
+    .top-strip::after {
+      content: "";
+      display: block;
+      width: var(--strip-width, 40%);
+      height: 100%;
+      background: var(--ultraviolet);
+    }
+    .cancel-camera {
+      position: fixed;
+      top: 24px;
+      left: 18px;
+      background: transparent;
+      color: white;
+      font-size: 13px;
+      z-index: 50;
+    }
+    .camera-center {
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
+      justify-content: center;
       align-items: center;
-      gap: 10px;
+      padding: 24px;
+      text-align: center;
+    }
+    .scanner-frame {
+      position: relative;
+      width: 85vw;
+      height: 55vw;
+      max-width: 420px;
+      max-height: 270px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+    .corner {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-color: var(--corner-color, white);
+      border-style: solid;
+      transition: border-color 0.2s ease;
+    }
+    .tl { top: 0; left: 0; border-width: 3px 0 0 3px; }
+    .tr { top: 0; right: 0; border-width: 3px 3px 0 0; }
+    .bl { bottom: 0; left: 0; border-width: 0 0 3px 3px; }
+    .br { bottom: 0; right: 0; border-width: 0 3px 3px 0; }
+    .scan-line {
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      top: 0;
+      height: 2px;
+      background: var(--ultraviolet);
+      animation: scan 2s linear infinite;
+    }
+    @keyframes scan {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(55vw); }
+    }
+    .scanner-hint { color: white; font-size: 11px; }
+    .camera-status {
+      margin: 24px 0 0;
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
     }
 
-    .width-option {
-      width: 36px;
-      height: 28px;
-      border-radius: 6px;
-      border: 1px solid transparent;
+    .rotate-page {
+      min-height: 100vh;
+      background: var(--midnight-plum);
+      color: white;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+    .rotate-phone {
+      width: 92px;
+      height: 54px;
+      border: 3px solid white;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 28px;
+      transform: rotate(90deg);
+      animation: phoneRock 1.5s ease-in-out infinite alternate;
+    }
+    .phone-dot {
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: var(--luminous-orchid);
+    }
+    @keyframes phoneRock {
+      from { transform: rotate(80deg); }
+      to { transform: rotate(100deg); }
+    }
+    .rotate-title { margin: 0 0 10px; font-size: 24px; color: white; }
+    .rotate-subtitle {
+      margin: 0 auto 22px;
+      max-width: 320px;
+      color: rgba(255,255,255,0.7);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .turn-sideways {
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-      padding: 0;
+      gap: 6px;
+      color: rgba(255,255,255,0.5);
+      font-size: 12px;
+    }
+    .rotate-skip {
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
       background: transparent;
+      color: rgba(255,255,255,0.5);
+      font-size: 11px;
     }
 
-    .width-option.selected {
-      border-color: #7A5CFF;
-      background: #F3F0FF;
-    }
-
-    .width-line {
-      background: #1A1A1A;
-      border-radius: 99px;
-      width: 22px;
-    }
-
-    .signature-main-column {
-      flex: 1;
-      min-width: 0;
+    .sig-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      height: 56px;
+      padding: 0 78px 0 14px;
       display: flex;
-      flex-direction: column;
-      align-items: stretch;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--mist-lavender);
+      background: white;
     }
-
-    .sig-actions {
+    .sig-header-left {
       display: flex;
+      align-items: center;
       gap: 10px;
-      margin-top: 10px;
-      justify-content: flex-start;
+      min-width: 0;
     }
-    .btn-undo,
-    .btn-clear {
-      padding: 8px 16px;
-      border-radius: 8px;
-      border: 1px solid #eae5f4;
+    .sig-title {
+      color: var(--midnight-plum);
+      font-size: 14px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .sig-subtitle {
+      color: var(--graphite-plum);
+      font-size: 11px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .sig-dots {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .sig-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--mist-lavender);
+    }
+    .sig-dot.filled { background: var(--ultraviolet); }
+    .sig-canvas {
+      position: fixed;
+      top: 56px;
+      left: 0;
+      right: 0;
+      bottom: 64px;
+      width: 100%;
+      height: calc(100% - 56px - 64px);
+      background: white;
+      touch-action: none;
+      cursor: crosshair;
+      display: block;
+    }
+    .sig-bottom {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 64px;
+      padding: 8px 16px calc(8px + env(safe-area-inset-bottom, 0px));
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      border-top: 1px solid var(--mist-lavender);
+      background: white;
+      z-index: 50;
+    }
+    .btn-undo {
+      width: 80px;
+      height: 44px;
+      border-radius: 10px;
+      border: 1.5px solid #EAE5F4;
       background: white;
       font-size: 13px;
-      font-family: Inter, sans-serif;
-      cursor: pointer;
-      color: #4e465e;
+      color: #4E465E;
       font-weight: 500;
+      cursor: pointer;
+      flex-shrink: 0;
     }
-    .btn-clear {
-      border-color: #ffe8e7;
-      color: #ff6b68;
-    }
-    .btn-undo:disabled,
-    .btn-clear:disabled {
+    .btn-undo:disabled {
       opacity: 0.35;
       cursor: not-allowed;
     }
     .btn-undo:not(:disabled):hover {
-      background: #f8f7fb;
+      background: #F8F7FB;
     }
-    .btn-clear:not(:disabled):hover {
-      background: #fff5f5;
-    }
-
-    .rotate-hint {
-      font-size: 11px;
-      color: #9ca3af;
-      text-align: center;
-      margin: 4px 0 8px;
-      font-style: italic;
-    }
-
-    .signature-canvas-wrapper {
-      flex: 1;
-      min-width: 0;
-      min-height: 0;
-    }
-
-    .signature-canvas {
-      width: 100%;
-      display: block;
-      border: 1px solid #D8D3E3;
-      border-radius: 8px;
+    .btn-clear {
+      width: 90px;
+      height: 48px;
+      border: 1.5px solid var(--mist-lavender);
+      border-radius: 10px;
       background: white;
-      touch-action: none;
-      cursor: crosshair;
-      min-height: 480px;
-    }
-
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(18, 12, 36, 0.45);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-      padding: 24px;
-    }
-    .modal-overlay.show { display: flex; }
-    .modal-box {
-      background: var(--white);
-      border-radius: 12px;
-      padding: 20px 18px;
-      max-width: 360px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-      border: 1px solid var(--mist-lavender);
-    }
-    .modal-box p { margin: 0 0 16px; font-size: 15px; color: var(--midnight-plum); line-height: 1.45; }
-    .pdf-actions {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 12px;
-    }
-    .btn-download {
-      min-height: 44px;
-      padding: 0 18px;
-      border-radius: 8px;
-      border: none;
-      background: #7A5CFF;
-      color: white;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .verify-inline {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .demo-bar {
-      position: sticky;
-      top: 0;
-      z-index: 40;
-      margin: 0 -16px 16px;
-      padding: 12px 16px 14px;
-      background: rgba(246, 239, 232, 0.96);
-      border-bottom: 1px solid var(--mist-lavender);
-      box-shadow: 0 4px 16px rgba(18, 12, 36, 0.06);
-      backdrop-filter: blur(8px);
-    }
-    .demo-bar-hint {
-      margin: 0 0 10px;
-      font-size: 12px;
-      line-height: 1.35;
       color: var(--graphite-plum);
+      font-size: 14px;
+      font-weight: 700;
     }
-    .demo-bar-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-    .btn-demo {
+    .btn-next, .btn-submit {
       flex: 1;
-      min-width: 140px;
-      min-height: 48px;
-      border: none;
-      border-radius: 8px;
-      background: var(--midnight-plum);
-      color: var(--white);
-      font-size: 14px;
-      font-weight: 600;
-      padding: 0 12px;
+      height: 48px;
+      border-radius: 10px;
+      color: white;
+      font-size: 15px;
+      font-weight: 800;
+      background: #D1D5DB;
     }
-    .btn-demo:hover:not(:disabled) { filter: brightness(1.08); }
-    .btn-demo:disabled { opacity: 0.45; cursor: not-allowed; }
-    .btn-demo-outline {
-      min-height: 48px;
-      border-radius: 8px;
-      border: 1px solid var(--input-border);
-      background: var(--white);
-      color: var(--graphite-plum);
-      font-size: 14px;
-      font-weight: 600;
-      padding: 0 14px;
-    }
-    .step-scroll {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 6px;
-    }
-    .step-scroll-label {
+    .btn-next.enabled { background: var(--ultraviolet); }
+    .btn-submit.enabled { background: var(--solar-coral); }
+    .btn-clear:disabled, .btn-next:disabled, .btn-submit:disabled { opacity: 0.4; }
+    .sig-demo-skip {
+      position: fixed;
+      left: 50%;
+      bottom: 72px;
+      transform: translateX(-50%);
+      z-index: 60;
+      background: rgba(255,255,255,0.9);
+      color: #6B7280;
+      border-bottom: 1px dashed #9CA3AF;
+      padding: 2px 4px;
       font-size: 12px;
-      font-weight: 600;
-      color: var(--graphite-plum);
-      margin-right: 4px;
-    }
-    .step-pill {
-      min-width: 44px;
-      min-height: 44px;
-      padding: 0 10px;
-      border-radius: 8px;
-      border: 1px solid var(--input-border);
-      background: var(--white);
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--graphite-plum);
-    }
-    .step-pill:disabled {
-      opacity: 0.35;
-      cursor: not-allowed;
-    }
-    .step-pill:not(:disabled):hover {
-      border-color: var(--ultraviolet);
-      color: var(--ultraviolet);
     }
 
-    .payer-header {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .brand-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-    .brand-logo-svg {
-      width: 40px;
-      height: 40px;
-      flex-shrink: 0;
-      filter: drop-shadow(0 2px 10px rgba(122, 92, 255, 0.45));
-    }
-    .brand-name {
-      font-weight: 600;
-      font-size: 18px;
-      color: var(--midnight-plum);
-      letter-spacing: -0.02em;
-    }
-    .payer-subtitle {
-      margin: 10px 0 0;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--graphite-plum);
-    }
-
-    .progress {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 4px;
-      margin-bottom: 16px;
-      padding: 0 4px 4px;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: thin;
-    }
-    .progress-step {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      flex: 0 0 auto;
-      min-width: 40px;
-      position: relative;
-    }
-    .progress-step:not(:last-child)::after {
-      content: "";
-      position: absolute;
-      top: 14px;
-      left: calc(50% + 14px);
-      right: calc(-50% + 14px);
-      height: 2px;
-      background: var(--mist-lavender);
-      z-index: 0;
-    }
-    .progress-step.done:not(:last-child)::after { background: var(--success); }
-    .progress-dot {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      border: 2px solid var(--mist-lavender);
-      background: var(--white);
+    .notice-page {
+      min-height: 100vh;
       display: grid;
       place-items: center;
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--graphite-plum);
-      position: relative;
-      z-index: 1;
-    }
-    .progress-step.active .progress-dot {
-      border-color: var(--ultraviolet);
-      background: var(--ultraviolet);
-      color: var(--white);
-    }
-    .progress-step.done .progress-dot {
-      border-color: var(--success);
-      background: var(--success);
-      color: var(--white);
-    }
-    .progress-step.done .progress-dot .step-num { display: none; }
-    .progress-step.done .progress-dot .step-check { display: block !important; }
-    .progress-step .progress-dot .step-check { display: none; width: 14px; height: 14px; }
-
-    .section-block { margin-bottom: 14px; }
-
-    .summary-row {
-      display: none;
-      align-items: center;
-      gap: 10px;
-      padding: 14px 16px;
-      background: var(--white);
-      border-radius: 12px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-      border: 1px solid var(--mist-lavender);
-    }
-    .summary-row.visible { display: flex; }
-    .summary-row .sum-icon {
-      width: 22px;
-      height: 22px;
-      color: var(--success);
-      flex-shrink: 0;
-    }
-    .summary-row .sum-text {
-      flex: 1;
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--midnight-plum);
-    }
-    .btn-edit {
-      background: transparent;
-      border: none;
-      color: var(--ultraviolet);
-      font-size: 13px;
-      font-weight: 600;
-      padding: 8px 4px;
-      min-height: 44px;
-    }
-    .btn-edit:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
-
-    .card {
-      background: var(--white);
-      border-radius: 12px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-      border: 1px solid var(--mist-lavender);
-      padding: 18px 16px;
-    }
-    .card.hidden { display: none !important; }
-
-    .card-title { font-size: 18px; font-weight: 700; margin: 0 0 6px; color: var(--midnight-plum); letter-spacing: -0.02em; }
-    .card-sub { margin: 0 0 16px; font-size: 13px; color: var(--graphite-plum); }
-
-    .form-group { margin-bottom: 14px; }
-    .form-group label {
-      display: block;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--graphite-plum);
-      margin-bottom: 6px;
-    }
-    .input {
-      width: 100%;
-      min-height: 48px;
-      border: 1px solid var(--input-border);
-      border-radius: 8px;
-      padding: 0 14px;
-      font-size: 15px;
-      font-family: inherit;
-      color: var(--near-black);
-      background: var(--white);
-    }
-    .input:focus { outline: none; border-color: var(--ultraviolet); }
-    .input.input-invalid { border-color: var(--solar-coral); }
-
-    .field-error {
-      font-size: 13px;
-      color: var(--solar-coral);
-      margin-top: 6px;
-      display: none;
-    }
-    .field-error.show { display: block; }
-
-    .btn-primary {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      width: 100%;
-      min-height: 48px;
-      border: none;
-      border-radius: 8px;
-      background: var(--ultraviolet);
-      color: var(--white);
-      font-size: 15px;
-      font-weight: 600;
-    }
-    .btn-primary:hover:not(:disabled) { filter: brightness(1.05); }
-    .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
-
-    .btn-secondary {
-      flex: 1;
-      min-height: 48px;
-      border-radius: 8px;
-      border: 1px solid var(--input-border);
-      background: var(--white);
-      color: var(--graphite-plum);
-      font-size: 14px;
-      font-weight: 600;
-    }
-    .btn-row { display: flex; gap: 10px; margin-top: 8px; }
-
-    .segmented { display: flex; border: 1px solid var(--input-border); border-radius: 8px; overflow: hidden; }
-    .segmented button {
-      flex: 1;
-      min-height: 48px;
-      border: none;
-      background: var(--white);
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--graphite-plum);
-      border-right: 1px solid var(--mist-lavender);
-    }
-    .segmented button:last-child { border-right: none; }
-    .segmented button.active { background: var(--ultraviolet); color: var(--white); }
-
-    .upload-zone {
-      position: relative;
-      display: block;
-      border: 2px dashed var(--input-border);
-      border-radius: 10px;
-      padding: 22px 16px;
-      text-align: center;
-      background: #faf9fc;
-      cursor: pointer;
-      transition: border-color 0.15s, background 0.15s;
-    }
-    .upload-zone:hover { border-color: var(--ultraviolet); background: #f5f3fb; }
-    .upload-zone input[type="file"] {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      cursor: pointer;
-      font-size: 0;
-    }
-    .upload-inner { pointer-events: none; position: relative; z-index: 0; }
-    .upload-inner svg { width: 32px; height: 32px; color: var(--ultraviolet); margin-bottom: 8px; }
-    .upload-inner p { margin: 0; font-size: 15px; color: var(--graphite-plum); }
-    .upload-note { margin: 6px 0 0 !important; font-size: 13px !important; color: var(--graphite-plum) !important; }
-    .upload-success { display: none; flex-direction: column; align-items: center; gap: 6px; }
-    .upload-zone.has-file .upload-prompt { display: none; }
-    .upload-zone.has-file .upload-success { display: flex; }
-    .upload-success svg { color: var(--success); }
-    .link-ocr {
-      display: inline-block;
-      margin-top: 10px;
-      font-size: 13px;
-      font-weight: 600;
-      background: none;
-      border: none;
-      padding: 8px 0;
-      color: var(--ultraviolet);
-      cursor: pointer;
-      text-decoration: underline;
-      text-underline-offset: 2px;
-    }
-    .ocr-fail-actions { display: none; margin-top: 12px; }
-    .ocr-fail-actions.visible { display: flex; gap: 10px; align-items: stretch; }
-    .ocr-fail-actions .btn-secondary { flex: 1; }
-
-    .sig-wrap { position: relative; margin-bottom: 14px; }
-    .sig-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 6px;
-    }
-    .sig-head label { margin: 0; font-size: 13px; font-weight: 600; color: var(--graphite-plum); }
-    .btn-clear {
-      background: none;
-      border: none;
-      color: var(--ultraviolet);
-      font-size: 13px;
-      font-weight: 600;
-      padding: 6px 4px;
-    }
-    .sig-canvas-box {
-      height: 120px;
-      border: 1px solid var(--input-border);
-      border-radius: 8px;
-      background: var(--white);
-      touch-action: none;
-      overflow: hidden;
-    }
-    .sig-canvas-box canvas { display: block; width: 100%; height: 120px; cursor: crosshair; }
-
-    .sig-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 0;
-    }
-    @media (min-width: 400px) {
-      .sig-grid { grid-template-columns: 1fr 1fr; gap: 12px 12px; }
-    }
-
-    .review-list { display: flex; flex-direction: column; gap: 12px; }
-    .review-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      font-size: 15px;
-      border-bottom: 1px solid var(--mist-lavender);
-      padding-bottom: 10px;
-    }
-    .review-row:last-child { border-bottom: none; padding-bottom: 0; }
-    .review-k { color: var(--graphite-plum); flex-shrink: 0; }
-    .review-v { text-align: right; font-weight: 600; color: var(--midnight-plum); word-break: break-word; }
-
-    .checkbox-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      margin: 18px 0 8px;
-    }
-    .checkbox-row input {
-      width: 22px;
-      height: 22px;
-      min-width: 22px;
-      margin-top: 2px;
-      accent-color: var(--ultraviolet);
-    }
-    .checkbox-row label { font-size: 15px; font-weight: 500; color: var(--midnight-plum); margin: 0; }
-
-    .success-banner {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      padding: 14px;
-      border-radius: 10px;
-      background: rgba(34, 197, 94, 0.12);
-      border: 1px solid rgba(34, 197, 94, 0.35);
-      margin-bottom: 16px;
-    }
-    .success-banner svg { width: 28px; height: 28px; color: var(--success); flex-shrink: 0; }
-    .success-banner h3 {
-      margin: 0;
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--midnight-plum);
-      line-height: 1.35;
-    }
-
-    .pdf-viewer-wrapper {
-      width: 100%;
-      border: 1px solid #d8d3e3;
-      border-radius: 8px;
-      background: #525659;
-      padding: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      margin-top: 16px;
-      overflow: auto;
-      max-height: 700px;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .pdf-viewer-wrapper::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-    }
-    .pdf-viewer-wrapper::-webkit-scrollbar-thumb {
-      background: #7a5cff;
-      border-radius: 4px;
-    }
-
-    .pdf-disclaimer-box {
-      border: 2px solid #f59e0b;
-      background: #fffbea;
-      border-radius: 6px;
-      padding: 8px 12px;
-      font-size: 11px;
-      color: #92400e;
-      font-weight: 600;
-      text-align: center;
-      margin-bottom: 16px;
-      font-family: Arial, sans-serif;
-    }
-
-    .pdf-page {
-      background: white;
-      width: 750px;
-      min-height: 1000px;
-      margin: 0 auto;
       padding: 24px;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 10px;
-      color: #1a1a1a;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-      box-sizing: border-box;
-    }
-
-    .pdf-page table {
-      border-collapse: collapse;
-      width: 100%;
-    }
-    .pdf-page td {
-      border: 1px solid #333;
-      padding: 4px 6px;
-      vertical-align: middle;
-    }
-    .pdf-page .field-num {
-      width: 20px;
-      text-align: center;
-      font-weight: bold;
-      background: #f9f9f9;
-    }
-    .pdf-page .field-label {
-      font-weight: bold;
-      width: 130px;
-      background: #f9f9f9;
-    }
-    .pdf-page .field-value {
       background: white;
-    }
-    .pdf-page .field-arabic {
-      text-align: right;
-      font-size: 9px;
-      width: 90px;
-      background: #f9f9f9;
-      direction: rtl;
-    }
-    .pdf-page .required {
-      color: red;
-    }
-
-    .pdf-page > table + table {
-      margin-top: -1px;
-    }
-    .pdf-footer-check + .pdf-footer-check {
-      margin-top: -1px;
-    }
-
-    .pdf-dd-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 16px;
-      margin-bottom: 8px;
-      padding-bottom: 10px;
-      border-bottom: 2px solid #333;
-    }
-    .pdf-dd-header-left .pdf-dd-title {
-      font-weight: bold;
-      font-size: 12px;
-      margin: 0 0 4px;
-    }
-    .pdf-dd-header-left .pdf-dd-sub {
-      font-weight: bold;
-      font-size: 11px;
-      margin: 0 0 6px;
-    }
-    .pdf-dd-header-left .pdf-dd-ar-red {
-      color: #c00;
-      font-size: 10px;
-      margin: 0;
-      direction: rtl;
-      text-align: left;
-    }
-    .pdf-dd-header-right {
-      text-align: right;
-    }
-    .pdf-dd-header-right .pdf-dd-logo-ar {
-      font-weight: bold;
-      font-size: 13px;
-      margin: 0 0 6px;
-      line-height: 1.2;
-    }
-    .pdf-dd-header-right .pdf-dd-rev {
-      font-size: 9px;
-      margin: 0;
-      font-weight: normal;
-    }
-
-    .pdf-oic-table td {
-      font-weight: bold;
       text-align: center;
-      background: #f9f9f9;
-      min-width: 28px;
     }
-    .pdf-oic-table .pdf-oic-label-cell {
-      background: #fff;
-      font-weight: bold;
-      padding: 6px 10px;
-    }
-
-    .pdf-agreement {
+    .notice-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px 14px;
-      background: #e8e8e8;
-      border: 1px solid #333;
-      padding: 10px 12px;
-      margin-top: -1px;
+      place-items: center;
+      margin: 0 auto 18px;
+      background: #F3F0FF;
+      color: var(--luminous-orchid);
     }
-    .pdf-agreement p {
-      margin: 0 0 8px;
-      font-size: 9px;
-      line-height: 1.35;
-      color: #1a1a1a;
+    .notice-page h1 {
+      margin: 0 0 10px;
+      color: var(--midnight-plum);
+      font-size: 22px;
     }
-    .pdf-agreement p:last-child {
-      margin-bottom: 0;
-    }
-
-    .pdf-sig-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 0;
-      border: 1px solid #333;
-      border-top: none;
-      margin-top: -1px;
-      min-height: 140px;
-      align-items: stretch;
-    }
-    .pdf-sig-cell {
-      border-right: 1px solid #333;
-      padding: 8px;
-      vertical-align: top;
-      box-sizing: border-box;
-      min-height: 120px;
-    }
-    .pdf-sig-cell:first-child {
-      min-height: 155px;
-    }
-    .pdf-sig-cell:nth-child(2) {
-      display: flex;
-      flex-direction: column;
-    }
-    .pdf-sig-cell:last-child {
-      border-right: none;
-    }
-    .pdf-sig-cap {
-      font-weight: bold;
-      font-size: 9px;
-      margin: 0 0 8px;
-      line-height: 1.3;
-    }
-    .pdf-sig-name {
-      margin: 0 0 6px;
-      font-weight: normal;
-    }
-    .pdf-sig-placeholder {
-      flex: 1;
-      min-height: 72px;
-      background: #e8e8e8;
-      border: 1px solid #ccc;
-    }
-
-    .pdf-footer-check {
-      border: 1px solid #333;
-      border-top: none;
-      padding: 6px 8px;
-      margin-top: -1px;
-      font-size: 10px;
-      background: #fafafa;
-    }
-
-    .page-footer {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 28px;
-      padding-top: 20px;
-      border-top: 1px solid var(--mist-lavender);
-      font-size: 12px;
+    .notice-page p {
+      max-width: 280px;
+      margin: 0 auto 24px;
       color: var(--graphite-plum);
-      text-align: center;
+      font-size: 14px;
+      line-height: 1.5;
     }
-    .page-footer .footer-mark { width: 22px; height: 22px; flex-shrink: 0; }
+    .notice-page .primary-btn { max-width: 320px; }
 
-    .spinner { animation: spin 0.9s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .hidden { display: none !important; }
-
-    body.flow-locked .btn-edit { display: none; }
-
-    #progressWrap.hidden { display: none !important; }
-
-    .demo-skip {
-      font-size: 12px;
-      color: #9CA3AF;
-      text-decoration: none;
-      border-bottom: 1px dashed #9CA3AF;
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      background: #DCFCE7;
+      color: #22C55E;
+      animation: popIn 0.4s ease-out both;
     }
-    .demo-skip:hover {
-      color: #7A5CFF;
-      border-color: #7A5CFF;
+    @keyframes popIn {
+      from { transform: scale(0); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
     }
 
-    /* LANDSCAPE MODE — signature pages only */
-    @media screen and (orientation: landscape) and (max-height: 500px) {
-      .progress-bar-wrapper {
-        display: none !important;
-      }
-      .sig-page-title {
-        font-size: 13px !important;
-        margin-bottom: 4px !important;
-      }
-      .sig-instruction {
-        font-size: 11px !important;
-        margin-bottom: 4px !important;
-      }
-
-      .signature-body {
-        flex-direction: row !important;
-        align-items: stretch !important;
-        gap: 10px !important;
-        height: calc(100vh - 120px) !important;
-      }
-
-      .pen-options {
-        width: 44px !important;
-        flex-direction: column !important;
-        flex-shrink: 0 !important;
-        overflow-y: auto !important;
-      }
-
-      .signature-canvas-wrapper {
-        flex: 1 !important;
-        height: 100% !important;
-      }
-
-      .signature-canvas {
-        height: 100% !important;
-        width: 100% !important;
-        min-height: 0 !important;
-      }
-
-      .rotate-hint {
-        display: none !important;
-      }
-
-      .sig-actions {
-        margin-top: 6px !important;
-      }
-      .nav-buttons {
-        padding: 6px 16px !important;
-      }
+    @media (max-width: 380px) {
+      .card { padding: 20px; }
+      .method-grid { grid-template-columns: 1fr; }
+      .step { width: 54px; }
+      .step-label { font-size: 8px; }
     }
   </style>
 </head>
 <body>
-  <button type="button" onclick="resetDemo()" style="position:fixed; top:12px; right:16px; background:none; border:1px solid #D1D5DB; border-radius:6px; padding:4px 10px; font-size:11px; color:#6B7280; cursor:pointer; z-index:999;">↺ Reset</button>
-  <div class="page">
-    <header class="payer-header">
-      <div class="brand-row">
-        <svg class="brand-logo-svg" width="40" height="40" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <defs>
-            <linearGradient id="autoraLogoGradPay001" x1="8" y1="54" x2="54" y2="10" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#7A5CFF"/><stop offset="45%" stop-color="#FF6B68"/><stop offset="100%" stop-color="#B36CFF"/>
-            </linearGradient>
-          </defs>
-          <path fill="url(#autoraLogoGradPay001)" d="M32 6 C22 6 13 12 10 22 C8 28 9 36 13 42 L19 38 C16 33 15 27 17 22 C19 15 26 10 34 11 C42 12 49 19 51 27 C52 32 51 38 48 43 L54 47 C58 40 60 31 58 23 C55 12 44 6 32 6 Z"/>
-          <path fill="url(#autoraLogoGradPay001)" opacity="0.92" d="M32 18 C26 18 21 22 20 29 C19 33 20 38 23 42 L29 38 C27 35 26 31 27 28 C28 23 32 20 37 20 C42 20 46 24 47 29 C48 32 47 36 45 39 L51 43 C54 38 55 31 54 25 C52 16 43 18 32 18 Z"/>
-          <path fill="url(#autoraLogoGradPay001)" d="M22 36 L26 30 L38 30 L42 36 L40 38 L24 38 Z"/>
-        </svg>
-        <span class="brand-name">Autora</span>
-      </div>
-      <p class="payer-subtitle">Secure Mandate Authorization</p>
-    </header>
-
-    <div id="progressWrap" class="progress-bar-wrapper">
-      <nav class="progress-bar" id="progressBarNav" aria-label="Mandate steps">
-        <div class="progress-bar-inner" id="progressBarInner">
-          <div class="step" data-step-id="0">
-            <div class="step-circle active" id="progCircle0"><span id="progNum0">1</span><span id="progCheck0" class="hidden">✓</span></div>
-            <span class="step-label active" id="progLabel0">Emirates ID</span>
-            <span class="step-sublabel" id="progSub0" aria-hidden="true"></span>
-          </div>
-          <div class="step-line" id="progLine0"></div>
-          <div class="step" data-step-id="1">
-            <div class="step-circle upcoming" id="progCircle1"><span id="progNum1">2</span><span id="progCheck1" class="hidden">✓</span></div>
-            <span class="step-label upcoming" id="progLabel1">Banking</span>
-            <span class="step-sublabel" id="progSub1" aria-hidden="true"></span>
-          </div>
-          <div class="step-line" id="progLine1"></div>
-          <div class="step" data-step-id="2">
-            <div class="step-circle upcoming" id="progCircle2"><span id="progNum2">3</span><span id="progCheck2" class="hidden">✓</span></div>
-            <span class="step-label upcoming" id="progLabel2">Signatures</span>
-            <span class="step-sublabel" id="progSub2" aria-hidden="true"></span>
-          </div>
-          <div class="step-line" id="progLine2"></div>
-          <div class="step" data-step-id="3">
-            <div class="step-circle upcoming" id="progCircle3"><span id="progNum3">4</span><span id="progCheck3" class="hidden">✓</span></div>
-            <span class="step-label upcoming" id="progLabel3">Review</span>
-            <span class="step-sublabel" id="progSub3" aria-hidden="true"></span>
-          </div>
-        </div>
-      </nav>
-    </div>
-
-    <div id="flowPages">
-    <!-- Page 0: Emirates ID -->
-    <div class="flow-page active" data-page="0" id="flowPage0">
-      <div class="flow-scroll">
-        <div class="card" id="sec1Card">
-          <h2 class="card-title">Emirates ID</h2>
-          <p class="card-sub">Upload a photo of your Emirates ID</p>
-
-          <div class="upload-zone" id="eidUploadZone">
-            <input type="file" id="eidFile" accept=".jpg,.jpeg,.png,.pdf,image/jpeg,image/png,application/pdf" />
-            <div class="upload-inner upload-prompt">
-              <i data-lucide="upload-cloud"></i>
-              <p>Tap to upload your Emirates ID</p>
-              <p class="upload-note">JPG, PNG or PDF</p>
-            </div>
-            <div class="upload-inner upload-success" id="eidUploadOk">
-              <i data-lucide="check-circle-2"></i>
-              <p id="eidFileName">document.pdf</p>
-            </div>
-          </div>
-          <button type="button" class="link-ocr" id="eidOcrFailBtn">Simulate OCR failure</button>
-          <div class="ocr-fail-actions" id="eidOcrFailActions">
-            <button type="button" class="btn-secondary" id="eidReupload">Re-upload photo</button>
-            <button type="button" class="btn-secondary" id="eidManual">Enter manually</button>
-          </div>
-
-          <div id="eidFields" style="display:none;margin-top:16px;">
-            <div class="form-group">
-              <label for="fullName">Full Name</label>
-              <input class="input" id="fullName" placeholder="As on your Emirates ID" autocomplete="name" />
-              <div class="field-error" id="fullNameErr">This field is required</div>
-            </div>
-            <div class="form-group">
-              <label for="eidNumber">Emirates ID Number</label>
-              <input class="input" id="eidNumber" placeholder="784-YYYY-XXXXXXX-X" inputmode="text" />
-              <div class="field-error" id="eidNumberErr">This field is required</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="nav-footer" id="navFooter0">
-        <button type="button" class="btn-secondary hidden" id="btnBack0">Back</button>
-        <button type="button" class="btn-primary" id="btnNext0"><span id="btnNext0Label">Next</span></button>
-      </div>
-      <div style="text-align:center; margin-top:12px;">
-        <a href="#" class="demo-skip" onclick="demoSkip(event); return false;">🎬 Demo — Skip to next step</a>
-      </div>
-      <footer class="page-footer">
-        <svg class="footer-mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <defs>
-            <linearGradient id="autoraFooterGrad0" x1="8" y1="54" x2="54" y2="10" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#7A5CFF"/><stop offset="45%" stop-color="#FF6B68"/><stop offset="100%" stop-color="#B36CFF"/>
-            </linearGradient>
-          </defs>
-          <path fill="url(#autoraFooterGrad0)" d="M32 6 C22 6 13 12 10 22 C8 28 9 36 13 42 L19 38 C16 33 15 27 17 22 C19 15 26 10 34 11 C42 12 49 19 51 27 C52 32 51 38 48 43 L54 47 C58 40 60 31 58 23 C55 12 44 6 32 6 Z"/>
-        </svg>
-        <span>Secured by Autora · Regulated by the Central Bank of the UAE</span>
-      </footer>
-    </div>
-
-    <!-- Page 1: Banking -->
-    <div class="flow-page" data-page="1" id="flowPage1">
-      <div class="flow-scroll">
-        <div class="card" id="sec2Card">
-          <h2 class="card-title">Banking Information</h2>
-          <p class="card-sub">Add your payment details</p>
-
-          <div class="form-group">
-            <label>Payment Method</label>
-            <div class="segmented" id="payMethodSeg">
-              <button type="button" data-method="iban" id="btnIban">IBAN</button>
-              <button type="button" data-method="card" id="btnCard">Credit Card</button>
-            </div>
-            <div class="field-error" id="payMethodErr">Please select a payment method</div>
-          </div>
-
-          <div id="ibanBlock" style="display:none;">
-            <div class="upload-zone" id="ibanUploadZone">
-              <input type="file" id="ibanFile" accept=".jpg,.jpeg,.png,.pdf,image/jpeg,image/png,application/pdf" />
-              <div class="upload-inner upload-prompt">
-                <i data-lucide="upload-cloud"></i>
-                <p>Upload IBAN document</p>
-                <p class="upload-note">JPG, PNG or PDF</p>
-              </div>
-              <div class="upload-inner upload-success" id="ibanUploadOk">
-                <i data-lucide="check-circle-2"></i>
-                <p id="ibanFileName">document.pdf</p>
-              </div>
-            </div>
-            <button type="button" class="link-ocr" id="ibanOcrFailBtn">Simulate OCR failure</button>
-            <div class="ocr-fail-actions" id="ibanOcrFailActions">
-              <button type="button" class="btn-secondary" id="ibanReupload">Re-upload photo</button>
-              <button type="button" class="btn-secondary" id="ibanManual">Enter manually</button>
-            </div>
-            <div id="ibanFieldWrap" style="display:none;margin-top:16px;">
-              <div class="form-group">
-                <label for="ibanInput">IBAN</label>
-                <input class="input" id="ibanInput" placeholder="AE00 0000 0000 0000 0000 000" inputmode="text" />
-                <div class="field-error" id="ibanErr">This IBAN number is not valid. Please check and enter it again.</div>
-              </div>
-            </div>
-          </div>
-
-          <div id="cardBlock" style="display:none;">
-            <div class="form-group">
-              <label for="ccInput">Credit Card Number</label>
-              <input class="input" id="ccInput" placeholder="XXXX XXXX XXXX XXXX" inputmode="numeric" autocomplete="cc-number" />
-              <div class="field-error" id="ccErr">This card number is not valid. Please check and enter it again.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="nav-footer" id="navFooter1">
-        <button type="button" class="btn-secondary" id="btnBack1">Back</button>
-        <button type="button" class="btn-primary" id="btnVerifyNext" disabled>
-          <span class="verify-inline">
-            <span id="btnVerifyLabel">Verify &amp; Next</span>
-            <i data-lucide="loader-2" class="spinner hidden" id="bankVerifySpinner" style="width:18px;height:18px;"></i>
-          </span>
-        </button>
-      </div>
-      <div style="text-align:center; margin-top:12px;">
-        <a href="#" class="demo-skip" onclick="demoSkip(event); return false;">🎬 Demo — Skip to next step</a>
-      </div>
-      <footer class="page-footer">
-        <svg class="footer-mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <defs>
-            <linearGradient id="autoraFooterGrad1" x1="8" y1="54" x2="54" y2="10" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#7A5CFF"/><stop offset="45%" stop-color="#FF6B68"/><stop offset="100%" stop-color="#B36CFF"/>
-            </linearGradient>
-          </defs>
-          <path fill="url(#autoraFooterGrad1)" d="M32 6 C22 6 13 12 10 22 C8 28 9 36 13 42 L19 38 C16 33 15 27 17 22 C19 15 26 10 34 11 C42 12 49 19 51 27 C52 32 51 38 48 43 L54 47 C58 40 60 31 58 23 C55 12 44 6 32 6 Z"/>
-        </svg>
-        <span>Secured by Autora · Regulated by the Central Bank of the UAE</span>
-      </footer>
-    </div>
-
-    <!-- Page 2: Signature 1 -->
-    <div class="flow-page signature-page" data-page="2" id="flowPage2" data-sig-index="0">
-      <div class="flow-scroll sig-page-body">
-        <h2 class="card-title sig-page-heading sig-page-title" style="margin-bottom:6px;">Signature 1 of 5</h2>
-        <p class="card-sub sig-instruction" id="sigInstr0">Please sign below exactly as you would sign at your bank.</p>
-        <p class="rotate-hint">
-          📱 Rotate your phone sideways for a wider signing area.
-        </p>
-        <div class="signature-body">
-          <div class="pen-options pen-toolbar" id="penBar0" data-sig-toolbar="0">
-            <div class="color-options" id="penColors0">
-              <button type="button" class="color-circle selected" data-color="#000000" style="background:#000000" aria-label="Black"></button>
-              <button type="button" class="color-circle" data-color="#1E3A5F" style="background:#1E3A5F" aria-label="Dark blue"></button>
-              <button type="button" class="color-circle" data-color="#8B0000" style="background:#8B0000" aria-label="Dark red"></button>
-              <button type="button" class="color-circle" data-color="#1B5E20" style="background:#1B5E20" aria-label="Dark green"></button>
-              <button type="button" class="color-circle" data-color="#4A0072" style="background:#4A0072" aria-label="Dark purple"></button>
-            </div>
-            <div class="options-divider"></div>
-            <div class="width-options" id="penWidths0">
-              <button type="button" class="width-option" data-width="1.5" aria-label="Thin"><span class="width-line" style="height:2px"></span></button>
-              <button type="button" class="width-option selected" data-width="3" aria-label="Medium"><span class="width-line" style="height:4px"></span></button>
-              <button type="button" class="width-option" data-width="5" aria-label="Thick"><span class="width-line" style="height:6px"></span></button>
-            </div>
-          </div>
-          <div class="signature-main-column">
-            <div class="signature-canvas-wrapper">
-              <canvas class="signature-canvas" id="sigCanvas0"></canvas>
-            </div>
-            <div class="sig-actions">
-              <button type="button" class="btn-undo" id="sigUndo0" disabled aria-label="Undo last stroke">↩ Undo</button>
-              <button type="button" class="btn-clear" id="sigClear0" disabled aria-label="Clear canvas">✕ Clear</button>
-            </div>
-          </div>
-        </div>
-        <div class="field-error" id="sigErr0">Please draw your signature before continuing.</div>
-      </div>
-      <div class="nav-footer nav-buttons">
-        <button type="button" class="btn-secondary" id="btnBackSig0">Back</button>
-        <button type="button" class="btn-primary" id="btnNextSig0"><span id="btnNextSig0Label">Next Signature</span></button>
-      </div>
-      <div style="text-align:center; margin-top:12px;">
-        <a href="#" class="demo-skip" onclick="demoSkip(event); return false;">🎬 Demo — Skip to next step</a>
-      </div>
-      <footer class="page-footer">
-        <svg class="footer-mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <defs>
-            <linearGradient id="autoraFooterGradSIG0" x1="8" y1="54" x2="54" y2="10" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#7A5CFF"/><stop offset="45%" stop-color="#FF6B68"/><stop offset="100%" stop-color="#B36CFF"/>
-            </linearGradient>
-          </defs>
-          <path fill="url(#autoraFooterGradSIG0)" d="M32 6 C22 6 13 12 10 22 C8 28 9 36 13 42 L19 38 C16 33 15 27 17 22 C19 15 26 10 34 11 C42 12 49 19 51 27 C52 32 51 38 48 43 L54 47 C58 40 60 31 58 23 C55 12 44 6 32 6 Z"/>
-        </svg>
-        <span>Secured by Autora · Regulated by the Central Bank of the UAE</span>
-      </footer>
-    </div>
-    <!-- Page 3: Signature 2 -->
-    <div class="flow-page signature-page" data-page="3" id="flowPage3" data-sig-index="1">
-      <div class="flow-scroll sig-page-body">
-        <h2 class="card-title sig-page-heading sig-page-title" style="margin-bottom:6px;">Signature 2 of 5</h2>
-        <p class="card-sub sig-instruction" id="sigInstr1">Please sign identically to your previous signature.</p>
-        <p class="rotate-hint">
-          📱 Rotate your phone sideways for a wider signing area.
-        </p>
-        <div class="signature-body">
-          <div class="pen-options pen-toolbar" id="penBar1" data-sig-toolbar="1">
-            <div class="color-options" id="penColors1">
-              <button type="button" class="color-circle selected" data-color="#000000" style="background:#000000" aria-label="Black"></button>
-              <button type="button" class="color-circle" data-color="#1E3A5F" style="background:#1E3A5F" aria-label="Dark blue"></button>
-              <button type="button" class="color-circle" data-color="#8B0000" style="background:#8B0000" aria-label="Dark red"></button>
-              <button type="button" class="color-circle" data-color="#1B5E20" style="background:#1B5E20" aria-label="Dark green"></button>
-              <button type="button" class="color-circle" data-color="#4A0072" style="background:#4A0072" aria-label="Dark purple"></button>
-            </div>
-            <div class="options-divider"></div>
-            <div class="width-options" id="penWidths1">
-              <button type="button" class="width-option" data-width="1.5" aria-label="Thin"><span class="width-line" style="height:2px"></span></button>
-              <button type="button" class="width-option selected" data-width="3" aria-label="Medium"><span class="width-line" style="height:4px"></span></button>
-              <button type="button" class="width-option" data-width="5" aria-label="Thick"><span class="width-line" style="height:6px"></span></button>
-            </div>
-          </div>
-          <div class="signature-main-column">
-            <div class="signature-canvas-wrapper">
-              <canvas class="signature-canvas" id="sigCanvas1"></canvas>
-            </div>
-            <div class="sig-actions">
-              <button type="button" class="btn-undo" id="sigUndo1" disabled aria-label="Undo last stroke">↩ Undo</button>
-              <button type="button" class="btn-clear" id="sigClear1" disabled aria-label="Clear canvas">✕ Clear</button>
-            </div>
-          </div>
-        </div>
-        <div class="field-error" id="sigErr1">Please draw your signature before continuing.</div>
-      </div>
-      <div class="nav-footer nav-buttons">
-        <button type="button" class="btn-secondary" id="btnBackSig1">Back</button>
-        <button type="button" class="btn-primary" id="btnNextSig1"><span id="btnNextSig1Label">Next Signature</span></button>
-      </div>
-      <div style="text-align:center; margin-top:12px;">
-        <a href="#" class="demo-skip" onclick="demoSkip(event); return false;">🎬 Demo — Skip to next step</a>
-      </div>
-      <footer class="page-footer">
-        <svg class="footer-mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <defs>
-            <linearGradient id="autoraFooterGradSIG1" x1="8" y1="54" x2="54" y2="10" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#7A5CFF"/><stop offset="45%" stop-color="#FF6B68"/><stop offset="100%" stop-color="#B36CFF"/>
-            </linearGradient>
-          </defs>
-          <path fill="url(#autoraFooterGradSIG1)" d="M32 6 C22 6 13 12 10 22 C8 28 9 36 13 42 L19 38 C16 33 15 27 17 22 C19 15 26 10 34 11 C42 12 49 19 51 27 C52 32 51 38 48 43 L54 47 C58 40 60 31 58 23 C55 12 44 6 32 6 Z"/>
-        </svg>
-        <span>Secured by Autora · Regulated by the Central Bank of the UAE</span>
-      </footer>
-    </div>
-    <!-- Page 4: Signature 3 -->
-    <div class="flow-page signature-page" data-page="4" id="flowPage4" data-sig-index="2">
-      <div class="flow-scroll sig-page-body">
-        <h2 class="card-title sig-page-heading sig-page-title" style="margin-bottom:6px;">Signature 3 of 5</h2>
-        <p class="card-sub sig-instruction" id="sigInstr2">Please sign identically to your previous signature.</p>
-        <p class="rotate-hint">
-          📱 Rotate your phone sideways for a wider signing area.
-        </p>
-        <div class="signature-body">
-          <div class="pen-options pen-toolbar" id="penBar2" data-sig-toolbar="2">
-            <div class="color-options" id="penColors2">
-              <button type="button" class="color-circle selected" data-color="#000000" style="background:#000000" aria-label="Black"></button>
-              <button type="button" class="color-circle" data-color="#1E3A5F" style="background:#1E3A5F" aria-label="Dark blue"></button>
-              <button type="button" class="color-circle" data-color="#8B0000" style="background:#8B0000" aria-label="Dark red"></button>
-              <button type="button" class="color-circle" data-color="#1B5E20" style="background:#1B5E20" aria-label="Dark green"></button>
-              <button type="button" class="color-circle" data-color="#4A0072" style="background:#4A0072" aria-label="Dark purple"></button>
-            </div>
-            <div class="options-divider"></div>
-            <div class="width-options" id="penWidths2">
-              <button type="button" class="width-option" data-width="1.5" aria-label="Thin"><span class="width-line" style="height:2px"></span></button>
-              <button type="button" class="width-option selected" data-width="3" aria-label="Medium"><span class="width-line" style="height:4px"></span></button>
-              <button type="button" class="width-option" data-width="5" aria-label="Thick"><span class="width-line" style="height:6px"></span></button>
-            </div>
-          </div>
-          <div class="signature-main-column">
-            <div class="signature-canvas-wrapper">
-              <canvas class="signature-canvas" id="sigCanvas2"></canvas>
-            </div>
-            <div class="sig-actions">
-              <button type="button" class="btn-undo" id="sigUndo2" disabled aria-label="Undo last stroke">↩ Undo</button>
-              <button type="button" class="btn-clear" id="sigClear2" disabled aria-label="Clear canvas">✕ Clear</button>
-            </div>
-          </div>
-        </div>
-        <div class="field-error" id="sigErr2">Please draw your signature before continuing.</div>
-      </div>
-      <div class="nav-footer nav-buttons">
-        <button type="button" class="btn-secondary" id="btnBackSig2">Back</button>
-        <button type="button" class="btn-primary" id="btnNextSig2"><span id="btnNextSig2Label">Next Signature</span></button>
-      </div>
-      <div style="text-align:center; margin-top:12px;">
-        <a href="#" class="demo-skip" onclick="demoSkip(event); return false;">🎬 Demo — Skip to next step</a>
-      </div>
-      <footer class="page-footer">
-        <svg class="footer-mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <defs>
-            <linearGradient id="autoraFooterGradSIG2" x1="8" y1="54" x2="54" y2="10" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#7A5CFF"/><stop offset="45%" stop-color="#FF6B68"/><stop offset="100%" stop-color="#B36CFF"/>
-            </linearGradient>
-          </defs>
-          <path fill="url(#autoraFooterGradSIG2)" d="M32 6 C22 6 13 12 10 22 C8 28 9 36 13 42 L19 38 C16 33 15 27 17 22 C19 15 26 10 34 11 C42 12 49 19 51 27 C52 32 51 38 48 43 L54 47 C58 40 60 31 58 23 C55 12 44 6 32 6 Z"/>
-        </svg>
-        <span>Secured by Autora · Regulated by the Central Bank of the UAE</span>
-      </footer>
-    </div>
-    <!-- Page 5: Signature 4 -->
-    <div class="flow-page signature-page" data-page="5" id="flowPage5" data-sig-index="3">
-      <div class="flow-scroll sig-page-body">
-        <h2 class="card-title sig-page-heading sig-page-title" style="margin-bottom:6px;">Signature 4 of 5</h2>
-        <p class="card-sub sig-instruction" id="sigInstr3">Please sign identically to your previous signature.</p>
-        <p class="rotate-hint">
-          📱 Rotate your phone sideways for a wider signing area.
-        </p>
-        <div class="signature-body">
-          <div class="pen-options pen-toolbar" id="penBar3" data-sig-toolbar="3">
-            <div class="color-options" id="penColors3">
-              <button type="button" class="color-circle selected" data-color="#000000" style="background:#000000" aria-label="Black"></button>
-              <button type="button" class="color-circle" data-color="#1E3A5F" style="background:#1E3A5F" aria-label="Dark blue"></button>
-              <button type="button" class="color-circle" data-color="#8B0000" style="background:#8B0000" aria-label="Dark red"></button>
-              <button type="button" class="color-circle" data-color="#1B5E20" style="background:#1B5E20" aria-label="Dark green"></button>
-              <button type="button" class="color-circle" data-color="#4A0072" style="background:#4A0072" aria-label="Dark purple"></button>
-            </div>
-            <div class="options-divider"></div>
-            <div class="width-options" id="penWidths3">
-              <button type="button" class="width-option" data-width="1.5" aria-label="Thin"><span class="width-line" style="height:2px"></span></button>
-              <button type="button" class="width-option selected" data-width="3" aria-label="Medium"><span class="width-line" style="height:4px"></span></button>
-              <button type="button" class="width-option" data-width="5" aria-label="Thick"><span class="width-line" style="height:6px"></span></button>
-            </div>
-          </div>
-          <div class="signature-main-column">
-            <div class="signature-canvas-wrapper">
-              <canvas class="signature-canvas" id="sigCanvas3"></canvas>
-            </div>
-            <div class="sig-actions">
-              <button type="button" class="btn-undo" id="sigUndo3" disabled aria-label="Undo last stroke">↩ Undo</button>
-              <button type="button" class="btn-clear" id="sigClear3" disabled aria-label="Clear canvas">✕ Clear</button>
-            </div>
-          </div>
-        </div>
-        <div class="field-error" id="sigErr3">Please draw your signature before continuing.</div>
-      </div>
-      <div class="nav-footer nav-buttons">
-        <button type="button" class="btn-secondary" id="btnBackSig3">Back</button>
-        <button type="button" class="btn-primary" id="btnNextSig3"><span id="btnNextSig3Label">Next Signature</span></button>
-      </div>
-      <div style="text-align:center; margin-top:12px;">
-        <a href="#" class="demo-skip" onclick="demoSkip(event); return false;">🎬 Demo — Skip to next step</a>
-      </div>
-      <footer class="page-footer">
-        <svg class="footer-mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <defs>
-            <linearGradient id="autoraFooterGradSIG3" x1="8" y1="54" x2="54" y2="10" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#7A5CFF"/><stop offset="45%" stop-color="#FF6B68"/><stop offset="100%" stop-color="#B36CFF"/>
-            </linearGradient>
-          </defs>
-          <path fill="url(#autoraFooterGradSIG3)" d="M32 6 C22 6 13 12 10 22 C8 28 9 36 13 42 L19 38 C16 33 15 27 17 22 C19 15 26 10 34 11 C42 12 49 19 51 27 C52 32 51 38 48 43 L54 47 C58 40 60 31 58 23 C55 12 44 6 32 6 Z"/>
-        </svg>
-        <span>Secured by Autora · Regulated by the Central Bank of the UAE</span>
-      </footer>
-    </div>
-    <!-- Page 6: Signature 5 -->
-    <div class="flow-page signature-page" data-page="6" id="flowPage6" data-sig-index="4">
-      <div class="flow-scroll sig-page-body">
-        <h2 class="card-title sig-page-heading sig-page-title" style="margin-bottom:6px;">Signature 5 of 5</h2>
-        <p class="card-sub sig-instruction" id="sigInstr4">Please sign identically to your previous signature.</p>
-        <p class="rotate-hint">
-          📱 Rotate your phone sideways for a wider signing area.
-        </p>
-        <div class="signature-body">
-          <div class="pen-options pen-toolbar" id="penBar4" data-sig-toolbar="4">
-            <div class="color-options" id="penColors4">
-              <button type="button" class="color-circle selected" data-color="#000000" style="background:#000000" aria-label="Black"></button>
-              <button type="button" class="color-circle" data-color="#1E3A5F" style="background:#1E3A5F" aria-label="Dark blue"></button>
-              <button type="button" class="color-circle" data-color="#8B0000" style="background:#8B0000" aria-label="Dark red"></button>
-              <button type="button" class="color-circle" data-color="#1B5E20" style="background:#1B5E20" aria-label="Dark green"></button>
-              <button type="button" class="color-circle" data-color="#4A0072" style="background:#4A0072" aria-label="Dark purple"></button>
-            </div>
-            <div class="options-divider"></div>
-            <div class="width-options" id="penWidths4">
-              <button type="button" class="width-option" data-width="1.5" aria-label="Thin"><span class="width-line" style="height:2px"></span></button>
-              <button type="button" class="width-option selected" data-width="3" aria-label="Medium"><span class="width-line" style="height:4px"></span></button>
-              <button type="button" class="width-option" data-width="5" aria-label="Thick"><span class="width-line" style="height:6px"></span></button>
-            </div>
-          </div>
-          <div class="signature-main-column">
-            <div class="signature-canvas-wrapper">
-              <canvas class="signature-canvas" id="sigCanvas4"></canvas>
-            </div>
-            <div class="sig-actions">
-              <button type="button" class="btn-undo" id="sigUndo4" disabled aria-label="Undo last stroke">↩ Undo</button>
-              <button type="button" class="btn-clear" id="sigClear4" disabled aria-label="Clear canvas">✕ Clear</button>
-            </div>
-          </div>
-        </div>
-        <div class="field-error" id="sigErr4">Please draw your signature before continuing.</div>
-      </div>
-      <div class="nav-footer nav-buttons">
-        <button type="button" class="btn-secondary" id="btnBackSig4">Back</button>
-        <button type="button" class="btn-primary" id="btnNextSig4"><span id="btnNextSig4Label">Next</span></button>
-      </div>
-      <div style="text-align:center; margin-top:12px;">
-        <a href="#" class="demo-skip" onclick="demoSkip(event); return false;">🎬 Demo — Skip to next step</a>
-      </div>
-      <footer class="page-footer">
-        <svg class="footer-mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <defs>
-            <linearGradient id="autoraFooterGradSIG4" x1="8" y1="54" x2="54" y2="10" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#7A5CFF"/><stop offset="45%" stop-color="#FF6B68"/><stop offset="100%" stop-color="#B36CFF"/>
-            </linearGradient>
-          </defs>
-          <path fill="url(#autoraFooterGradSIG4)" d="M32 6 C22 6 13 12 10 22 C8 28 9 36 13 42 L19 38 C16 33 15 27 17 22 C19 15 26 10 34 11 C42 12 49 19 51 27 C52 32 51 38 48 43 L54 47 C58 40 60 31 58 23 C55 12 44 6 32 6 Z"/>
-        </svg>
-        <span>Secured by Autora · Regulated by the Central Bank of the UAE</span>
-      </footer>
-    </div>
-    <!-- Page 7: Review -->
-    <div class="flow-page" data-page="7" id="flowPage7">
-      <div class="flow-scroll">
-        <div class="card" id="sec4Card">
-          <h2 class="card-title">Review &amp; Confirm</h2>
-          <p class="card-sub">Review your mandate details before signing</p>
-          <div class="review-list" id="reviewList"></div>
-          <div class="checkbox-row">
-            <input type="checkbox" id="tcCheck" />
-            <label for="tcCheck">I confirm that I have read and understood the terms and conditions of this Direct Debit mandate.</label>
-          </div>
-        </div>
-      </div>
-      <div class="nav-footer" id="navFooterReview">
-        <button type="button" class="btn-secondary" id="btnBackReview">Back</button>
-        <button type="button" class="btn-primary" id="sec4Confirm" disabled>
-          <span id="sec4BtnLabel">Confirm &amp; Sign</span>
-          <i data-lucide="loader-2" class="spinner hidden" id="sec4Spinner" style="width:20px;height:20px;"></i>
-        </button>
-      </div>
-      <div style="text-align:center; margin-top:12px;">
-        <a href="#" class="demo-skip" onclick="demoSkip(event); return false;">🎬 Demo — Skip to next step</a>
-      </div>
-      <footer class="page-footer">
-        <svg class="footer-mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <defs>
-            <linearGradient id="autoraFooterGradRev" x1="8" y1="54" x2="54" y2="10" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#7A5CFF"/><stop offset="45%" stop-color="#FF6B68"/><stop offset="100%" stop-color="#B36CFF"/>
-            </linearGradient>
-          </defs>
-          <path fill="url(#autoraFooterGradRev)" d="M32 6 C22 6 13 12 10 22 C8 28 9 36 13 42 L19 38 C16 33 15 27 17 22 C19 15 26 10 34 11 C42 12 49 19 51 27 C52 32 51 38 48 43 L54 47 C58 40 60 31 58 23 C55 12 44 6 32 6 Z"/>
-        </svg>
-        <span>Secured by Autora · Regulated by the Central Bank of the UAE</span>
-      </footer>
-    </div>
-
-    <!-- Page 8: PDF / Complete -->
-    <div class="flow-page" data-page="8" id="flowPage8">
-      <div class="flow-scroll">
-      <div class="card" id="sec5Card">
-        <h2 class="card-title">Your Signed Mandate</h2>
-        <p class="card-sub">Your mandate has been successfully signed</p>
-        <div class="success-banner">
-          <i data-lucide="check-circle-2"></i>
-          <div>
-            <h3>Mandate Signed Successfully — Reference: MND-2026-00847</h3>
-          </div>
-        </div>
-
-        <div class="pdf-viewer-wrapper" role="region" aria-label="Signed Direct Debit Authority Form preview">
-          <div class="pdf-page">
-            <div class="pdf-disclaimer-box">
-              ⚠️ This document is generated by Autora for reference purposes only and is not an official Direct Debit Authority form.
-            </div>
-            <header class="pdf-dd-header">
-              <div class="pdf-dd-header-left">
-                <p class="pdf-dd-title">Direct Debit Authority</p>
-                <p class="pdf-dd-sub">Others</p>
-                <p class="pdf-dd-ar-red">توكيل الخصم المباشر / آخرون</p>
-              </div>
-              <div class="pdf-dd-header-right">
-                <p class="pdf-dd-logo-ar">الاصم المباشر / DIRECT DEBIT</p>
-                <p class="pdf-dd-rev">UAEDDS/DDAO/Rev20140131</p>
-              </div>
-            </header>
-
-            <table class="pdf-oic-table">
-              <tr>
-                <td class="pdf-oic-label-cell">OIC</td>
-                <td>5</td>
-                <td>6</td>
-                <td>9</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>4</td>
-                <td>6</td>
-              </tr>
-            </table>
-
-            <table>
-              <tr>
-                <td class="field-label">Originator Name</td>
-                <td class="field-value">Demo Merchant LLC</td>
-                <td class="field-arabic">اسم المنشئ</td>
-              </tr>
-              <tr>
-                <td class="field-label">Primary Sponsoring Bank</td>
-                <td class="field-value" id="pdfBankNameCell">Emirates NBD</td>
-                <td class="field-arabic">البنك الراعي الأساسي</td>
-              </tr>
-              <tr>
-                <td class="field-label">DDA Purpose Code</td>
-                <td class="field-value">Others</td>
-                <td class="field-arabic">رمز الغرض</td>
-              </tr>
-            </table>
-
-            <table>
-              <tr>
-                <td class="field-label">Consumer/Premises/etc<span class="required">*</span></td>
-                <td class="field-value">Individual</td>
-                <td class="field-arabic">المستهلك/المباني/الخ</td>
-              </tr>
-              <tr>
-                <td class="field-label">Customer Type<span class="required">*</span></td>
-                <td class="field-value">Individual — فردي ✓</td>
-                <td class="field-arabic">نوع العميل</td>
-              </tr>
-              <tr>
-                <td class="field-label">Customer ID Type<span class="required">*</span> + Number<span class="required">*</span></td>
-                <td class="field-value">EIDAC — 784-1990-1234567-8</td>
-                <td class="field-arabic">نوع بطاقة تعريف العميل</td>
-              </tr>
-            </table>
-
-            <table>
-              <tr>
-                <td class="field-num">1</td>
-                <td class="field-label"><span class="required">*</span> Bank Name</td>
-                <td class="field-value">Emirates NBD</td>
-                <td class="field-arabic">اسم البنك</td>
-              </tr>
-              <tr>
-                <td class="field-num">2</td>
-                <td class="field-label"><span class="required">*</span> Title of Account</td>
-                <td class="field-value">Ahmed Al Mansouri</td>
-                <td class="field-arabic">اسم الحساب</td>
-              </tr>
-              <tr>
-                <td class="field-num">3</td>
-                <td class="field-label"><span class="required">*</span> Account Type</td>
-                <td class="field-value">Current/Savings Account ✓</td>
-                <td class="field-arabic">نوع الحساب</td>
-              </tr>
-              <tr>
-                <td class="field-num">4</td>
-                <td class="field-label"><span class="required">*</span> IBAN / Card Number</td>
-                <td class="field-value" id="pdfPayInstrumentCell">AE07 0331 2345 6789 0123 456</td>
-                <td class="field-arabic">رقم الحساب الدولي</td>
-              </tr>
-              <tr>
-                <td class="field-num">5</td>
-                <td class="field-label">Mobile Number</td>
-                <td class="field-value">+971 50 123 4567</td>
-                <td class="field-arabic">رقم الهاتف المحمول</td>
-              </tr>
-              <tr>
-                <td class="field-num">6</td>
-                <td class="field-label">Email Address</td>
-                <td class="field-value">ahmed.mansouri@email.com</td>
-                <td class="field-arabic">عنوان البريد الإلكتروني</td>
-              </tr>
-              <tr>
-                <td class="field-num">7</td>
-                <td class="field-label"><span class="required">*</span> Issued for</td>
-                <td class="field-value">Demo Merchant LLC</td>
-                <td class="field-arabic">اصدر لـ</td>
-              </tr>
-              <tr>
-                <td class="field-num">8</td>
-                <td class="field-label"><span class="required">*</span> Commences On</td>
-                <td class="field-value">01 / 09 / 2026</td>
-                <td class="field-arabic">تبدأ في</td>
-              </tr>
-              <tr>
-                <td class="field-num">9</td>
-                <td class="field-label"><span class="required">*</span> Expires On</td>
-                <td class="field-value">01 / 09 / 2027</td>
-                <td class="field-arabic">تنتهي في</td>
-              </tr>
-              <tr>
-                <td class="field-num">10</td>
-                <td class="field-label"><span class="required">*</span> Fixed/Variable Amount</td>
-                <td class="field-value">Fixed: ✓</td>
-                <td class="field-arabic">المبلغ الثابت/المتغير</td>
-              </tr>
-              <tr>
-                <td class="field-num">11</td>
-                <td class="field-label"><span class="required">*</span> Payment Frequency</td>
-                <td class="field-value">Monthly ✓</td>
-                <td class="field-arabic">طريقة الخصم</td>
-              </tr>
-              <tr>
-                <td class="field-num">12</td>
-                <td class="field-label"><span class="required">*</span> Fixed Amount 1 / Minimum Amount</td>
-                <td class="field-value">500.00</td>
-                <td class="field-arabic">المبلغ الثابت 1 / الحد الأدنى</td>
-              </tr>
-              <tr>
-                <td class="field-num">13</td>
-                <td class="field-label"><span class="required">*</span> Fixed Amount 2 / Maximum Amount</td>
-                <td class="field-value">500.00</td>
-                <td class="field-arabic">المبلغ الثابت 2 / الحد الأقصى</td>
-              </tr>
-              <tr>
-                <td class="field-num">14</td>
-                <td class="field-label"><span class="required">*</span> Currency Code</td>
-                <td class="field-value">AED</td>
-                <td class="field-arabic">رمز العملة</td>
-              </tr>
-            </table>
-
-            <div class="pdf-agreement">
-              <div>
-                <p>
-                  <strong>Agreement and Authorization</strong>
-                </p>
-                <p>
-                  The undersigned payer hereby authorizes the Originator named above and the Sponsoring Bank to debit the account identified in this Direct Debit Authority for the amounts and frequency specified, in accordance with the UAE Direct Debit System Rules and regulatory instructions issued by the Central Bank of the UAE. The payer confirms that the information provided is true and complete and understands that this mandate remains effective until cancelled in accordance with applicable procedures or until the expiry date shown above.
-                </p>
-                <p>
-                  By signing below, the payer acknowledges receipt of the terms governing direct debits and agrees that debits may be processed as described herein. Any amendment or revocation shall be subject to the timelines and requirements prescribed under the UAE Direct Debit System.
-                </p>
-              </div>
-              <div dir="rtl" style="text-align: right;">
-                <p>
-                  <strong>الاتفاق والتفويض</strong>
-                </p>
-                <p>
-                  يقر الدافع الموقع أدناه بتفويض المنشئ المذكور أعلاه والبنك الراعي بخصم الحساب الموضح في توكيل الخصم المباشر هذا وفقاً للمبالغ وتكرار الدفع المحددين، وذلك بموجب قواعد نظام الخصم المباشر في دولة الإمارات والتعليمات التنظيمية الصادرة عن البنك المركزي لدولة الإمارات العربية المتحدة. يؤكد الدافع صحة واكتمال البيانات المقدمة وعلمه بأن هذا التوكيل يظل نافذاً حتى إلغاؤه وفق الإجراءات المعمول بها أو حتى تاريخ الانتهاء الموضح أعلاه.
-                </p>
-                <p>
-                  بالتوقيع أدناه يقر الدافع باستلامه الشروط الحاكمة للخصم المباشر وموافقته على معالجة الخصومات كما هو منصوص عليه. أي تعديل أو إلغاء يخضع للمدد والمتطلبات المنصوص عليها ضمن نظام الخصم المباشر في دولة الإمارات.
-                </p>
-              </div>
-            </div>
-
-            <div class="pdf-sig-row">
-              <div class="pdf-sig-cell">
-                <p class="pdf-sig-cap">Payer Name, Signature &amp; Date<span class="required">*</span> — اسم الدافع، التوقيع والتاريخ</p>
-                <p class="pdf-sig-name">Ahmed Al Mansouri</p>
-                <svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                  <path
-                    d="M5,30 C20,10 30,35 50,20 C70,5 80,30 100,15 C110,10 115,20 118,18"
-                    stroke="#1A1A1A"
-                    stroke-width="1.5"
-                    fill="none"
-                    stroke-linecap="round"
-                  />
-                </svg>
-              </div>
-              <div class="pdf-sig-cell">
-                <p class="pdf-sig-cap">Signature Verified — التوقيع</p>
-                <div class="pdf-sig-placeholder"></div>
-              </div>
-              <div class="pdf-sig-cell">
-                <p class="pdf-sig-cap">Name / الاسم</p>
-                <p class="pdf-sig-name">Ahmed Al Mansouri</p>
-              </div>
-            </div>
-
-            <div class="pdf-footer-check">✓ I have ✓ <strong>not</strong> left the Minimum amount as blank</div>
-            <div class="pdf-footer-check">✓ I have ✓ <strong>not</strong> left the Maximum amount as blank</div>
-          </div>
-        </div>
-
-        <div class="pdf-actions">
-          <button type="button" class="btn-download" onclick="downloadPDF()">⬇ Download PDF</button>
-        </div>
-      </div>
-      </div>
-      <div style="text-align:center; margin-top:12px;">
-        <a href="#" class="demo-skip" onclick="demoSkip(event); return false;">🎬 Demo — Skip to next step</a>
-      </div>
-      <footer class="page-footer">
-        <svg class="footer-mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <defs>
-            <linearGradient id="autoraFooterGradPdf" x1="8" y1="54" x2="54" y2="10" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#7A5CFF"/><stop offset="45%" stop-color="#FF6B68"/><stop offset="100%" stop-color="#B36CFF"/>
-            </linearGradient>
-          </defs>
-          <path fill="url(#autoraFooterGradPdf)" d="M32 6 C22 6 13 12 10 22 C8 28 9 36 13 42 L19 38 C16 33 15 27 17 22 C19 15 26 10 34 11 C42 12 49 19 51 27 C52 32 51 38 48 43 L54 47 C58 40 60 31 58 23 C55 12 44 6 32 6 Z"/>
-        </svg>
-        <span>Secured by Autora · Regulated by the Central Bank of the UAE</span>
-      </footer>
-    </div>
-    </div>
-
-  <div id="sigMismatchModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="sigMismatchTitle">
-    <div class="modal-box">
-      <p id="sigMismatchTitle">Your signature looks different from your first signature. Please try again to make sure all signatures match.</p>
-      <button type="button" class="btn-primary" id="sigMismatchOk" style="width:100%;">OK</button>
-    </div>
-  </div>
-
-  </div>
+  <button class="reset-btn" onclick="resetFlow()">↺ Reset</button>
+  <main id="app"></main>
 
   <script>
-(function () {
-  const PRE_FULL = "Ahmed Al Mansouri";
-  const PRE_EID = "784-1990-1234567-8";
-  const PRE_IBAN = "AE07 0331 2345 6789 0123 456";
-  const PRE_CC = "4111 1111 1111 1111";
+    let currentPage = 1;
+    let selectedMethod = "";
+    let reviewMethod = "";
+    let eidFullName = "";
+    let eidNumber = "";
+    let eidPhone = "";
+    let ibanValue = "";
+    let ibanManual = false;
+    let ccValue = "";
+    let ccMonth = "";
+    let ccYear = "";
+    let ibanValid = false;
+    let cardValid = false;
+    let monthValid = false;
+    let yearValid = false;
+    let cameraTimers = [];
+    let currentSigPage = 0;
+    const allPaths = {};
+    let drawing = false;
+    let lastPoint = null;
+    let strokePoints = [];
 
-  let currentPage = 0;
-  /** @type {string|null} */
-  let bankName = null;
-  let penColor = "#000000";
-  let penWidth = 3;
-  let penLocked = false;
-
-  /** @type {Array<Array<{color:string,baseWidth:number,points:Array<{x:number,y:number,t:number}>}>>} */
-  const sigStrokes = [[], [], [], [], []];
-  const sigDrawActive = [false, false, false, false, false];
-  let sig1ImageData = null;
-  /** @type {{aspect:number,strokeCount:number,cx:number,cy:number,bbox:any}|null} */
-  let sig1Meta = null;
-
-
-  const $ = function (id) {
-    return document.getElementById(id);
-  };
-
-  function refreshLucide() {
-    try {
-      if (window.lucide && lucide.createIcons) lucide.createIcons();
-    } catch (e) {}
-  }
-
-  function clearFieldErrors() {
-    document.querySelectorAll(".field-error").forEach(function (el) {
-      el.classList.remove("show");
-    });
-    document.querySelectorAll(".input-invalid").forEach(function (el) {
-      el.classList.remove("input-invalid");
-    });
-  }
-
-  function showFieldError(inputId, errId, msg) {
-    const inp = $(inputId);
-    const er = $(errId);
-    if (msg && er) er.textContent = msg;
-    if (inp) inp.classList.add("input-invalid");
-    if (er) er.classList.add("show");
-  }
-
-  const state = {
-    eid: { hasFile: false, fileName: "", ocrFail: false, manual: false },
-    bank: { method: null, ibanHasFile: false, ibanFileName: "", ibanOcrFail: false, ibanManual: false },
-    bankVerifying: false,
-  };
-
-  function pageEl(pageIndex) {
-    return $("flowPage" + pageIndex);
-  }
-
-  function updateSigStrokeButtons(sigIndex) {
-    const has = sigStrokes[sigIndex].length > 0;
-    const u = $("sigUndo" + sigIndex);
-    const cl = $("sigClear" + sigIndex);
-    if (u) u.disabled = !has;
-    if (cl) cl.disabled = !has;
-  }
-
-  function enableSigStrokeButtons(sigIndex) {
-    const u = $("sigUndo" + sigIndex);
-    const cl = $("sigClear" + sigIndex);
-    if (u) u.disabled = false;
-    if (cl) cl.disabled = false;
-  }
-
-  let orientationRedrawTimer = null;
-  function handleOrientationChange() {
-    clearTimeout(orientationRedrawTimer);
-    orientationRedrawTimer = setTimeout(function () {
-      for (let i = 0; i < 5; i++) {
-        redrawSigCanvas(i);
-      }
-    }, 300);
-  }
-
-  function updateProgressUI() {
-    const wrap = $("progressWrap");
-    if (!wrap) return;
-    if (currentPage >= 8) {
-      wrap.classList.add("hidden");
-      return;
-    }
-    wrap.classList.remove("hidden");
-
-    let phase = 0;
-    if (currentPage === 0) phase = 0;
-    else if (currentPage === 1) phase = 1;
-    else if (currentPage >= 2 && currentPage <= 6) phase = 2;
-    else if (currentPage === 7) phase = 3;
-
-    const sigNum = currentPage >= 2 && currentPage <= 6 ? currentPage - 1 : null;
-
-    for (let i = 0; i < 4; i++) {
-      const done = i < phase;
-      const active = i === phase;
-      const upcoming = i > phase;
-
-      const circle = $("progCircle" + i);
-      const num = $("progNum" + i);
-      const chk = $("progCheck" + i);
-      const lbl = $("progLabel" + i);
-      const sub = $("progSub" + i);
-
-      if (circle) {
-        circle.classList.remove("done", "active", "upcoming");
-        if (done) circle.classList.add("done");
-        else if (active) circle.classList.add("active");
-        else circle.classList.add("upcoming");
-      }
-      if (num && chk) {
-        if (done) {
-          num.classList.add("hidden");
-          chk.classList.remove("hidden");
-        } else {
-          num.classList.remove("hidden");
-          chk.classList.add("hidden");
-        }
-      }
-      if (lbl) {
-        lbl.classList.remove("active", "upcoming", "done");
-        if (done) lbl.classList.add("done");
-        else if (active) lbl.classList.add("active");
-        else if (upcoming) lbl.classList.add("upcoming");
-      }
-      if (sub) {
-        sub.textContent = "";
-        if (i === 2 && active && sigNum !== null) {
-          sub.textContent = "Signature " + sigNum + " of 5";
-        }
-      }
-    }
-    for (let i = 0; i < 3; i++) {
-      const line = $("progLine" + i);
-      if (line) {
-        line.classList.toggle("done", i < phase);
-      }
-    }
-  }
-
-  function resizeCanvasEl(canvas) {
-    const rect = canvas.getBoundingClientRect();
-    const w = Math.max(1, Math.floor(rect.width));
-    const h = Math.max(1, Math.floor(rect.height));
-    canvas.width = w;
-    canvas.height = h;
-  }
-
-  function getCanvasPos(e, canvas) {
-    const rect = canvas.getBoundingClientRect();
-    const clientX = e.touches && e.touches[0] ? e.touches[0].clientX : e.clientX;
-    const clientY = e.touches && e.touches[0] ? e.touches[0].clientY : e.clientY;
-    return {
-      x: (clientX - rect.left) * (canvas.width / rect.width),
-      y: (clientY - rect.top) * (canvas.height / rect.height),
+    const app = document.getElementById("app");
+    const steps = ["Payment Method", "ID", "Banking", "Review", "Sign"];
+    const sigPages = { 8: 1, 9: 2, 10: 3, 12: 4, 13: 5 };
+    const sigSubtitles = {
+      1: "Sign in the space below",
+      2: "Sign again in the space below",
+      3: "Sign again in the space below",
+      4: "Sign in the space below",
+      5: "Final signature"
     };
-  }
 
-  function redrawSigCanvas(sigIndex) {
-    const canvas = $("sigCanvas" + sigIndex);
-    if (!canvas) return;
-    resizeCanvasEl(canvas);
-    const ctx = canvas.getContext("2d");
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    sigStrokes[sigIndex].forEach(function (stroke) {
-      replayStrokeSmooth(ctx, stroke);
-    });
-  }
-
-  function replayStrokeSmooth(ctx, stroke) {
-    const pts = stroke.points;
-    if (pts.length < 2) return;
-    ctx.strokeStyle = stroke.color;
-    ctx.lineWidth = stroke.baseWidth;
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-    let lastX = pts[0].x;
-    let lastY = pts[0].y;
-    let curX = pts[0].x;
-    let curY = pts[0].y;
-    for (let i = 1; i < pts.length; i++) {
-      const pos = pts[i];
-      const midX = (lastX + pos.x) / 2;
-      const midY = (lastY + pos.y) / 2;
-      ctx.beginPath();
-      ctx.moveTo(curX, curY);
-      ctx.quadraticCurveTo(lastX, lastY, midX, midY);
-      ctx.stroke();
-      curX = midX;
-      curY = midY;
-      lastX = pos.x;
-      lastY = pos.y;
+    function autoraMark(size = 28) {
+      return `
+        <svg class="autora-mark" width="${size}" height="${size}" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+          <defs><linearGradient id="autoraGrad${size}" x1="2" y1="26" x2="26" y2="2" gradientUnits="userSpaceOnUse"><stop stop-color="#7A5CFF"/><stop offset="0.55" stop-color="#B36CFF"/><stop offset="1" stop-color="#FF6B68"/></linearGradient></defs>
+          <rect width="28" height="28" rx="8" fill="url(#autoraGrad${size})"/>
+          <path d="M8 21L13.15 7H15.25L20.4 21H17.85L16.75 17.75H11.6L10.5 21H8ZM12.3 15.55H16.05L14.2 10.05L12.3 15.55Z" fill="white"/>
+        </svg>`;
     }
-  }
 
-  function extractAllPoints(strokes) {
-    const pts = [];
-    strokes.forEach(function (s) {
-      s.points.forEach(function (p) {
-        pts.push({ x: p.x, y: p.y });
+    function autoraHeader() {
+      return `
+        <div class="autora-header">
+          ${autoraMark(28)}
+          <div>
+            <div style="font-size:18px;font-weight:700;color:#120C24;">Autora</div>
+            <div style="font-size:7px;color:#B36CFF;letter-spacing:1px;text-transform:uppercase;">DIRECT DEBIT PLATFORM</div>
+          </div>
+        </div>`;
+    }
+
+    function progressBar(active) {
+      let html = '<div class="progress-bar">';
+      steps.forEach((label, index) => {
+        const step = index + 1;
+        const state = step < active ? "done" : step === active ? "active" : "upcoming";
+        html += `
+          <div class="step">
+            <div class="step-circle ${state}">${step}</div>
+            <div class="step-label ${state}">${label}</div>
+          </div>`;
+        if (index < steps.length - 1) {
+          html += `<div class="step-line ${step < active ? "done" : ""}"></div>`;
+        }
       });
-    });
-    return pts;
-  }
-
-  function computeMeta(strokes) {
-    const pts = extractAllPoints(strokes);
-    if (!pts.length) return null;
-    let minX = Infinity,
-      minY = Infinity,
-      maxX = -Infinity,
-      maxY = -Infinity;
-    pts.forEach(function (p) {
-      minX = Math.min(minX, p.x);
-      minY = Math.min(minY, p.y);
-      maxX = Math.max(maxX, p.x);
-      maxY = Math.max(maxY, p.y);
-    });
-    const bw = Math.max(1, maxX - minX);
-    const bh = Math.max(1, maxY - minY);
-    let sx = 0,
-      sy = 0;
-    pts.forEach(function (p) {
-      sx += p.x;
-      sy += p.y;
-    });
-    return {
-      aspect: bw / bh,
-      strokeCount: strokes.length,
-      cx: sx / pts.length,
-      cy: sy / pts.length,
-      bbox: { minX: minX, minY: minY, maxX: maxX, maxY: maxY, w: bw, h: bh },
-      pts: pts,
-    };
-  }
-
-  function signaturesRoughlyMatch(sigIndex) {
-    const m1 = sig1Meta;
-    const m2 = computeMeta(sigStrokes[sigIndex]);
-    if (!m1 || !m2) return false;
-    const ar1 = m1.aspect,
-      ar2 = m2.aspect;
-    const denom = Math.max(ar1, ar2, 0.001);
-    if (Math.abs(ar1 - ar2) / denom > 0.4) return false;
-    if (Math.abs(m1.strokeCount - m2.strokeCount) > 3) return false;
-    const bw = Math.max(m1.bbox.w, m2.bbox.w, 1);
-    const bh = Math.max(m1.bbox.h, m2.bbox.h, 1);
-    const nx = Math.abs(m1.cx - m2.cx) / bw;
-    const ny = Math.abs(m1.cy - m2.cy) / bh;
-    if (Math.hypot(nx, ny) > 0.55) return false;
-
-    const pts1 = m1.pts;
-    const pts2 = m2.pts;
-    let sum = 0;
-    for (let k = 0; k < 20; k++) {
-      const a = pts1[Math.floor(Math.random() * pts1.length)];
-      const b = pts2[Math.floor(Math.random() * pts2.length)];
-      sum += Math.hypot((a.x - b.x) / bw, (a.y - b.y) / bh);
+      return html + "</div>";
     }
-    if (sum / 20 > 0.65) return false;
-    return true;
-  }
 
-  function setupSigCanvas(sigIndex) {
-    const canvas = $("sigCanvas" + sigIndex);
-    if (!canvas || canvas.dataset.bound === "1") return;
-    canvas.dataset.bound = "1";
+    function shell(content, step, footer = true) {
+      return `
+        <div class="app-shell">
+          ${autoraHeader()}
+          ${progressBar(step)}
+          ${content}
+          ${footer ? '<div class="footer">Secured by Autora</div>' : ""}
+        </div>`;
+    }
 
-    let lastX = 0;
-    let lastY = 0;
-    let currentPath = [];
+    function page1() {
+      return shell(`
+        <section class="card">
+          <p style="font-size:13px; color:#B36CFF; font-weight:600; text-align:center; margin-bottom:16px;">
+            You will sign 5 times total
+          </p>
+          <h1 class="title">Choose Payment Method</h1>
+          <p class="subtitle">Select how you would like to authorize your payment.</p>
+          <div class="method-grid">
+            <button class="method-card ${selectedMethod === "card" ? "selected" : ""}" onclick="selectMethod('card')">
+              <i data-lucide="check-circle-2" class="checkmark" width="20" height="20"></i>
+              <i data-lucide="credit-card" width="32" height="32" style="color:#7A5CFF;"></i>
+              <div class="method-name">Credit Card</div>
+              <div class="method-copy">Pay using your credit card</div>
+            </button>
+            <button class="method-card ${selectedMethod === "iban" ? "selected" : ""}" onclick="selectMethod('iban')">
+              <i data-lucide="check-circle-2" class="checkmark" width="20" height="20"></i>
+              <i data-lucide="landmark" width="32" height="32" style="color:#7A5CFF;"></i>
+              <div class="method-name">IBAN Number</div>
+              <div class="method-copy">Pay using your bank IBAN number</div>
+            </button>
+          </div>
+          <button class="primary-btn" ${selectedMethod ? "" : "disabled"} onclick="showPage(2)">Next</button>
+          ${demoSkip()}
+        </section>`, 1);
+    }
+
+    function page2() {
+      return shell(`
+        <section class="card">
+          <div class="icon-hero"><i data-lucide="id-card" width="64" height="64"></i></div>
+          <h1 class="title">Scan Your Emirates ID</h1>
+          <p class="subtitle">We need to verify your identity. Please have your Emirates ID ready.</p>
+          <div class="instruction-card">📋 Place your Emirates ID in front of your camera. Make sure it's well-lit and clearly visible.</div>
+          <button class="primary-btn" onclick="showPage(3)">📷 Scan Emirates ID</button>
+          ${demoSkip()}
+        </section>`, 2);
+    }
+
+    function page3() {
+      return `
+        <div class="camera-page">
+          <div class="top-strip" style="--strip-width:40%;"></div>
+          <button class="cancel-camera" onclick="showPage(2)">← Cancel</button>
+          <div class="camera-center">
+            <div class="scanner-frame" id="scannerFrame">
+              <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+              <div class="scan-line"></div>
+              <div class="scanner-hint">Align your Emirates ID within the frame</div>
+            </div>
+            <div class="camera-status" id="cameraStatus">📋 Scan the FRONT of your Emirates ID</div>
+            ${demoSkip()}
+          </div>
+        </div>`;
+    }
+
+    function page4() {
+      return shell(`
+        <section class="card">
+          <h1 class="title">${selectedMethod === "card" ? "Enter Your Card Details" : "Enter Your IBAN"}</h1>
+          ${selectedMethod === "card" ? cardForm() : ibanForm()}
+          <button class="primary-btn" ${bankingReady() ? "" : "disabled"} onclick="saveBankingAndNext()">Next</button>
+          ${demoSkip()}
+        </section>`, 3);
+    }
+
+    function ibanForm() {
+      return `
+        ${ibanManual ? "" : `
+          <div id="uploadArea" class="upload-area ${ibanValid && ibanValue ? "success" : ""}" onclick="document.getElementById('ibanFile').click()">
+            ${ibanValid && ibanValue ? "✅<div style='font-weight:700;margin-top:8px;color:#120C24;'>IBAN document uploaded</div><div style='font-size:12px;color:#4E465E;'>iban-document.jpg</div>" : "<i data-lucide='upload-cloud' width='32' height='32' style='color:#7A5CFF;'></i><div style='font-size:14px;font-weight:700;margin-top:8px;color:#120C24;'>Upload IBAN Document</div><div style='font-size:12px;color:#6B7280;margin-top:4px;'>Tap to upload or take a photo</div>"}
+          </div>
+          <input id="ibanFile" type="file" accept="image/*,.pdf" style="display:none;" onchange="handleIbanUpload(this)" />
+          <button class="text-link" onclick="manualIban()">Can't upload? Enter manually</button>
+        `}
+        <div class="field ${ibanValid || !ibanValue ? "" : "error"}" id="ibanField">
+          <label for="ibanInput">IBAN Number</label>
+          <div class="input-wrap">
+            <input id="ibanInput" value="${escapeAttr(ibanValue)}" placeholder="AE XX XXXX XXXX XXXX XXXX XXX" oninput="ibanValue=this.value; ibanValid=false; updateFieldState('ibanState','')" onblur="validateIban()" />
+            <span class="field-state ${ibanValid ? "valid" : ""}" id="ibanState">${ibanValid ? iconSvg("check-circle-2", 18) : ""}</span>
+          </div>
+          <div class="field-error">This IBAN number is not valid. Please check and enter it again.</div>
+        </div>`;
+    }
+
+    function cardForm() {
+      return `
+        <div class="warning">⚠️ Please note: Some banks do not accept Direct Debit with credit cards, including: HSBC, WIO, and Mashreq.</div>
+        <div class="field ${cardValid || !ccValue ? "" : "error"}" id="cardField">
+          <label for="cardInput">Credit Card Number</label>
+          <div class="input-wrap">
+            <input id="cardInput" value="${escapeAttr(ccValue)}" placeholder="XXXX XXXX XXXX XXXX" inputmode="numeric" oninput="ccValue=this.value.replace(/\\D/g,'').slice(0,16); this.value=ccValue; cardValid=false; updateFieldState('cardState','')" onblur="validateCard()" />
+            <span class="field-state ${cardValid ? "valid" : ""}" id="cardState">${cardValid ? iconSvg("check-circle-2", 18) : ""}</span>
+          </div>
+          <div class="field-error">Please enter a valid 16-digit card number.</div>
+        </div>
+        <div class="field-row">
+          <div class="field ${monthValid || !ccMonth ? "" : "error"}" id="monthField">
+            <label for="monthInput">Month</label>
+            <div class="input-wrap">
+              <input id="monthInput" value="${escapeAttr(ccMonth)}" placeholder="MM" maxlength="2" inputmode="numeric" oninput="ccMonth=this.value.replace(/\\D/g,'').slice(0,2); this.value=ccMonth; monthValid=false; updateFieldState('monthState','')" onblur="validateMonth()" />
+              <span class="field-state ${monthValid ? "valid" : ""}" id="monthState">${monthValid ? iconSvg("check-circle-2", 18) : ""}</span>
+            </div>
+            <div class="field-error">Enter 01-12.</div>
+          </div>
+          <div class="slash">/</div>
+          <div class="field ${yearValid || !ccYear ? "" : "error"}" id="yearField">
+            <label for="yearInput">Year</label>
+            <div class="input-wrap">
+              <input id="yearInput" value="${escapeAttr(ccYear)}" placeholder="YY" maxlength="2" inputmode="numeric" oninput="ccYear=this.value.replace(/\\D/g,'').slice(0,2); this.value=ccYear; yearValid=false; updateFieldState('yearState','')" onblur="validateYear()" />
+              <span class="field-state ${yearValid ? "valid" : ""}" id="yearState">${yearValid ? iconSvg("check-circle-2", 18) : ""}</span>
+            </div>
+            <div class="field-error">Enter current year or later.</div>
+          </div>
+        </div>`;
+    }
+
+    function page5() {
+      if (!reviewMethod) reviewMethod = selectedMethod || "iban";
+      return shell(`
+        <section class="card">
+          <h1 class="title">Review Your Information</h1>
+          <p class="subtitle">All fields are editable — make any corrections needed.</p>
+          <div class="section-block">
+            <div class="section-head">
+              <div class="section-label">Identity</div>
+              <button class="outline-small" onclick="showPage(2)">📷 Re-scan ID</button>
+            </div>
+            <div class="field"><label>Full Name</label><input value="${escapeAttr(eidFullName)}" oninput="eidFullName=this.value" /></div>
+            <div class="field"><label>Emirates ID Number</label><input value="${escapeAttr(eidNumber)}" oninput="eidNumber=this.value" /></div>
+            <div class="field"><label>Phone Number</label><input value="${escapeAttr(eidPhone)}" oninput="eidPhone=this.value" /></div>
+          </div>
+          <div class="section-block">
+            <div class="section-head"><div class="section-label">Payment</div></div>
+            <div class="segmented">
+              <button class="${reviewMethod === "iban" ? "active" : ""}" onclick="reviewMethod='iban'; showPage(5)">IBAN</button>
+              <button class="${reviewMethod === "card" ? "active" : ""}" onclick="reviewMethod='card'; showPage(5)">Credit Card</button>
+            </div>
+            ${reviewMethod === "iban" ? `
+              <div class="field"><label>IBAN Number</label><input value="${escapeAttr(ibanValue)}" oninput="ibanValue=this.value" /></div>
+            ` : `
+              <div class="field"><label>CC Number</label><input value="${escapeAttr(ccValue)}" oninput="ccValue=this.value" /></div>
+              <div class="field-row">
+                <div class="field"><label>Month</label><input value="${escapeAttr(ccMonth)}" maxlength="2" oninput="ccMonth=this.value" /></div>
+                <div class="slash">/</div>
+                <div class="field"><label>Year</label><input value="${escapeAttr(ccYear)}" maxlength="2" oninput="ccYear=this.value" /></div>
+              </div>
+            `}
+          </div>
+          <button class="primary-btn" style="margin-top:18px;" onclick="showPage(6)">Sign →</button>
+          ${demoSkip()}
+        </section>`, 4);
+    }
+
+    function page6() {
+      return shell(`
+        <section class="card">
+          <p style="font-size:13px; color:#B36CFF; font-weight:600; text-align:center; margin-bottom:16px;">
+            You will sign 5 times total
+          </p>
+          <div class="info-bank">
+            <h3>✍️ Use your Emirates ID signature</h3>
+            <p>Please use the same signature as the one on your Emirates ID card (bottom-left corner).</p>
+            <div class="eid-illustration">
+              <div class="eid-country">United Arab Emirates</div>
+              <div class="eid-body">
+                <div class="eid-photo"></div>
+                <div class="eid-lines">
+                  <div class="eid-line" style="width:80%;"></div>
+                  <div class="eid-line" style="width:62%;"></div>
+                  <div class="eid-line" style="width:72%;"></div>
+                </div>
+              </div>
+              <div class="sig-highlight">Your signature ↓</div>
+            </div>
+          </div>
+          <button class="primary-btn" onclick="showPage(7)">Get Started →</button>
+          <div style="margin-top:10px;color:#B36CFF;font-size:12px;font-style:italic;text-align:center;">You will sign 5 times total</div>
+          ${demoSkip()}
+        </section>`, 5);
+    }
+
+    function page7() {
+      return `
+        <div class="rotate-page">
+          <div class="top-strip" style="--strip-width:100%;"></div>
+          <div>
+            <div class="rotate-phone"><div class="phone-dot"></div></div>
+            <h1 class="rotate-title">Rotate Your Phone</h1>
+            <p class="rotate-subtitle">Please rotate your device to <span style="color:#B36CFF;font-weight:600;">landscape mode</span> to sign</p>
+            <div class="turn-sideways"><i data-lucide="rotate-cw" width="16" height="16"></i><span>Turn sideways</span></div>
+          </div>
+          <button class="rotate-skip" onclick="showPage(8)">Skip →</button>
+        </div>`;
+    }
+
+    function signaturePage(pageNumber) {
+      const sig = sigPages[pageNumber];
+      const isFinal = sig === 5;
+      const hasStroke = (allPaths[pageNumber] || []).length > 0;
+      let dots = "";
+      for (let i = 1; i <= 5; i++) dots += `<span class="sig-dot ${i <= sig ? "filled" : ""}"></span>`;
+      return `
+        <div>
+          <div class="sig-header">
+            <div class="sig-header-left">
+              ${autoraMark(24)}
+              <div>
+                <div class="sig-title">Signature ${sig} of 5</div>
+                <div class="sig-subtitle">${sigSubtitles[sig]}</div>
+              </div>
+            </div>
+            <div class="sig-dots">${dots}</div>
+          </div>
+          <canvas class="sig-canvas" id="sigCanvas"></canvas>
+          <div class="sig-bottom">
+            <button class="btn-undo" id="undoBtn" ${hasStroke ? "" : "disabled"} onclick="undoSignature()">↩ Undo</button>
+            <button class="btn-clear" id="clearBtn" ${hasStroke ? "" : "disabled"} onclick="clearSignature()">✕ Clear</button>
+            <button class="${isFinal ? "btn-submit" : "btn-next"} ${hasStroke ? "enabled" : ""}" id="${isFinal ? "submitBtn" : "nextBtn"}" ${hasStroke ? "" : "disabled"} onclick="${isFinal ? "submitSignatures()" : "nextSignaturePage()"}">${isFinal ? "✓ Submit" : "Next ›"}</button>
+          </div>
+          <button class="sig-demo-skip" onclick="demoSkipPage()">🎬 Demo — Skip to next step</button>
+        </div>`;
+    }
+
+    function page11() {
+      return `
+        <div class="notice-page">
+          <section>
+            <div class="notice-icon"><i data-lucide="info" width="48" height="48"></i></div>
+            <h1>One More Thing</h1>
+            <p>If you think you have a different signature, please provide it in the next panel. If not, simply repeat the same signature.</p>
+            <button class="primary-btn" onclick="showPage(12)">Continue →</button>
+            ${demoSkip()}
+          </section>
+        </div>`;
+    }
+
+    function successPage() {
+      return `
+        <div class="app-shell">
+          ${autoraHeader()}
+          <section class="card">
+            <div class="success-icon"><i data-lucide="check" width="40" height="40"></i></div>
+            <h1 class="title">Mandate Submitted Successfully</h1>
+            <p class="subtitle" style="margin-bottom:14px;">Your payment mandate has been submitted. You will be notified once it is processed.</p>
+            <div style="color:#B36CFF;font-size:12px;font-style:italic;text-align:center;">Reference: MND-2026-00847</div>
+          </section>
+        </div>`;
+    }
+
+    function demoSkip() {
+      return '<button class="demo-skip" onclick="demoSkipPage()">🎬 Demo — Skip to next step</button>';
+    }
+
+    function showPage(page) {
+      clearCameraTimers();
+      currentPage = page;
+      document.body.style.background = (page === 3 ? "#1A1A1A" : page === 7 ? "#120C24" : page >= 8 && page <= 13 ? "white" : "#F6EFE8");
+      document.body.style.overflow = (page >= 8 && page <= 13) || page === 3 || page === 7 ? "hidden" : "auto";
+      if (page === 1) app.innerHTML = page1();
+      if (page === 2) app.innerHTML = page2();
+      if (page === 3) app.innerHTML = page3();
+      if (page === 4) app.innerHTML = page4();
+      if (page === 5) app.innerHTML = page5();
+      if (page === 6) app.innerHTML = page6();
+      if (page === 7) app.innerHTML = page7();
+      if (sigPages[page]) app.innerHTML = signaturePage(page);
+      if (page === 11) app.innerHTML = page11();
+      if (page === "success") app.innerHTML = successPage();
+      if (window.lucide) lucide.createIcons();
+      if (page === 3) startCameraSequence();
+      if (sigPages[page]) requestAnimationFrame(() => initSignatureCanvas(page));
+      window.scrollTo(0, 0);
+    }
+
+    function selectMethod(method) {
+      selectedMethod = method;
+      reviewMethod = method;
+      showPage(1);
+    }
+
+    function setEidVars() {
+      eidFullName = "Ahmed Al Mansouri";
+      eidNumber = "784-1990-1234567-8";
+      eidPhone = "+971 50 123 4567";
+    }
+
+    function startCameraSequence() {
+      const frame = document.getElementById("scannerFrame");
+      const status = document.getElementById("cameraStatus");
+      cameraTimers.push(setTimeout(() => {
+        frame.style.setProperty("--corner-color", "#22C55E");
+        status.textContent = "✅ Front side detected — now scan the BACK";
+      }, 2500));
+      cameraTimers.push(setTimeout(() => {
+        frame.style.setProperty("--corner-color", "white");
+        status.textContent = "🔄 Now scan the BACK of your Emirates ID";
+      }, 4000));
+      cameraTimers.push(setTimeout(() => {
+        frame.style.setProperty("--corner-color", "#22C55E");
+        status.textContent = "✅ Emirates ID scanned successfully!";
+      }, 6500));
+      cameraTimers.push(setTimeout(() => {
+        setEidVars();
+        showPage(4);
+      }, 7500));
+    }
+
+    function clearCameraTimers() {
+      cameraTimers.forEach(clearTimeout);
+      cameraTimers = [];
+    }
+
+    function handleIbanUpload(input) {
+      if (!input.files || !input.files.length) return;
+      ibanManual = false;
+      ibanValue = "AE07 0331 2345 6789 0123 456";
+      ibanValid = true;
+      showPage(4);
+    }
+
+    function manualIban() {
+      ibanManual = true;
+      ibanValue = "";
+      ibanValid = false;
+      showPage(4);
+      setTimeout(() => document.getElementById("ibanInput")?.focus(), 0);
+    }
+
+    function validateIban() {
+      const state = document.getElementById("ibanState");
+      const field = document.getElementById("ibanField");
+      if (!state || !field) return;
+      updateFieldState("ibanState", '<span class="spinner"></span>');
+      field.classList.remove("error");
+      setTimeout(() => {
+        const compact = ibanValue.replace(/\s/g, "").toUpperCase();
+        ibanValid = compact.startsWith("AE") && compact.length >= 23;
+        field.classList.toggle("error", !ibanValid);
+        updateFieldState("ibanState", ibanValid ? iconSvg("check-circle-2", 18) : "");
+        state.classList.toggle("valid", ibanValid);
+        refreshNextButton();
+      }, 800);
+    }
+
+    function validateCard() {
+      cardValid = ccValue.replace(/\D/g, "").length === 16;
+      document.getElementById("cardField")?.classList.toggle("error", !cardValid);
+      updateFieldState("cardState", cardValid ? iconSvg("check-circle-2", 18) : "");
+      document.getElementById("cardState")?.classList.toggle("valid", cardValid);
+      refreshNextButton();
+    }
+
+    function validateMonth() {
+      const value = Number(ccMonth);
+      monthValid = /^\d{2}$/.test(ccMonth) && value >= 1 && value <= 12;
+      document.getElementById("monthField")?.classList.toggle("error", !monthValid);
+      updateFieldState("monthState", monthValid ? iconSvg("check-circle-2", 18) : "");
+      document.getElementById("monthState")?.classList.toggle("valid", monthValid);
+      refreshNextButton();
+    }
+
+    function validateYear() {
+      const current = Number(String(new Date().getFullYear()).slice(-2));
+      yearValid = /^\d{2}$/.test(ccYear) && Number(ccYear) >= current;
+      document.getElementById("yearField")?.classList.toggle("error", !yearValid);
+      updateFieldState("yearState", yearValid ? iconSvg("check-circle-2", 18) : "");
+      document.getElementById("yearState")?.classList.toggle("valid", yearValid);
+      refreshNextButton();
+    }
+
+    function updateFieldState(id, html) {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = html;
+    }
+
+    function bankingReady() {
+      return selectedMethod === "card" ? cardValid && monthValid && yearValid : ibanValid;
+    }
+
+    function refreshNextButton() {
+      const btn = document.querySelector(".primary-btn");
+      if (btn && currentPage === 4) btn.disabled = !bankingReady();
+    }
+
+    function saveBankingAndNext() {
+      if (!bankingReady()) return;
+      if (!eidFullName) setEidVars();
+      showPage(5);
+    }
+
+    function initSignatureCanvas(page) {
+      currentSigPage = page;
+      const canvas = document.getElementById("sigCanvas");
+      if (!canvas) return;
+      initCanvas(canvas);
+      restoreSignature(canvas, page);
+      canvas.addEventListener("mousedown", startDraw);
+      canvas.addEventListener("mousemove", drawMove);
+      window.addEventListener("mouseup", endDraw, { once: true });
+      canvas.addEventListener("touchstart", startDraw, { passive: false });
+      canvas.addEventListener("touchmove", drawMove, { passive: false });
+      canvas.addEventListener("touchend", endDraw);
+    }
+
+    function initCanvas(canvas) {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    }
+
+    function getPos(e, canvas) {
+      const rect = canvas.getBoundingClientRect();
+      const touch = e.touches ? e.touches[0] : e;
+      return {
+        x: (touch.clientX - rect.left) * (canvas.width / rect.width),
+        y: (touch.clientY - rect.top) * (canvas.height / rect.height)
+      };
+    }
+
+    function configurePen(ctx) {
+      ctx.strokeStyle = "#1A3A6B";
+      ctx.lineWidth = 2.5;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+    }
 
     function startDraw(e) {
       e.preventDefault();
-      resizeCanvasEl(canvas);
-      redrawSigCanvas(sigIndex);
+      const canvas = e.currentTarget;
       const ctx = canvas.getContext("2d");
-      const pos = getCanvasPos(e, canvas);
-      sigDrawActive[sigIndex] = true;
-      lastX = pos.x;
-      lastY = pos.y;
-      currentPath = [{ x: pos.x, y: pos.y, t: Date.now() }];
-      ctx.strokeStyle = penColor;
-      ctx.lineWidth = penWidth;
-      ctx.lineCap = "round";
-      ctx.lineJoin = "round";
+      configurePen(ctx);
+      drawing = true;
+      strokePoints = [];
+      lastPoint = getPos(e, canvas);
+      strokePoints.push(lastPoint);
       ctx.beginPath();
-      ctx.moveTo(lastX, lastY);
-      $("sigErr" + sigIndex).classList.remove("show");
+      ctx.moveTo(lastPoint.x, lastPoint.y);
+      window.addEventListener("mouseup", endDraw, { once: true });
     }
 
     function drawMove(e) {
-      if (!sigDrawActive[sigIndex]) return;
+      if (!drawing) return;
       e.preventDefault();
+      const canvas = e.currentTarget;
       const ctx = canvas.getContext("2d");
-      const pos = getCanvasPos(e, canvas);
-      currentPath.push({ x: pos.x, y: pos.y, t: Date.now() });
-      ctx.strokeStyle = penColor;
-      ctx.lineWidth = penWidth;
-      ctx.lineCap = "round";
-      ctx.lineJoin = "round";
-      const midX = (lastX + pos.x) / 2;
-      const midY = (lastY + pos.y) / 2;
-      ctx.quadraticCurveTo(lastX, lastY, midX, midY);
+      const point = getPos(e, canvas);
+      const mid = { x: (lastPoint.x + point.x) / 2, y: (lastPoint.y + point.y) / 2 };
+      ctx.quadraticCurveTo(lastPoint.x, lastPoint.y, mid.x, mid.y);
       ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(midX, midY);
-      lastX = pos.x;
-      lastY = pos.y;
-      enableSigStrokeButtons(sigIndex);
+      lastPoint = point;
+      strokePoints.push(point);
     }
 
-    function endDraw(e) {
-      if (e && e.preventDefault) e.preventDefault();
-      if (!sigDrawActive[sigIndex]) return;
-      sigDrawActive[sigIndex] = false;
-      if (currentPath.length >= 2) {
-        sigStrokes[sigIndex].push({
-          color: penColor,
-          baseWidth: penWidth,
-          points: currentPath.slice(),
-        });
+    function endDraw() {
+      if (!drawing) return;
+      drawing = false;
+      if (strokePoints.length) {
+        allPaths[currentSigPage] = allPaths[currentSigPage] || [];
+        allPaths[currentSigPage].push(strokePoints);
+        setSignatureButtons(true);
       }
-      currentPath = [];
-      redrawSigCanvas(sigIndex);
-      updateSigStrokeButtons(sigIndex);
-      canvas.getContext("2d").beginPath();
+      strokePoints = [];
+      lastPoint = null;
     }
 
-    canvas.addEventListener("mousedown", startDraw);
-    canvas.addEventListener("mousemove", drawMove);
-    canvas.addEventListener("mouseleave", endDraw);
-    window.addEventListener("mouseup", endDraw);
-    canvas.addEventListener("touchstart", startDraw, { passive: false });
-    canvas.addEventListener("touchmove", drawMove, { passive: false });
-    canvas.addEventListener("touchend", endDraw);
-    canvas.addEventListener("touchcancel", endDraw);
-  }
-
-  function syncPenToolbars() {
-    for (let i = 0; i < 5; i++) {
-      const bar = $("penBar" + i);
-      if (!bar) continue;
-      const locked = penLocked;
-      bar.classList.toggle("disabled", locked);
-      bar.title = locked ? "Pen settings are locked to match Signature 1." : "";
-      const tip = locked ? "Pen settings are locked to match Signature 1." : "";
-      bar.querySelectorAll(".color-circle").forEach(function (btn) {
-        btn.classList.toggle("selected", btn.getAttribute("data-color") === penColor);
-        btn.title = tip;
-      });
-      bar.querySelectorAll(".width-option").forEach(function (btn) {
-        btn.classList.toggle("selected", btn.getAttribute("data-width") === String(penWidth));
-        btn.title = tip;
-      });
-    }
-  }
-
-  function bindPenControls() {
-    for (let i = 0; i < 5; i++) {
-      const bar = $("penBar" + i);
-      if (!bar || bar.dataset.listeners === "1") continue;
-      bar.dataset.listeners = "1";
-      bar.addEventListener("click", function (e) {
-        if (penLocked) return;
-        const cbtn = e.target.closest(".color-circle");
-        const wbtn = e.target.closest(".width-option");
-        if (cbtn) {
-          penColor = cbtn.getAttribute("data-color") || "#000000";
-          syncPenToolbars();
-        }
-        if (wbtn) {
-          penWidth = parseFloat(wbtn.getAttribute("data-width") || "3", 10);
-          syncPenToolbars();
-        }
-      });
-    }
-  }
-
-  function showPage(n) {
-    currentPage = n;
-    document.querySelectorAll(".flow-page").forEach(function (el) {
-      el.classList.remove("active");
-    });
-    const page = pageEl(n);
-    if (page) page.classList.add("active");
-
-    if ($("btnBack0")) $("btnBack0").classList.toggle("hidden", n === 0);
-
-    updateProgressUI();
-
-    if (n >= 2 && n <= 6) {
-      const idx = n - 2;
-      setupSigCanvas(idx);
-      bindPenControls();
-      syncPenToolbars();
-      redrawSigCanvas(idx);
-      updateSigStrokeButtons(idx);
-    }
-
-    if (n === 7) {
-      buildReview();
-      updateReviewConfirmState();
-    }
-
-    if (n === 8) {
-      updatePdfPreviewCells();
-    }
-
-    refreshLucide();
-    window.requestAnimationFrame(function () {
-      if (n >= 2 && n <= 6) {
-        redrawSigCanvas(n - 2);
+    function setSignatureButtons(enabled) {
+      const undo = document.getElementById("undoBtn");
+      const clear = document.getElementById("clearBtn");
+      const next = document.getElementById("nextBtn") || document.getElementById("submitBtn");
+      if (undo) undo.disabled = !enabled;
+      if (clear) clear.disabled = !enabled;
+      if (next) {
+        next.disabled = !enabled;
+        next.classList.toggle("enabled", enabled);
       }
-    });
-  }
-
-  function updatePdfPreviewCells() {
-    const b = $("pdfBankNameCell");
-    const p = $("pdfPayInstrumentCell");
-    if (b && bankName) b.textContent = bankName;
-    const method = state.bank.method;
-    if (p) {
-      if (method === "iban") p.textContent = $("ibanInput").value.trim();
-      else if (method === "card") p.textContent = $("ccInput").value.trim();
     }
-  }
 
-  window.downloadPDF = function () {
-    const pdfEl = document.querySelector(".pdf-page");
-    if (!pdfEl) return;
-    const pdfContent = pdfEl.outerHTML;
-
-    const pdfStyles = `
-    body { font-family: Arial, sans-serif; font-size: 10px; margin: 20px; color: #1A1A1A; background: white; }
-    .pdf-page { width: 750px; margin: 0 auto; padding: 24px; }
-    table { border-collapse: collapse; width: 100%; margin-bottom: 4px; }
-    td { border: 1px solid #333; padding: 4px 6px; vertical-align: middle; font-size: 10px; }
-    .pdf-dd-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
-    .pdf-dd-title { font-size: 14px; font-weight: bold; margin: 0 0 2px; }
-    .pdf-dd-sub { margin: 0 0 2px; font-size: 11px; }
-    .pdf-dd-ar-red { color: red; margin: 0; font-size: 10px; }
-    .pdf-dd-logo-ar { font-size: 13px; font-weight: bold; margin: 0 0 2px; text-align: right; }
-    .pdf-dd-rev { font-size: 9px; margin: 0; text-align: right; }
-    .pdf-oic-table td { width: 30px; text-align: center; font-weight: bold; }
-    .pdf-oic-label-cell { font-weight: bold; width: 60px; }
-    .field-label { font-weight: bold; width: 180px; background: #f9f9f9; }
-    .field-value { background: white; }
-    .field-arabic { text-align: right; font-size: 9px; width: 120px; background: #f9f9f9; }
-    .field-num { width: 20px; text-align: center; font-weight: bold; background: #f9f9f9; }
-    .required { color: red; }
-    .pdf-agreement { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; font-size: 9px; line-height: 1.4; border: 1px solid #333; padding: 8px; }
-    .pdf-sig-row { display: flex; border: 1px solid #333; margin-top: 8px; }
-    .pdf-sig-cell { flex: 1; border-right: 1px solid #333; padding: 6px; min-height: 80px; }
-    .pdf-sig-cell:last-child { border-right: none; }
-    .pdf-sig-cap { font-size: 9px; font-weight: bold; margin: 0 0 6px; }
-    .pdf-sig-name { font-size: 10px; margin: 0 0 4px; }
-    .pdf-sig-placeholder { height: 50px; background: #f5f5f5; }
-    .pdf-footer-check { font-size: 9px; margin-top: 4px; }
-    .pdf-disclaimer-box { border: 2px solid #F59E0B; background: #FFFBEA; border-radius: 6px; padding: 8px 12px; font-size: 11px; color: #92400E; font-weight: 600; text-align: center; margin-bottom: 16px; }
-  `;
-
-    const fullHtml = `<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>Autora Mandate - MND-2026-00847</title>
-  <style>${pdfStyles}</style>
-</head>
-<body>
-  ${pdfContent}
-</body>
-</html>`;
-
-    const blob = new Blob([fullHtml], { type: "text/html" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "Autora-Mandate-MND-2026-00847.html";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  };
-
-  function last4Digits(str) {
-    const d = (str || "").replace(/\D/g, "");
-    return d.length < 4 ? d : d.slice(-4);
-  }
-
-  function buildReview() {
-    const fn = $("fullName").value.trim();
-    const eid = $("eidNumber").value.trim();
-    const method = state.bank.method;
-    const iban = $("ibanInput").value.trim();
-    const cc = $("ccInput").value.trim();
-
-    const rows = [
-      ["Full Name", fn],
-      ["Emirates ID", eid],
-      ["Bank Name", bankName || "—"],
-      ["Payment Method", method === "card" ? "Credit Card" : "IBAN"],
-    ];
-    if (method === "iban") rows.push(["IBAN / CC Number", iban]);
-    if (method === "card")
-      rows.push([
-        "IBAN / CC Number",
-        cc
-          .replace(/\s/g, "")
-          .replace(/(\d{4})/g, "$1 ")
-          .trim(),
-      ]);
-
-    rows.push(
-      ["Merchant", "Demo Merchant LLC"],
-      ["Frequency", "Monthly"],
-      ["Collection Amount", "AED 500.00"],
-      ["Start Date", "01/09/2026"],
-      ["End Date", "01/09/2027"]
-    );
-
-    const list = $("reviewList");
-    list.innerHTML = "";
-    rows.forEach(function (row) {
-      const r = document.createElement("div");
-      r.className = "review-row";
-      r.innerHTML = '<span class="review-k"></span><span class="review-v"></span>';
-      r.querySelector(".review-k").textContent = row[0] + ":";
-      r.querySelector(".review-v").textContent = row[1];
-      list.appendChild(r);
-    });
-  }
-
-  function updateReviewConfirmState() {
-    const btn = $("sec4Confirm");
-    if (!btn) return;
-    btn.disabled = !$("tcCheck").checked;
-  }
-
-  function paymentFieldFilled() {
-    if (state.bank.method === "iban") return ($("ibanInput").value.trim().length > 0);
-    if (state.bank.method === "card") return ($("ccInput").value.replace(/\D/g, "").length > 0);
-    return false;
-  }
-
-  function updateBankVerifyButton() {
-    const btn = $("btnVerifyNext");
-    if (!btn || state.bankVerifying) return;
-    const ok = state.bank.method && paymentFieldFilled();
-    btn.disabled = !ok;
-  }
-
-  function setPayMethod(m) {
-    state.bank.method = m;
-    const seg = document.querySelector("#payMethodSeg");
-    if (seg) {
-      seg.querySelector("[data-method='iban']").classList.toggle("active", m === "iban");
-      seg.querySelector("[data-method='card']").classList.toggle("active", m === "card");
+    function clearSignature() {
+      const canvas = document.getElementById("sigCanvas");
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      allPaths[currentSigPage] = [];
+      setSignatureButtons(false);
     }
-    $("ibanBlock").style.display = m === "iban" ? "block" : "none";
-    $("cardBlock").style.display = m === "card" ? "block" : "none";
-    $("payMethodErr").classList.remove("show");
-    if (m !== "iban") {
-      resetIbanUpload(false);
+
+    function undoSignature() {
+      const paths = allPaths[currentSigPage] || [];
+      if (!paths.length) return;
+      paths.pop();
+      allPaths[currentSigPage] = paths;
+      const canvas = document.getElementById("sigCanvas");
+      if (canvas) redrawSignature(canvas, paths);
+      setSignatureButtons(paths.length > 0);
     }
-    if (m === "card") {
-      const cc = $("ccInput");
-      if (!cc.value.trim()) cc.value = PRE_CC;
-    }
-    clearFieldErrors();
-    updateBankVerifyButton();
-  }
 
-  function resetEidUpload() {
-    state.eid = { hasFile: false, fileName: "", ocrFail: false, manual: false };
-    $("eidFile").value = "";
-    $("eidUploadZone").classList.remove("has-file");
-    $("eidOcrFailActions").classList.remove("visible");
-    $("eidFields").style.display = "none";
-    $("fullName").value = "";
-    $("eidNumber").value = "";
-    clearFieldErrors();
-  }
-
-  function onEidFile(f) {
-    if (!f) return;
-    state.eid.manual = false;
-    state.eid.hasFile = true;
-    state.eid.fileName = f.name;
-    state.eid.ocrFail = false;
-    $("eidUploadZone").classList.add("has-file");
-    $("eidFileName").textContent = f.name;
-    $("eidOcrFailActions").classList.remove("visible");
-    $("eidFields").style.display = "block";
-    $("fullName").value = PRE_FULL;
-    $("eidNumber").value = PRE_EID;
-    clearFieldErrors();
-    refreshLucide();
-  }
-
-  function resetIbanUpload(clearMethod) {
-    state.bank.ibanHasFile = false;
-    state.bank.ibanFileName = "";
-    state.bank.ibanOcrFail = false;
-    state.bank.ibanManual = false;
-    $("ibanFile").value = "";
-    $("ibanUploadZone").classList.remove("has-file");
-    $("ibanOcrFailActions").classList.remove("visible");
-    $("ibanFieldWrap").style.display = "none";
-    $("ibanInput").value = "";
-    if (clearMethod) updateBankVerifyButton();
-  }
-
-  function onIbanFile(f) {
-    if (!f) return;
-    state.bank.ibanManual = false;
-    state.bank.ibanHasFile = true;
-    state.bank.ibanFileName = f.name;
-    state.bank.ibanOcrFail = false;
-    $("ibanUploadZone").classList.add("has-file");
-    $("ibanFileName").textContent = f.name;
-    $("ibanOcrFailActions").classList.remove("visible");
-    $("ibanFieldWrap").style.display = "block";
-    $("ibanInput").value = PRE_IBAN;
-    updateBankVerifyButton();
-  }
-
-  function validateEidAndAdvance() {
-    clearFieldErrors();
-    const fn = $("fullName").value.trim();
-    const en = $("eidNumber").value.trim();
-    let ok = true;
-    if (!fn) {
-      showFieldError("fullName", "fullNameErr", "This field is required");
-      ok = false;
-    }
-    if (!en) {
-      showFieldError("eidNumber", "eidNumberErr", "This field is required");
-      ok = false;
-    }
-    if (!ok) return;
-    showPage(1);
-  }
-
-  function runBankVerification() {
-    clearFieldErrors();
-    $("payMethodErr").classList.remove("show");
-    if (!state.bank.method) {
-      $("payMethodErr").classList.add("show");
-      return;
-    }
-    if (!paymentFieldFilled()) return;
-
-    const btn = $("btnVerifyNext");
-    const sp = $("bankVerifySpinner");
-    const lbl = $("btnVerifyLabel");
-    state.bankVerifying = true;
-    btn.disabled = true;
-    sp.classList.remove("hidden");
-    lbl.textContent = "Verifying...";
-
-    window.setTimeout(function () {
-      let pass = false;
-      if (state.bank.method === "iban") {
-        const raw = $("ibanInput").value.trim();
-        const compact = raw.replace(/\s/g, "");
-        if (compact.substring(0, 2).toUpperCase() === "AE" && compact.length >= 23) {
-          pass = true;
-          bankName = "Emirates NBD";
-        } else {
-          showFieldError("ibanInput", "ibanErr", "This IBAN number is not valid. Please check and enter it again.");
-        }
-      } else {
-        const digits = $("ccInput").value.replace(/\D/g, "");
-        if (digits.length === 16) {
-          pass = true;
-          bankName = "Visa";
-        } else {
-          showFieldError("ccInput", "ccErr", "This card number is not valid. Please check and enter it again.");
-        }
-      }
-
-      state.bankVerifying = false;
-      sp.classList.add("hidden");
-      lbl.textContent = "Verify & Next";
-      btn.disabled = false;
-      updateBankVerifyButton();
-
-      if (pass) showPage(2);
-    }, 2000);
-  }
-
-  function validateSignatureAndAdvance(sigIndex) {
-    const err = $("sigErr" + sigIndex);
-    err.classList.remove("show");
-    if (sigStrokes[sigIndex].length === 0) {
-      err.classList.add("show");
-      return;
-    }
-    if (sigIndex > 0) {
-      if (!signaturesRoughlyMatch(sigIndex)) {
-        $("sigMismatchModal").classList.add("show");
-        sigStrokes[sigIndex] = [];
-        redrawSigCanvas(sigIndex);
-        updateSigStrokeButtons(sigIndex);
+    function restoreSignature(canvas, page) {
+      const paths = allPaths[page] || [];
+      if (!paths.length) return;
+      if (paths[0].demo) {
+        drawDemoSig(canvas);
         return;
       }
-    } else {
-      const canvas = $("sigCanvas0");
-      resizeCanvasEl(canvas);
+      redrawSignature(canvas, paths);
+    }
+
+    function redrawSignature(canvas, paths) {
       const ctx = canvas.getContext("2d");
-      sig1ImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      sig1Meta = computeMeta(sigStrokes[0]);
-      penLocked = true;
-      syncPenToolbars();
-    }
-    showPage(3 + sigIndex);
-  }
-
-  function goBack() {
-    if (currentPage <= 0) return;
-    showPage(currentPage - 1);
-  }
-
-  function wireNav() {
-    $("btnNext0").addEventListener("click", validateEidAndAdvance);
-    $("btnBack1").addEventListener("click", goBack);
-    $("btnVerifyNext").addEventListener("click", function () {
-      if (!state.bankVerifying) runBankVerification();
-    });
-
-    for (let i = 0; i < 5; i++) {
-      $("btnBackSig" + i).addEventListener("click", goBack);
-      $("btnNextSig" + i).addEventListener("click", function () {
-        validateSignatureAndAdvance(i);
-      });
-      $("sigUndo" + i).addEventListener("click", function () {
-        sigStrokes[i].pop();
-        redrawSigCanvas(i);
-        updateSigStrokeButtons(i);
-      });
-      $("sigClear" + i).addEventListener("click", function () {
-        sigDrawActive[i] = false;
-        sigStrokes[i] = [];
-        redrawSigCanvas(i);
-        updateSigStrokeButtons(i);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      configurePen(ctx);
+      paths.forEach(points => {
+        if (!Array.isArray(points) || points.length < 2) return;
+        ctx.beginPath();
+        ctx.moveTo(points[0].x, points[0].y);
+        for (let i = 1; i < points.length; i++) {
+          const prev = points[i - 1];
+          const curr = points[i];
+          ctx.quadraticCurveTo(prev.x, prev.y, (prev.x + curr.x) / 2, (prev.y + curr.y) / 2);
+        }
+        ctx.stroke();
       });
     }
 
-    $("btnBackReview").addEventListener("click", goBack);
+    function nextSignaturePage() {
+      if (!(allPaths[currentSigPage] || []).length) return;
+      if (currentSigPage === 8) showPage(9);
+      else if (currentSigPage === 9) showPage(10);
+      else if (currentSigPage === 10) showPage(11);
+      else if (currentSigPage === 12) showPage(13);
+    }
 
-    $("tcCheck").addEventListener("change", updateReviewConfirmState);
+    function submitSignatures() {
+      if (!(allPaths[currentSigPage] || []).length) return;
+      showPage("success");
+    }
 
-    $("sec4Confirm").addEventListener("click", function () {
-      if (!$("tcCheck").checked) return;
-      $("sec4Spinner").classList.remove("hidden");
-      $("sec4BtnLabel").textContent = "Signing…";
-      $("sec4Confirm").disabled = true;
-      window.setTimeout(function () {
-        $("sec4Spinner").classList.add("hidden");
-        $("sec4BtnLabel").textContent = "Confirm & Sign";
-        $("sec4Confirm").disabled = !$("tcCheck").checked;
+    function drawDemoSig(canvas) {
+      const ctx = canvas.getContext("2d");
+      const w = canvas.width, h = canvas.height;
+      ctx.strokeStyle = "#1A3A6B";
+      ctx.lineWidth = 2.5;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.beginPath();
+      ctx.moveTo(w * 0.15, h * 0.55);
+      ctx.bezierCurveTo(w * 0.25, h * 0.25, w * 0.35, h * 0.75, w * 0.5, h * 0.5);
+      ctx.bezierCurveTo(w * 0.65, h * 0.3, w * 0.75, h * 0.65, w * 0.88, h * 0.45);
+      ctx.stroke();
+      allPaths[currentSigPage] = [{ demo: true }];
+      setSignatureButtons(true);
+    }
+
+    function demoSkipPage() {
+      if (currentPage === 1) {
+        selectedMethod = "iban";
+        reviewMethod = "iban";
+        showPage(2);
+      } else if (currentPage === 2) {
+        showPage(3);
+      } else if (currentPage === 3) {
+        clearCameraTimers();
+        setEidVars();
+        showPage(4);
+      } else if (currentPage === 4) {
+        if (selectedMethod !== "card") {
+          ibanValue = "AE07 0331 2345 6789 0123 456";
+          ibanValid = true;
+        } else {
+          ccValue = "4111111111111111";
+          ccMonth = "12";
+          ccYear = String(new Date().getFullYear()).slice(-2);
+          cardValid = monthValid = yearValid = true;
+        }
+        setEidVars();
+        showPage(5);
+      } else if (currentPage === 5) {
+        showPage(6);
+      } else if (currentPage === 6) {
+        showPage(7);
+      } else if (currentPage === 7) {
         showPage(8);
-      }, 1500);
-    });
-
-    $("sigMismatchOk").addEventListener("click", function () {
-      $("sigMismatchModal").classList.remove("show");
-    });
-  }
-
-  function wireBankingFields() {
-    document.querySelector("#payMethodSeg").addEventListener("click", function (e) {
-      const btn = e.target.closest("button[data-method]");
-      if (!btn) return;
-      setPayMethod(btn.getAttribute("data-method"));
-    });
-    $("ibanInput").addEventListener("input", function () {
-      $("ibanErr").classList.remove("show");
-      $("ibanInput").classList.remove("input-invalid");
-      updateBankVerifyButton();
-    });
-    $("ccInput").addEventListener("input", function () {
-      $("ccErr").classList.remove("show");
-      $("ccInput").classList.remove("input-invalid");
-      updateBankVerifyButton();
-    });
-    $("ibanFile").addEventListener("change", function () {
-      const f = this.files && this.files[0];
-      if (f) onIbanFile(f);
-    });
-    $("ibanOcrFailBtn").addEventListener("click", function (e) {
-      e.preventDefault();
-      if (!state.bank.ibanHasFile) return;
-      state.bank.ibanOcrFail = true;
-      $("ibanFieldWrap").style.display = "none";
-      $("ibanOcrFailActions").classList.add("visible");
-      $("ibanInput").value = "";
-      updateBankVerifyButton();
-    });
-    $("ibanReupload").addEventListener("click", function () {
-      resetIbanUpload(false);
-    });
-    $("ibanManual").addEventListener("click", function () {
-      state.bank.ibanManual = true;
-      state.bank.ibanOcrFail = false;
-      $("ibanOcrFailActions").classList.remove("visible");
-      $("ibanFieldWrap").style.display = "block";
-      $("ibanInput").value = "";
-      updateBankVerifyButton();
-    });
-  }
-
-  function wireEid() {
-    $("eidFile").addEventListener("change", function () {
-      const f = this.files && this.files[0];
-      if (f) onEidFile(f);
-    });
-    $("eidOcrFailBtn").addEventListener("click", function (e) {
-      e.preventDefault();
-      if (!state.eid.hasFile) return;
-      $("eidFields").style.display = "none";
-      $("eidOcrFailActions").classList.add("visible");
-      clearFieldErrors();
-    });
-    $("eidReupload").addEventListener("click", resetEidUpload);
-    $("eidManual").addEventListener("click", function () {
-      state.eid.manual = true;
-      $("eidOcrFailActions").classList.remove("visible");
-      $("eidFields").style.display = "block";
-      $("fullName").value = "";
-      $("eidNumber").value = "";
-      clearFieldErrors();
-    });
-    ["fullName", "eidNumber"].forEach(function (id) {
-      $(id).addEventListener("input", clearFieldErrors);
-    });
-  }
-
-  window.addEventListener("orientationchange", handleOrientationChange);
-  window.addEventListener("resize", handleOrientationChange);
-
-  function cubicBezierPoint(t, x0, y0, x1, y1, x2, y2, x3, y3) {
-    const mt = 1 - t;
-    const mt2 = mt * mt;
-    const mt3 = mt2 * mt;
-    const t2 = t * t;
-    const t3 = t2 * t;
-    return {
-      x: mt3 * x0 + 3 * mt2 * t * x1 + 3 * mt * t2 * x2 + t3 * x3,
-      y: mt3 * y0 + 3 * mt2 * t * y1 + 3 * mt * t2 * y2 + t3 * y3,
-    };
-  }
-
-  function sampleCubicSegment(x0, y0, x1, y1, x2, y2, x3, y3, steps, tStart) {
-    const pts = [];
-    for (let i = 0; i <= steps; i++) {
-      const t = i / steps;
-      const p = cubicBezierPoint(t, x0, y0, x1, y1, x2, y2, x3, y3);
-      pts.push({ x: p.x, y: p.y, t: tStart + i });
-    }
-    return pts;
-  }
-
-  function buildDemoStrokesForSize(w, h) {
-    const col = penColor || "#000000";
-    const baseW = penWidth || 3;
-    const ax = w * 0.1,
-      ay = h * 0.6;
-    const bx = w * 0.2,
-      by = h * 0.2;
-    const cx = w * 0.35,
-      cy = h * 0.8;
-    const dx = w * 0.5,
-      dy = h * 0.5;
-    const ex = w * 0.65,
-      ey = h * 0.2;
-    const fx = w * 0.75,
-      fy = h * 0.7;
-    const gx = w * 0.9,
-      gy = h * 0.4;
-    let tBase = Date.now();
-    const partA = sampleCubicSegment(ax, ay, bx, by, cx, cy, dx, dy, 18, tBase);
-    tBase += partA.length;
-    const partB = sampleCubicSegment(dx, dy, ex, ey, fx, fy, gx, gy, 18, tBase).slice(1);
-    const strokeOnePts = partA.concat(partB);
-    tBase += partB.length + 1;
-    const hx = w * 0.1,
-      hy = h * 0.7;
-    const ix = w * 0.3,
-      iy = h * 0.75;
-    const jx = w * 0.6,
-      jy = h * 0.72;
-    const kx = w * 0.9,
-      ky = h * 0.7;
-    const strokeTwoPts = sampleCubicSegment(hx, hy, ix, iy, jx, jy, kx, ky, 22, tBase);
-    return [
-      { color: col, baseWidth: baseW, points: strokeOnePts },
-      { color: col, baseWidth: baseW, points: strokeTwoPts },
-    ];
-  }
-
-  function injectDemoSignature(sigIndex) {
-    const canvas = $("sigCanvas" + sigIndex);
-    if (!canvas) return;
-    resizeCanvasEl(canvas);
-    const rect = canvas.getBoundingClientRect();
-    const w = Math.max(1, rect.width);
-    const h = Math.max(1, rect.height);
-    const unitTpl = buildDemoStrokesForSize(1, 1);
-    const col = penColor || "#000000";
-    const baseW = penWidth || 3;
-    let tOff = Date.now();
-    sigStrokes[sigIndex] = unitTpl.map(function (st) {
-      return {
-        color: col,
-        baseWidth: baseW,
-        points: st.points.map(function (p) {
-          return { x: p.x * w, y: p.y * h, t: tOff++ };
-        }),
-      };
-    });
-    drawSampleSignature(canvas);
-    updateSigStrokeButtons(sigIndex);
-  }
-
-  function drawSampleSignature(canvas) {
-    resizeCanvasEl(canvas);
-    const ctx = canvas.getContext("2d");
-    const w = canvas.width;
-    const h = canvas.height;
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(0, 0, w, h);
-    var currentPenColor = penColor || "#000000";
-    var currentPenWidth = penWidth || 3;
-    ctx.strokeStyle = currentPenColor;
-    ctx.lineWidth = currentPenWidth;
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-    ctx.beginPath();
-    ctx.moveTo(w * 0.1, h * 0.6);
-    ctx.bezierCurveTo(w * 0.2, h * 0.2, w * 0.35, h * 0.8, w * 0.5, h * 0.5);
-    ctx.bezierCurveTo(w * 0.65, h * 0.2, w * 0.75, h * 0.7, w * 0.9, h * 0.4);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(w * 0.1, h * 0.7);
-    ctx.bezierCurveTo(w * 0.3, h * 0.75, w * 0.6, h * 0.72, w * 0.9, h * 0.7);
-    ctx.stroke();
-  }
-
-  function demoSkipEid() {
-    state.eid.hasFile = true;
-    state.eid.fileName = "demo-emirates-id.jpg";
-    state.eid.ocrFail = false;
-    $("eidUploadZone").classList.add("has-file");
-    $("eidFileName").textContent = "demo-emirates-id.jpg";
-    $("eidOcrFailActions").classList.remove("visible");
-    $("eidFields").style.display = "block";
-    $("fullName").value = PRE_FULL;
-    $("eidNumber").value = PRE_EID;
-    clearFieldErrors();
-    refreshLucide();
-    showPage(1);
-  }
-
-  function demoSkipBank() {
-    setPayMethod("iban");
-    state.bank.ibanManual = false;
-    state.bank.ibanHasFile = true;
-    state.bank.ibanFileName = "demo-iban-doc.pdf";
-    state.bank.ibanOcrFail = false;
-    $("ibanUploadZone").classList.add("has-file");
-    $("ibanFileName").textContent = "demo-iban-doc.pdf";
-    $("ibanOcrFailActions").classList.remove("visible");
-    $("ibanFieldWrap").style.display = "block";
-    $("ibanInput").value = PRE_IBAN;
-    clearFieldErrors();
-    updateBankVerifyButton();
-
-    const btn = $("btnVerifyNext");
-    const sp = $("bankVerifySpinner");
-    const lbl = $("btnVerifyLabel");
-    state.bankVerifying = true;
-    if (btn) btn.disabled = true;
-    if (sp) sp.classList.remove("hidden");
-    if (lbl) lbl.textContent = "Verifying...";
-
-    window.setTimeout(function () {
-      bankName = "Emirates NBD";
-      state.bankVerifying = false;
-      if (sp) sp.classList.add("hidden");
-      if (lbl) lbl.textContent = "Verify & Next";
-      if (btn) btn.disabled = false;
-      updateBankVerifyButton();
-      showPage(2);
-      refreshLucide();
-    }, 1000);
-  }
-
-  function demoSkipReview() {
-    $("tcCheck").checked = true;
-    updateReviewConfirmState();
-    $("sec4Spinner").classList.remove("hidden");
-    $("sec4BtnLabel").textContent = "Signing…";
-    $("sec4Confirm").disabled = true;
-    window.setTimeout(function () {
-      $("sec4Spinner").classList.add("hidden");
-      $("sec4BtnLabel").textContent = "Confirm & Sign";
-      $("sec4Confirm").disabled = !$("tcCheck").checked;
-      showPage(8);
-      refreshLucide();
-    }, 1500);
-  }
-
-  function demoSkipImpl(ev) {
-    if (ev && ev.preventDefault) ev.preventDefault();
-    switch (currentPage) {
-      case 0:
-        demoSkipEid();
-        break;
-      case 1:
-        demoSkipBank();
-        break;
-      case 2:
-      case 3:
-      case 4:
-      case 5:
-      case 6:
-        injectDemoSignature(currentPage - 2);
-        validateSignatureAndAdvance(currentPage - 2);
-        break;
-      case 7:
-        demoSkipReview();
-        break;
-      case 8:
-      default:
-        break;
-    }
-  }
-
-  function resetDemoImpl() {
-    currentPage = 0;
-    bankName = null;
-    penColor = "#000000";
-    penWidth = 3;
-    penLocked = false;
-    sig1ImageData = null;
-    sig1Meta = null;
-    for (let i = 0; i < 5; i++) {
-      sigStrokes[i] = [];
-      sigDrawActive[i] = false;
-    }
-    state.bankVerifying = false;
-    state.bank = { method: null, ibanHasFile: false, ibanFileName: "", ibanOcrFail: false, ibanManual: false };
-    state.eid = { hasFile: false, fileName: "", ocrFail: false, manual: false };
-
-    resetEidUpload();
-    $("ccInput").value = "";
-    $("ibanInput").value = "";
-    $("tcCheck").checked = false;
-    $("sec4Spinner").classList.add("hidden");
-    $("sec4BtnLabel").textContent = "Confirm & Sign";
-    $("sec4Confirm").disabled = true;
-    $("bankVerifySpinner").classList.add("hidden");
-    $("btnVerifyLabel").textContent = "Verify & Next";
-    $("sigMismatchModal").classList.remove("show");
-    clearFieldErrors();
-    $("payMethodErr").classList.remove("show");
-
-    setPayMethod(null);
-    $("ibanUploadZone").classList.remove("has-file");
-    $("ibanOcrFailActions").classList.remove("visible");
-    $("ibanFieldWrap").style.display = "none";
-    updateBankVerifyButton();
-
-    for (let i = 0; i < 5; i++) {
-      const c = $("sigCanvas" + i);
-      if (c) {
-        delete c.dataset.bound;
-        resizeCanvasEl(c);
-        const ctx = c.getContext("2d");
-        ctx.fillStyle = "#ffffff";
-        ctx.fillRect(0, 0, c.width, c.height);
+      } else if ([8, 9, 10, 12].includes(currentPage)) {
+        const canvas = document.getElementById("sigCanvas");
+        if (canvas) drawDemoSig(canvas);
+        nextSignaturePage();
+      } else if (currentPage === 11) {
+        showPage(12);
+      } else if (currentPage === 13) {
+        const canvas = document.getElementById("sigCanvas");
+        if (canvas) drawDemoSig(canvas);
+        showPage("success");
       }
-      updateSigStrokeButtons(i);
-      const er = $("sigErr" + i);
-      if (er) er.classList.remove("show");
     }
 
-    showPage(0);
-    syncPenToolbars();
-    refreshLucide();
-  }
+    function resetFlow() {
+      selectedMethod = "";
+      reviewMethod = "";
+      eidFullName = "";
+      eidNumber = "";
+      eidPhone = "";
+      ibanValue = "";
+      ibanManual = false;
+      ccValue = "";
+      ccMonth = "";
+      ccYear = "";
+      ibanValid = cardValid = monthValid = yearValid = false;
+      Object.keys(allPaths).forEach(key => delete allPaths[key]);
+      showPage(1);
+    }
 
-  window.demoSkip = demoSkipImpl;
-  window.resetDemo = resetDemoImpl;
-  window.drawSampleSignature = drawSampleSignature;
+    function iconSvg(name, size) {
+      const icons = {
+        "check-circle-2": `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>`
+      };
+      return icons[name] || "";
+    }
 
-  resetEidUpload();
-  setPayMethod(null);
-  $("ccInput").value = "";
-  wireEid();
-  wireBankingFields();
-  wireNav();
-  bindPenControls();
-  syncPenToolbars();
-  showPage(0);
-  refreshLucide();
-})();
+    function escapeAttr(value) {
+      return String(value || "").replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+    }
 
+    window.addEventListener("orientationchange", () => {
+      setTimeout(() => {
+        if (currentPage === 7 && Math.abs(window.orientation || 0) === 90) showPage(8);
+      }, 400);
+    });
+    window.addEventListener("resize", () => {
+      if (currentPage === 7 && window.innerWidth > window.innerHeight) showPage(8);
+      if (sigPages[currentPage]) {
+        const old = allPaths[currentPage] || [];
+        const canvas = document.getElementById("sigCanvas");
+        if (canvas) {
+          initCanvas(canvas);
+          if (old.length && old[0].demo) drawDemoSig(canvas);
+        }
+      }
+    });
+
+    showPage(1);
   </script>
 </body>
 </html>
