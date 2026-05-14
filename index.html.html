@@ -79,7 +79,7 @@
     html, body { margin: 0; min-height: 100%; }
     body {
       font-family: "Inter", system-ui, sans-serif;
-      background: var(--warm-sand);
+      background: var(--mist-lavender);
       color: var(--midnight-plum);
       overflow-x: hidden;
     }
@@ -170,7 +170,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: 64px;
+      width: 76px;
       gap: 5px;
     }
     .step-circle {
@@ -499,19 +499,69 @@
       font-size: 11px;
     }
 
-    .back-btn {
-      background: none;
-      border: none;
+    .back-outline-btn {
+      display: block;
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1.5px solid #EAE5F4;
+      background: #fff;
       color: #7A5CFF;
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;
+      font-family: inherit;
+    }
+    .back-outline-btn.on-dark {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.35);
+      color: #fff;
+    }
+    .back-outline-btn.compact {
+      display: inline-block;
+      width: auto;
+      padding: 8px 14px;
+      font-size: 13px;
+      border-radius: 999px;
+    }
+    .sign-rotate-overlay {
+      display: none;
+      position: absolute;
+      inset: 0;
+      z-index: 100;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 32px;
+      color: #fff;
+      font-family: Inter, sans-serif;
+      background: linear-gradient(160deg, #7A5CFF, #5A3FE0);
+    }
+    .sign-rotate-phone {
+      margin-bottom: 32px;
+      animation: phoneRock 1.5s ease-in-out infinite alternate;
+    }
+    .sign-rotate-title {
+      margin: 0 0 12px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .sign-rotate-subtitle {
+      margin: 0;
+      max-width: 320px;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #EAE5F4;
+    }
+    .sign-rotate-hint {
       display: flex;
       align-items: center;
-      gap: 6px;
-      padding: 0;
-      margin-bottom: 24px;
-      align-self: flex-start;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 24px;
+      opacity: 0.7;
+      font-size: 12px;
     }
 
     @media (max-width: 380px) {
@@ -609,13 +659,12 @@
         </div>
 
         <div id="ibanFields" style="display:none;">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-            <h3 style="font-size:16px;font-weight:700;color:#120C24;margin:0;">Enter Your IBAN</h3>
-            <span onclick="switchToCreditCard()" style="font-size:12px;color:#7A5CFF;font-weight:600;text-decoration:underline;cursor:pointer;">Switch to Credit Card</span>
+          <div style="text-align:center;margin-bottom:18px;">
+            <button type="button" class="text-link" onclick="switchToCreditCard()">Switch to Credit Card</button>
           </div>
           <div id="uploadArea" class="upload-area" onclick="document.getElementById('ibanFile').click()">
             <i data-lucide="upload-cloud" width="32" height="32" style="color:#7A5CFF;"></i>
-            <div style="font-size:14px;font-weight:700;margin-top:8px;color:#120C24;">Upload IBAN Document</div>
+            <div style="font-size:14px;font-weight:700;margin-top:8px;color:#120C24;">Upload IBAN Document or Screenshot</div>
             <div style="font-size:12px;color:#6B7280;margin-top:4px;">Tap to upload or take a photo</div>
           </div>
           <input id="ibanFile" type="file" accept="image/*,.pdf" style="display:none;" onchange="handleIbanUpload(this)" />
@@ -631,9 +680,7 @@
         </div>
 
         <button class="primary-btn" id="bankingNextBtn" disabled onclick="saveBankingAndNext()" style="margin-bottom:12px;">Next</button>
-        <div style="text-align:center;">
-          <span onclick="showScreen('paymentMethodScreen')" style="font-size:13px;color:#7A5CFF;font-weight:500;cursor:pointer;text-decoration:underline;font-family:Inter,sans-serif;">← Back</span>
-        </div>
+        <button type="button" class="back-outline-btn" onclick="showScreen('paymentMethodScreen')">← Back</button>
       </section>
       <div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-top:16px;">
         <span style="font-size:12px;color:#9CA3AF;font-family:Inter,sans-serif;">Secured by Autora</span>
@@ -653,12 +700,10 @@
         <p class="subtitle">Please have your Emirates ID ready, you can scan hard copy or soft copy</p>
         <div class="instruction-card">📋 Place your Emirates ID in front of your camera. Make sure it's well-lit and clearly visible.</div>
         <button class="primary-btn" onclick="showScreen('eidCameraScreen')" style="margin-bottom:12px;">📷 Scan Emirates ID</button>
-        <div style="text-align:center;margin-bottom:20px;">
-          <span onclick="showScreen('bankingScreen')" style="font-size:13px;color:#7A5CFF;font-weight:500;cursor:pointer;text-decoration:underline;font-family:Inter,sans-serif;">← Back</span>
-        </div>
-        <p style="text-align:center;margin-top:0;font-size:13px;font-family:Inter,sans-serif;">
+        <p style="text-align:center;margin:0 0 12px 0;font-size:13px;font-family:Inter,sans-serif;">
           <span onclick="showScreen('uploadIdScreen')" style="color:#7A5CFF;text-decoration:underline;cursor:pointer;font-weight:500;">I don't have my ID, upload ID picture</span>
         </p>
+        <button type="button" class="back-outline-btn" onclick="showScreen('bankingScreen')">← Back</button>
       </section>
       <div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-top:16px;">
         <span style="font-size:12px;color:#9CA3AF;font-family:Inter,sans-serif;">Secured by Autora</span>
@@ -675,7 +720,7 @@
         <div class="scanner-frame" id="videoContainer"></div>
         <div class="camera-status" id="cameraStatus">📋 Scan the FRONT of your Emirates ID</div>
         <div style="text-align:center;margin-top:16px;">
-          <span onclick="showScreen('eidIntroScreen')" style="font-size:13px;color:#7A5CFF;font-weight:500;cursor:pointer;text-decoration:underline;font-family:Inter,sans-serif;">← Back</span>
+          <button type="button" class="back-outline-btn on-dark compact" onclick="showScreen('eidIntroScreen')">← Back</button>
         </div>
       </div>
       <div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-top:16px;padding-bottom:24px;">
@@ -710,9 +755,7 @@
           <p id="uploadedFileName" style="font-size:12px;color:#4E465E;margin-top:8px;"></p>
         </div>
         <button id="uploadContinueBtn" onclick="continueFromUpload()" disabled class="primary-btn" style="margin-top:24px;margin-bottom:12px;opacity:0.4;transition:opacity 0.2s;">Continue</button>
-        <div style="text-align:center;">
-          <span onclick="showScreen('eidIntroScreen')" style="font-size:13px;color:#7A5CFF;font-weight:500;cursor:pointer;text-decoration:underline;font-family:Inter,sans-serif;">← Back</span>
-        </div>
+        <button type="button" class="back-outline-btn" onclick="showScreen('eidIntroScreen')">← Back</button>
       </section>
       <div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-top:16px;">
         <span style="font-size:12px;color:#9CA3AF;font-family:Inter,sans-serif;">Secured by Autora</span>
@@ -756,9 +799,7 @@
           </div>
         </div>
         <button class="primary-btn" style="margin-top:18px;margin-bottom:12px;" onclick="showScreen('signatureInfoScreen')">Sign →</button>
-        <div style="text-align:center;">
-          <span onclick="reviewGoBack()" style="font-size:13px;color:#7A5CFF;font-weight:500;cursor:pointer;text-decoration:underline;font-family:Inter,sans-serif;">← Back</span>
-        </div>
+        <button type="button" class="back-outline-btn" onclick="reviewGoBack()">← Back</button>
       </section>
       <div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-top:16px;">
         <span style="font-size:12px;color:#9CA3AF;font-family:Inter,sans-serif;">Secured by Autora</span>
@@ -772,7 +813,7 @@
     <div style="min-height:100vh;background:white;display:flex;flex-direction:column;padding:40px 20px 32px;font-family:Inter,sans-serif;">
       <div style="display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:20px;">
         <div id="signatureInfoLogo" style="margin-bottom:12px;"></div>
-        <p style="font-size:14px;line-height:1.6;margin:8px 0 0 0;color:#4E465E;max-width:420px;">Please provide your bank signature</p>
+        <p style="font-size:14px;line-height:1.6;margin:8px 0 0 0;color:#4E465E;max-width:420px;">Sign as you would on your bank documents</p>
         <div style="margin-top:16px;width:100%;max-width:384px;border:1px solid #EAE5F4;border-radius:16px;background:#F3F0FF;padding:16px;text-align:left;">
           <p style="font-size:12px;font-weight:700;color:#7A5CFF;margin:0 0 4px 0;">✍️ Use your Emirates ID signature for better acceptance</p>
           <p style="font-size:12px;color:#4E465E;margin:0 0 12px 0;">Please use the <strong>same signature</strong> as the one on your Emirates ID (bottom-left corner).</p>
@@ -784,9 +825,7 @@
         </div>
       </div>
       <button onclick="showSignScreen(1)" style="width:100%;padding:16px;border-radius:16px;background:linear-gradient(135deg,#7A5CFF,#5A3FE0);color:white;font-size:16px;font-weight:700;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(122,92,255,0.35);">Get Started →</button>
-      <div style="text-align:center;margin-top:12px;">
-        <span onclick="showScreen('reviewScreen')" style="font-size:13px;color:#7A5CFF;font-weight:500;cursor:pointer;text-decoration:underline;font-family:Inter,sans-serif;">← Back</span>
-      </div>
+      <button type="button" class="back-outline-btn" onclick="showScreen('reviewScreen')" style="margin-top:12px;">← Back</button>
       <p style="text-align:center;font-size:12px;color:#FF6B68;font-weight:600;margin-top:12px;">You will sign 5 times total</p>
     </div>
   </div>
@@ -821,10 +860,20 @@
       <button onclick="sigClear(1)" style="flex:0 0 64px;padding:10px 0;border-radius:10px;border:1.5px solid #FF6B68;color:#FF6B68;font-size:13px;font-weight:600;background:white;cursor:pointer;font-family:Inter,sans-serif;">Clear</button>
       <button id="sigNextBtn_1" onclick="sigNext(1)" disabled style="flex:1;padding:10px 0;border-radius:10px;border:none;color:white;font-size:13px;font-weight:700;cursor:pointer;opacity:0.35;font-family:Inter,sans-serif;background:#7A5CFF;">Next →</button>
     </div>
-    <div id="rotateOverlay_1" style="display:none; position:absolute; inset:0; z-index:100; background:#120C24; flex-direction:column; align-items:center; justify-content:center; color:white; font-family:Inter,sans-serif; text-align:center; padding:32px;">
-      <div style="font-size:48px; margin-bottom:16px;">↻</div>
-      <h2 style="font-size:20px;font-weight:700;margin:0 0 8px;">Rotate Your Phone</h2>
-      <p style="font-size:14px;color:#a8c8ea;margin:0;">Please rotate to <span style="color:#FF6B68;font-weight:700;">landscape mode</span> to sign</p>
+    <div id="rotateOverlay_1" class="sign-rotate-overlay">
+      <div class="sign-rotate-phone">
+        <svg width="80" height="80" viewBox="0 0 80 80" fill="none" aria-hidden="true">
+          <rect x="8" y="24" width="64" height="34" rx="7" fill="white" fill-opacity="0.15" stroke="white" stroke-width="3"></rect>
+          <rect x="14" y="30" width="52" height="22" rx="3" fill="white" fill-opacity="0.25"></rect>
+          <circle cx="69" cy="41" r="3" fill="white" fill-opacity="0.8"></circle>
+          <circle cx="36" cy="41" r="7" fill="#FF6B68"></circle>
+          <circle cx="34" cy="39" r="2.5" fill="white" fill-opacity="0.6"></circle>
+          <path d="M20 41 Q28 35 36 41 Q44 47 52 41" stroke="white" stroke-width="2" stroke-linecap="round" fill="none" stroke-opacity="0.7"></path>
+        </svg>
+      </div>
+      <h2 class="sign-rotate-title">Rotate Your Phone</h2>
+      <p class="sign-rotate-subtitle">Please rotate your device to <span style="font-weight:700;color:#FF6B68;">landscape mode</span> to sign</p>
+      <div class="sign-rotate-hint"><span style="font-size:24px;">↻</span><span>Turn sideways</span></div>
     </div>
   </div>
   <div id="signScreen_2" class="sign-screen">
@@ -849,10 +898,20 @@
       <button onclick="sigClear(2)" style="flex:0 0 64px;padding:10px 0;border-radius:10px;border:1.5px solid #FF6B68;color:#FF6B68;font-size:13px;font-weight:600;background:white;cursor:pointer;font-family:Inter,sans-serif;">Clear</button>
       <button id="sigNextBtn_2" onclick="sigNext(2)" disabled style="flex:1;padding:10px 0;border-radius:10px;border:none;color:white;font-size:13px;font-weight:700;cursor:pointer;opacity:0.35;font-family:Inter,sans-serif;background:#7A5CFF;">Next →</button>
     </div>
-    <div id="rotateOverlay_2" style="display:none; position:absolute; inset:0; z-index:100; background:#120C24; flex-direction:column; align-items:center; justify-content:center; color:white; font-family:Inter,sans-serif; text-align:center; padding:32px;">
-      <div style="font-size:48px; margin-bottom:16px;">↻</div>
-      <h2 style="font-size:20px;font-weight:700;margin:0 0 8px;">Rotate Your Phone</h2>
-      <p style="font-size:14px;color:#a8c8ea;margin:0;">Please rotate to <span style="color:#FF6B68;font-weight:700;">landscape mode</span> to sign</p>
+    <div id="rotateOverlay_2" class="sign-rotate-overlay">
+      <div class="sign-rotate-phone">
+        <svg width="80" height="80" viewBox="0 0 80 80" fill="none" aria-hidden="true">
+          <rect x="8" y="24" width="64" height="34" rx="7" fill="white" fill-opacity="0.15" stroke="white" stroke-width="3"></rect>
+          <rect x="14" y="30" width="52" height="22" rx="3" fill="white" fill-opacity="0.25"></rect>
+          <circle cx="69" cy="41" r="3" fill="white" fill-opacity="0.8"></circle>
+          <circle cx="36" cy="41" r="7" fill="#FF6B68"></circle>
+          <circle cx="34" cy="39" r="2.5" fill="white" fill-opacity="0.6"></circle>
+          <path d="M20 41 Q28 35 36 41 Q44 47 52 41" stroke="white" stroke-width="2" stroke-linecap="round" fill="none" stroke-opacity="0.7"></path>
+        </svg>
+      </div>
+      <h2 class="sign-rotate-title">Rotate Your Phone</h2>
+      <p class="sign-rotate-subtitle">Please rotate your device to <span style="font-weight:700;color:#FF6B68;">landscape mode</span> to sign</p>
+      <div class="sign-rotate-hint"><span style="font-size:24px;">↻</span><span>Turn sideways</span></div>
     </div>
   </div>
   <div id="signScreen_3" class="sign-screen">
@@ -877,10 +936,20 @@
       <button onclick="sigClear(3)" style="flex:0 0 64px;padding:10px 0;border-radius:10px;border:1.5px solid #FF6B68;color:#FF6B68;font-size:13px;font-weight:600;background:white;cursor:pointer;font-family:Inter,sans-serif;">Clear</button>
       <button id="sigNextBtn_3" onclick="sigNext(3)" disabled style="flex:1;padding:10px 0;border-radius:10px;border:none;color:white;font-size:13px;font-weight:700;cursor:pointer;opacity:0.35;font-family:Inter,sans-serif;background:#7A5CFF;">Next →</button>
     </div>
-    <div id="rotateOverlay_3" style="display:none; position:absolute; inset:0; z-index:100; background:#120C24; flex-direction:column; align-items:center; justify-content:center; color:white; font-family:Inter,sans-serif; text-align:center; padding:32px;">
-      <div style="font-size:48px; margin-bottom:16px;">↻</div>
-      <h2 style="font-size:20px;font-weight:700;margin:0 0 8px;">Rotate Your Phone</h2>
-      <p style="font-size:14px;color:#a8c8ea;margin:0;">Please rotate to <span style="color:#FF6B68;font-weight:700;">landscape mode</span> to sign</p>
+    <div id="rotateOverlay_3" class="sign-rotate-overlay">
+      <div class="sign-rotate-phone">
+        <svg width="80" height="80" viewBox="0 0 80 80" fill="none" aria-hidden="true">
+          <rect x="8" y="24" width="64" height="34" rx="7" fill="white" fill-opacity="0.15" stroke="white" stroke-width="3"></rect>
+          <rect x="14" y="30" width="52" height="22" rx="3" fill="white" fill-opacity="0.25"></rect>
+          <circle cx="69" cy="41" r="3" fill="white" fill-opacity="0.8"></circle>
+          <circle cx="36" cy="41" r="7" fill="#FF6B68"></circle>
+          <circle cx="34" cy="39" r="2.5" fill="white" fill-opacity="0.6"></circle>
+          <path d="M20 41 Q28 35 36 41 Q44 47 52 41" stroke="white" stroke-width="2" stroke-linecap="round" fill="none" stroke-opacity="0.7"></path>
+        </svg>
+      </div>
+      <h2 class="sign-rotate-title">Rotate Your Phone</h2>
+      <p class="sign-rotate-subtitle">Please rotate your device to <span style="font-weight:700;color:#FF6B68;">landscape mode</span> to sign</p>
+      <div class="sign-rotate-hint"><span style="font-size:24px;">↻</span><span>Turn sideways</span></div>
     </div>
   </div>
   <div id="signScreen_4" class="sign-screen">
@@ -905,10 +974,20 @@
       <button onclick="sigClear(4)" style="flex:0 0 64px;padding:10px 0;border-radius:10px;border:1.5px solid #FF6B68;color:#FF6B68;font-size:13px;font-weight:600;background:white;cursor:pointer;font-family:Inter,sans-serif;">Clear</button>
       <button id="sigNextBtn_4" onclick="sigNext(4)" disabled style="flex:1;padding:10px 0;border-radius:10px;border:none;color:white;font-size:13px;font-weight:700;cursor:pointer;opacity:0.35;font-family:Inter,sans-serif;background:#7A5CFF;">Next →</button>
     </div>
-    <div id="rotateOverlay_4" style="display:none; position:absolute; inset:0; z-index:100; background:#120C24; flex-direction:column; align-items:center; justify-content:center; color:white; font-family:Inter,sans-serif; text-align:center; padding:32px;">
-      <div style="font-size:48px; margin-bottom:16px;">↻</div>
-      <h2 style="font-size:20px;font-weight:700;margin:0 0 8px;">Rotate Your Phone</h2>
-      <p style="font-size:14px;color:#a8c8ea;margin:0;">Please rotate to <span style="color:#FF6B68;font-weight:700;">landscape mode</span> to sign</p>
+    <div id="rotateOverlay_4" class="sign-rotate-overlay">
+      <div class="sign-rotate-phone">
+        <svg width="80" height="80" viewBox="0 0 80 80" fill="none" aria-hidden="true">
+          <rect x="8" y="24" width="64" height="34" rx="7" fill="white" fill-opacity="0.15" stroke="white" stroke-width="3"></rect>
+          <rect x="14" y="30" width="52" height="22" rx="3" fill="white" fill-opacity="0.25"></rect>
+          <circle cx="69" cy="41" r="3" fill="white" fill-opacity="0.8"></circle>
+          <circle cx="36" cy="41" r="7" fill="#FF6B68"></circle>
+          <circle cx="34" cy="39" r="2.5" fill="white" fill-opacity="0.6"></circle>
+          <path d="M20 41 Q28 35 36 41 Q44 47 52 41" stroke="white" stroke-width="2" stroke-linecap="round" fill="none" stroke-opacity="0.7"></path>
+        </svg>
+      </div>
+      <h2 class="sign-rotate-title">Rotate Your Phone</h2>
+      <p class="sign-rotate-subtitle">Please rotate your device to <span style="font-weight:700;color:#FF6B68;">landscape mode</span> to sign</p>
+      <div class="sign-rotate-hint"><span style="font-size:24px;">↻</span><span>Turn sideways</span></div>
     </div>
   </div>
   <div id="signScreen_5" class="sign-screen">
@@ -933,16 +1012,26 @@
       <button onclick="sigClear(5)" style="flex:0 0 64px;padding:10px 0;border-radius:10px;border:1.5px solid #FF6B68;color:#FF6B68;font-size:13px;font-weight:600;background:white;cursor:pointer;font-family:Inter,sans-serif;">Clear</button>
       <button id="sigNextBtn_5" onclick="sigNext(5)" disabled style="flex:1;padding:10px 0;border-radius:10px;border:none;color:white;font-size:13px;font-weight:700;cursor:pointer;opacity:0.35;font-family:Inter,sans-serif;background:#FF6B68;">✓ Submit</button>
     </div>
-    <div id="rotateOverlay_5" style="display:none; position:absolute; inset:0; z-index:100; background:#120C24; flex-direction:column; align-items:center; justify-content:center; color:white; font-family:Inter,sans-serif; text-align:center; padding:32px;">
-      <div style="font-size:48px; margin-bottom:16px;">↻</div>
-      <h2 style="font-size:20px;font-weight:700;margin:0 0 8px;">Rotate Your Phone</h2>
-      <p style="font-size:14px;color:#a8c8ea;margin:0;">Please rotate to <span style="color:#FF6B68;font-weight:700;">landscape mode</span> to sign</p>
+    <div id="rotateOverlay_5" class="sign-rotate-overlay">
+      <div class="sign-rotate-phone">
+        <svg width="80" height="80" viewBox="0 0 80 80" fill="none" aria-hidden="true">
+          <rect x="8" y="24" width="64" height="34" rx="7" fill="white" fill-opacity="0.15" stroke="white" stroke-width="3"></rect>
+          <rect x="14" y="30" width="52" height="22" rx="3" fill="white" fill-opacity="0.25"></rect>
+          <circle cx="69" cy="41" r="3" fill="white" fill-opacity="0.8"></circle>
+          <circle cx="36" cy="41" r="7" fill="#FF6B68"></circle>
+          <circle cx="34" cy="39" r="2.5" fill="white" fill-opacity="0.6"></circle>
+          <path d="M20 41 Q28 35 36 41 Q44 47 52 41" stroke="white" stroke-width="2" stroke-linecap="round" fill="none" stroke-opacity="0.7"></path>
+        </svg>
+      </div>
+      <h2 class="sign-rotate-title">Rotate Your Phone</h2>
+      <p class="sign-rotate-subtitle">Please rotate your device to <span style="font-weight:700;color:#FF6B68;">landscape mode</span> to sign</p>
+      <div class="sign-rotate-hint"><span style="font-size:24px;">↻</span><span>Turn sideways</span></div>
     </div>
   </div>
 
   <!-- Screen 11: One More Thing -->
   <div id="oneMoreThingScreen" class="screen">
-    <div style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center;gap:20px;background:#F6EFE8;font-family:Inter,sans-serif;">
+    <div style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center;gap:20px;background:#EAE5F4;font-family:Inter,sans-serif;">
       <div id="oneMoreThingLogo"></div>
       <div style="width:64px;height:64px;border-radius:50%;background:#F3F0FF;display:flex;align-items:center;justify-content:center;">
         <svg width="34" height="34" viewBox="0 0 40 40" fill="none">
@@ -963,7 +1052,7 @@
 
   <!-- Screen 14: Success -->
   <div id="successScreen" class="screen">
-    <div style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#F6EFE8;font-family:Inter,sans-serif;text-align:center;padding:32px;">
+    <div style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#EAE5F4;font-family:Inter,sans-serif;text-align:center;padding:32px;">
       <div id="successIcon" style="width:80px;height:80px;border-radius:50%;background:#DCFCE7;display:flex;align-items:center;justify-content:center;margin-bottom:24px;transform:scale(0);transition:transform 0.5s cubic-bezier(0.34,1.56,0.64,1);">
         <svg width="44" height="44" viewBox="0 0 52 52" fill="none">
           <circle cx="26" cy="26" r="24" fill="#7A5CFF" />
@@ -1018,7 +1107,7 @@
     }
 
     function progressBar(step) {
-      const labels = ["Method", "Banking", "Verify ID", "Review"];
+      const labels = ["Method", "Banking", "Personal Information", "Review"];
       return `
         <div class="progress-bar">
           ${labels.map((label, idx) => {
@@ -1160,7 +1249,7 @@
     function switchToIban() {
       selectedMethod = "iban";
       const title = document.getElementById("bankingScreenTitle");
-      if (title) title.textContent = "Banking Details";
+      if (title) title.textContent = "IBAN Details";
       const cc = document.getElementById("ccFields");
       const iban = document.getElementById("ibanFields");
       if (cc) cc.style.display = "none";
@@ -1342,19 +1431,11 @@
       }, 1300));
 
       cameraTimers.push(setTimeout(() => {
-        status.textContent = "📋 Now scan the BACK of your Emirates ID";
-      }, 2400));
-
-      cameraTimers.push(setTimeout(() => {
-        status.textContent = "✅ Back side captured";
-      }, 3600));
-
-      cameraTimers.push(setTimeout(() => {
         eidFullName = eidFullName || "Mohammed Al Nuaimi";
         eidNumber = eidNumber || "784-1988-1234567-1";
         reviewMethod = selectedMethod || "iban";
         showScreen("reviewScreen");
-      }, 4400));
+      }, 2600));
     }
 
     function handleEidUpload(input) {
@@ -1457,7 +1538,7 @@
       document.body.style.background =
         id === "eidCameraScreen" ? "#1A1A1A" :
         id === "signatureInfoScreen" ? "white" :
-        "#F6EFE8";
+        "#EAE5F4";
       document.body.style.overflow = id === "eidCameraScreen" ? "hidden" : "auto";
     }
 
@@ -1639,21 +1720,57 @@
       }
     }
 
+    function isLandscape() {
+      return window.innerWidth > window.innerHeight;
+    }
+
+    function getActiveSignScreen() {
+      for (let i = 1; i <= 5; i += 1) {
+        const el = document.getElementById("signScreen_" + i);
+        if (el && el.classList.contains("active")) return i;
+      }
+      return null;
+    }
+
+    function updateSignOrientation(n) {
+      const overlay = document.getElementById("rotateOverlay_" + n);
+      if (!overlay) return;
+      overlay.style.display = isLandscape() ? "none" : "flex";
+    }
+
     function showSignScreen(n) {
       [1, 2, 3, 4, 5].forEach((i) => {
         const el = document.getElementById("signScreen_" + i);
         if (el) el.classList.remove("active");
       });
 
-      if (n === null) return;
+      if (n === null) {
+        [1, 2, 3, 4, 5].forEach((i) => {
+          const overlay = document.getElementById("rotateOverlay_" + i);
+          if (overlay) overlay.style.display = "none";
+        });
+        return;
+      }
 
       const el = document.getElementById("signScreen_" + n);
       if (!el) return;
       el.classList.add("active");
       document.body.style.background = "white";
       document.body.style.overflow = "hidden";
-      setTimeout(() => initSignPad(n), 50);
+      setTimeout(() => {
+        initSignPad(n);
+        updateSignOrientation(n);
+      }, 50);
     }
+
+    window.addEventListener("resize", () => {
+      const active = getActiveSignScreen();
+      if (active) updateSignOrientation(active);
+    });
+    window.addEventListener("orientationchange", () => {
+      const active = getActiveSignScreen();
+      if (active) updateSignOrientation(active);
+    });
 
     function triggerSuccessAnim() {
       setTimeout(() => {
