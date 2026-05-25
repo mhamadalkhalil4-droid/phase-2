@@ -73,13 +73,15 @@
       --warm-sand: #F6EFE8;
       --mist-lavender: #EAE5F4;
       --graphite-plum: #4E465E;
+      --page-bg: #FFFFFF;
+      --card-surface: #F8F7FB;
     }
 
     * { box-sizing: border-box; }
     html, body { margin: 0; min-height: 100%; }
     body {
       font-family: "Inter", system-ui, sans-serif;
-      background: var(--mist-lavender);
+      background: var(--page-bg);
       color: var(--midnight-plum);
       overflow-x: hidden;
     }
@@ -109,6 +111,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      background: var(--page-bg);
     }
     .autora-header {
       display: flex;
@@ -121,8 +124,8 @@
     .card {
       width: 100%;
       max-width: 430px;
-      background: white;
-      border: 1px solid var(--mist-lavender);
+      background: var(--card-surface);
+      border: 1px solid var(--card-surface);
       border-radius: 18px;
       box-shadow: 0 12px 30px rgba(18,12,36,0.08);
       padding: 24px;
@@ -212,9 +215,9 @@
       position: relative;
       min-height: 138px;
       padding: 20px 12px;
-      border: 1.5px solid var(--mist-lavender);
+      border: 1.5px solid var(--card-surface);
       border-radius: 12px;
-      background: white;
+      background: var(--card-surface);
       text-align: center;
       cursor: pointer;
       transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -814,7 +817,7 @@
       <div style="display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:20px;">
         <div id="signatureInfoLogo" style="margin-bottom:12px;"></div>
         <p style="font-size:14px;line-height:1.6;margin:8px 0 0 0;color:#4E465E;max-width:420px;">Sign as you would on your bank documents</p>
-        <div style="margin-top:16px;width:100%;max-width:384px;border:1px solid #EAE5F4;border-radius:16px;background:#F3F0FF;padding:16px;text-align:left;">
+        <div style="margin-top:16px;width:100%;max-width:384px;border:1px solid #F8F7FB;border-radius:16px;background:#F8F7FB;padding:16px;text-align:left;">
           <p style="font-size:12px;font-weight:700;color:#7A5CFF;margin:0 0 4px 0;">✍️ Use your Emirates ID signature for better acceptance</p>
           <p style="font-size:12px;color:#4E465E;margin:0 0 12px 0;">Please use the <strong>same signature</strong> as the one on your Emirates ID (bottom-left corner).</p>
           <div style="position:relative;border-radius:12px;overflow:hidden;border:1px solid #EAE5F4;box-shadow:0 1px 3px rgba(18,12,36,0.08);">
@@ -1031,7 +1034,7 @@
 
   <!-- Screen 11: One More Thing -->
   <div id="oneMoreThingScreen" class="screen">
-    <div style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center;gap:20px;background:#EAE5F4;font-family:Inter,sans-serif;">
+    <div style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center;gap:20px;background:#FFFFFF;font-family:Inter,sans-serif;">
       <div id="oneMoreThingLogo"></div>
       <div style="width:64px;height:64px;border-radius:50%;background:#F3F0FF;display:flex;align-items:center;justify-content:center;">
         <svg width="34" height="34" viewBox="0 0 40 40" fill="none">
@@ -1052,7 +1055,7 @@
 
   <!-- Screen 14: Success -->
   <div id="successScreen" class="screen">
-    <div style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#EAE5F4;font-family:Inter,sans-serif;text-align:center;padding:32px;">
+    <div style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#FFFFFF;font-family:Inter,sans-serif;text-align:center;padding:32px;">
       <div id="successIcon" style="width:80px;height:80px;border-radius:50%;background:#DCFCE7;display:flex;align-items:center;justify-content:center;margin-bottom:24px;transform:scale(0);transition:transform 0.5s cubic-bezier(0.34,1.56,0.64,1);">
         <svg width="44" height="44" viewBox="0 0 52 52" fill="none">
           <circle cx="26" cy="26" r="24" fill="#7A5CFF" />
