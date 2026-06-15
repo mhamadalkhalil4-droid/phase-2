@@ -6,7 +6,7 @@
   <title>Payer Mandate Submission - Autora</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <script type="module">
     import { getStroke } from "https://cdn.jsdelivr.net/npm/perfect-freehand@1.2.3/+esm";
     window.perfectFreehandGetStroke = getStroke;
@@ -30,7 +30,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 8px 16px;
-      border-bottom: 1px solid #EAE5F4;
+      border-bottom: 1px solid var(--border);
       background: white;
       flex-shrink: 0;
       height: 56px;
@@ -57,7 +57,7 @@
       gap: 10px;
       padding: 8px 12px;
       padding-bottom: max(8px, env(safe-area-inset-bottom));
-      border-top: 1px solid #EAE5F4;
+      border-top: 1px solid var(--border);
       background: white;
       height: 64px;
       z-index: 10;
@@ -66,23 +66,40 @@
   </style>
   <style>
     :root {
-      --midnight-plum: #120C24;
-      --ultraviolet: #7A5CFF;
-      --luminous-orchid: #B36CFF;
-      --solar-coral: #FF6B68;
-      --warm-sand: #F6EFE8;
-      --mist-lavender: #EAE5F4;
-      --graphite-plum: #4E465E;
-      --page-bg: #FFFFFF;
-      --card-surface: #F8F7FB;
+  --dark-blue:    #172B4D;
+  --dark-blue-2:  #0F1F38;
+  --dark-blue-3:  #1E3A62;
+  --teal:         #00A3A3;
+  --teal-mid:     #00BFBF;
+  --teal-pale:    #E6F7F7;
+  --teal-light:   #CCEFEF;
+  --mint:         #4ADE80;
+  --mint-mid:     #22C55E;
+  --mint-light:   #DCFCE7;
+  --white:        #FFFFFF;
+  --bg:           #F4F6F9;
+  --border:       #E2E8F0;
+  --border-lt:    #EEF2F7;
+  --txt-head:     #0F1F38;
+  --txt-body:     #2D3F5C;
+  --txt-muted:    #64748B;
+  --txt-faint:    #94A3B8;
+  --amber:        #D97706;
+  --amber-lt:     #FEF3C7;
+  --red:          #DC2626;
+  --red-lt:       #FEE2E2;
+  --purple:       #7C3AED;
+  --purple-lt:    #EDE9FE;
+      --page-bg: var(--bg);
+      --card-surface: var(--white);
     }
 
     * { box-sizing: border-box; }
     html, body { margin: 0; min-height: 100%; }
     body {
-      font-family: "Inter", system-ui, sans-serif;
+      font-family: "DM Sans", system-ui, sans-serif;
       background: var(--page-bg);
-      color: var(--midnight-plum);
+      color: var(--dark-blue);
       overflow-x: hidden;
     }
     button, input { font: inherit; }
@@ -127,19 +144,19 @@
       background: var(--card-surface);
       border: 1px solid var(--card-surface);
       border-radius: 18px;
-      box-shadow: 0 12px 30px rgba(18,12,36,0.08);
+      box-shadow: 0 12px 30px rgba(15,31,56,0.08);
       padding: 24px;
     }
     .title {
       margin: 0 0 8px;
-      color: var(--midnight-plum);
+      color: var(--dark-blue);
       font-size: 20px;
       font-weight: 700;
       text-align: center;
     }
     .subtitle {
       margin: 0 0 22px;
-      color: var(--graphite-plum);
+      color: var(--txt-muted);
       font-size: 13px;
       text-align: center;
       line-height: 1.5;
@@ -150,13 +167,15 @@
       border-radius: 12px;
       font-weight: 700;
       color: white;
-      background: var(--ultraviolet);
+      background: var(--teal);
       font-size: 15px;
+      box-shadow: 0 2px 10px rgba(0,163,163,0.35);
     }
+    .primary-btn:hover:not(:disabled) { background: var(--teal-mid); }
     .primary-btn:disabled { background: #D1D5DB; }
     .footer {
       margin: 18px 0 0;
-      color: var(--graphite-plum);
+      color: var(--txt-muted);
       font-size: 11px;
       text-align: center;
     }
@@ -185,25 +204,25 @@
       font-size: 12px;
       font-weight: 700;
     }
-    .step-circle.done, .step-circle.active { background: #7A5CFF; color: white; }
-    .step-circle.upcoming { background: #EAE5F4; color: #9CA3AF; }
+    .step-circle.done, .step-circle.active { background: var(--teal); color: white; }
+    .step-circle.upcoming { background: var(--border); color: #9CA3AF; }
     .step-label {
-      color: var(--graphite-plum);
+      color: var(--txt-muted);
       font-size: 9px;
       font-weight: 600;
       line-height: 1.15;
       text-align: center;
     }
-    .step-label.active { color: var(--ultraviolet); }
+    .step-label.active { color: var(--teal); }
     .step-label.upcoming { color: #9CA3AF; }
     .step-line {
       flex: 1;
       height: 2px;
       min-width: 12px;
       margin-top: 13px;
-      background: #EAE5F4;
+      background: var(--border);
     }
-    .step-line.done { background: #7A5CFF; }
+    .step-line.done { background: var(--teal); }
 
     .method-grid {
       display: grid;
@@ -223,7 +242,7 @@
       transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
     .method-card:hover {
-      border-color: #7A5CFF;
+      border-color: var(--teal);
       box-shadow: 0 8px 24px rgba(122, 92, 255, 0.18);
     }
     .method-name {
@@ -242,23 +261,23 @@
       display: grid;
       place-items: center;
       margin-bottom: 16px;
-      color: var(--ultraviolet);
+      color: var(--teal);
     }
     .instruction-card {
       background: #F3F0FF;
       border-radius: 10px;
       padding: 14px;
-      color: var(--graphite-plum);
+      color: var(--txt-muted);
       font-size: 13px;
       line-height: 1.5;
       margin: 16px 0 20px;
     }
     .upload-area {
-      border: 1.5px dashed var(--mist-lavender);
+      border: 1.5px dashed var(--border);
       border-radius: 10px;
       padding: 24px;
       text-align: center;
-      color: var(--graphite-plum);
+      color: var(--txt-muted);
       margin-bottom: 12px;
     }
     .upload-area.success {
@@ -270,7 +289,7 @@
       display: block;
       margin: 6px auto 18px;
       background: transparent;
-      color: var(--ultraviolet);
+      color: var(--teal);
       font-size: 12px;
       font-weight: 700;
       text-decoration: underline;
@@ -284,13 +303,13 @@
     }
     .slash {
       padding-bottom: 13px;
-      color: var(--graphite-plum);
+      color: var(--txt-muted);
       font-weight: 700;
     }
     label {
       display: block;
       margin-bottom: 6px;
-      color: var(--graphite-plum);
+      color: var(--txt-muted);
       font-size: 12px;
       font-weight: 700;
     }
@@ -298,15 +317,15 @@
     input {
       width: 100%;
       min-height: 44px;
-      border: 1.5px solid var(--mist-lavender);
+      border: 1.5px solid var(--border);
       border-radius: 10px;
       padding: 0 38px 0 12px;
-      color: var(--midnight-plum);
+      color: var(--dark-blue);
       background: white;
       outline: none;
       font-size: 14px;
     }
-    input:focus { border-color: var(--ultraviolet); }
+    input:focus { border-color: var(--teal); }
     .field-state {
       position: absolute;
       top: 50%;
@@ -321,22 +340,22 @@
     .field-error {
       display: none;
       margin: 5px 0 0;
-      color: var(--solar-coral);
+      color: var(--red);
       font-size: 11px;
     }
     .field.error .field-error { display: block; }
     .spinner {
       width: 16px;
       height: 16px;
-      border: 2px solid var(--mist-lavender);
-      border-top-color: var(--ultraviolet);
+      border: 2px solid var(--border);
+      border-top-color: var(--teal);
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
     .section-block {
-      border: 1px solid var(--mist-lavender);
+      border: 1px solid var(--border);
       border-radius: 14px;
       padding: 16px;
       margin-top: 14px;
@@ -348,16 +367,16 @@
       margin-bottom: 14px;
     }
     .section-label {
-      color: var(--graphite-plum);
+      color: var(--txt-muted);
       font-size: 12px;
       font-weight: 800;
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
     .outline-small {
-      border: 1px solid var(--ultraviolet);
+      border: 1px solid var(--teal);
       background: white;
-      color: var(--ultraviolet);
+      color: var(--teal);
       border-radius: 9px;
       padding: 7px 10px;
       font-size: 11px;
@@ -369,25 +388,25 @@
       gap: 6px;
       padding: 5px;
       border-radius: 12px;
-      background: var(--mist-lavender);
+      background: var(--border);
       margin-bottom: 14px;
     }
     .segmented button {
       min-height: 36px;
       border-radius: 9px;
       background: white;
-      color: var(--graphite-plum);
+      color: var(--txt-muted);
       font-size: 13px;
       font-weight: 700;
     }
     .segmented button.active {
-      background: var(--ultraviolet);
+      background: var(--teal);
       color: white;
     }
 
     .camera-page {
       min-height: 100vh;
-      background: #1A1A1A;
+      background: var(--txt-head);
       color: white;
       overflow: hidden;
     }
@@ -405,14 +424,14 @@
       display: block;
       width: var(--strip-width, 40%);
       height: 100%;
-      background: var(--ultraviolet);
+      background: var(--teal);
     }
     .camera-back {
       position: fixed;
       top: 24px;
       left: 18px;
       background: transparent;
-      color: #7A5CFF;
+      color: var(--teal);
       font-size: 14px;
       font-weight: 600;
       z-index: 50;
@@ -448,7 +467,7 @@
 
     .rotate-page {
       min-height: 100vh;
-      background: #120C24;
+      background: var(--dark-blue);
       color: white;
       display: grid;
       place-items: center;
@@ -470,7 +489,7 @@
       width: 13px;
       height: 13px;
       border-radius: 50%;
-      background: #FF6B68;
+      background: var(--red);
     }
     @keyframes phoneRock {
       from { transform: rotate(80deg); }
@@ -507,9 +526,9 @@
       width: 100%;
       padding: 12px 16px;
       border-radius: 12px;
-      border: 1.5px solid #EAE5F4;
+      border: 1.5px solid var(--border);
       background: #fff;
-      color: #7A5CFF;
+      color: var(--teal);
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;
@@ -538,8 +557,8 @@
       text-align: center;
       padding: 32px;
       color: #fff;
-      font-family: Inter, sans-serif;
-      background: linear-gradient(160deg, #7A5CFF, #5A3FE0);
+      font-family: DM Sans, sans-serif;
+      background: linear-gradient(160deg, var(--teal), var(--teal-mid));
     }
     .sign-rotate-phone {
       margin-bottom: 32px;
@@ -555,7 +574,7 @@
       max-width: 320px;
       font-size: 14px;
       line-height: 1.5;
-      color: #EAE5F4;
+      color: var(--border);
     }
     .sign-rotate-hint {
       display: flex;
@@ -584,29 +603,29 @@
       <div class="autora-header" id="paymentAutoraHeader"></div>
       <div id="paymentProgress"></div>
       <section class="card">
-        <p style="font-size:13px; color:#4E465E; text-align:center; margin-bottom:16px;">
+        <p style="font-size:13px; color:var(--txt-muted); text-align:center; margin-bottom:16px;">
           You are signing your
-          <span onclick="openPdfPopup()" style="color:#7A5CFF; font-weight:600; text-decoration:underline; cursor:pointer;">bank payment form</span>
-          for <strong style="color:#120C24;">Demo Merchant LLC</strong>
+          <span onclick="openPdfPopup()" style="color:var(--teal); font-weight:600; text-decoration:underline; cursor:pointer;">bank payment form</span>
+          for <strong style="color:var(--dark-blue);">Demo Merchant LLC</strong>
         </p>
         <h1 class="title">Choose Payment Method</h1>
         <p class="subtitle">Select how you would like to authorize your payment.</p>
         <div class="method-grid">
           <div class="method-card" onclick="selectPaymentMethod('cc')">
-            <i data-lucide="credit-card" width="32" height="32" style="color:#7A5CFF;"></i>
+            <i data-lucide="credit-card" width="32" height="32" style="color:var(--teal);"></i>
             <div class="method-name">Credit Card</div>
             <div class="method-copy">Pay using your credit card</div>
           </div>
           <div class="method-card" onclick="selectPaymentMethod('iban')">
-            <i data-lucide="landmark" width="32" height="32" style="color:#7A5CFF;"></i>
+            <i data-lucide="landmark" width="32" height="32" style="color:var(--teal);"></i>
             <div class="method-name">IBAN Number</div>
             <div class="method-copy">Pay using your bank IBAN number</div>
           </div>
         </div>
       </section>
       <div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-top:16px;">
-        <span style="font-size:12px;color:#9CA3AF;font-family:Inter,sans-serif;">Secured by Autora</span>
-        <span onclick="showScreen('bankingScreen')" style="font-size:12px;color:#B36CFF;font-weight:600;cursor:pointer;text-decoration:underline;font-family:Inter,sans-serif;">Demo Skip →</span>
+        <span style="font-size:12px;color:#9CA3AF;font-family:DM Sans,sans-serif;">Secured by Autora</span>
+        <span onclick="showScreen('bankingScreen')" style="font-size:12px;color:var(--teal-mid);font-weight:600;cursor:pointer;text-decoration:underline;font-family:DM Sans,sans-serif;">Demo Skip →</span>
       </div>
     </div>
   </div>
@@ -630,7 +649,7 @@
               ⚠️ Credit cards issued by <strong>WIO, HSBC, MASHREQ</strong> are not supported.
               Use a card from a different bank, or switch to IBAN.
             </p>
-            <span onclick="switchToIban()" style="font-size:13px;color:#7A5CFF;font-weight:600;text-decoration:underline;cursor:pointer;">Switch to IBAN</span>
+            <span onclick="switchToIban()" style="font-size:13px;color:var(--teal);font-weight:600;text-decoration:underline;cursor:pointer;">Switch to IBAN</span>
           </div>
           <div class="field" id="cardField">
             <label for="cardInput">Credit Card Number</label>
@@ -666,8 +685,8 @@
             <button type="button" class="text-link" onclick="switchToCreditCard()">Switch to Credit Card</button>
           </div>
           <div id="uploadArea" class="upload-area" onclick="document.getElementById('ibanFile').click()">
-            <i data-lucide="upload-cloud" width="32" height="32" style="color:#7A5CFF;"></i>
-            <div style="font-size:14px;font-weight:700;margin-top:8px;color:#120C24;">Upload IBAN Document or Screenshot</div>
+            <i data-lucide="upload-cloud" width="32" height="32" style="color:var(--teal);"></i>
+            <div style="font-size:14px;font-weight:700;margin-top:8px;color:var(--dark-blue);">Upload IBAN Document or Screenshot</div>
             <div style="font-size:12px;color:#6B7280;margin-top:4px;">Tap to upload or take a photo</div>
           </div>
           <input id="ibanFile" type="file" accept="image/*,.pdf" style="display:none;" onchange="handleIbanUpload(this)" />
@@ -686,8 +705,8 @@
         <button type="button" class="back-outline-btn" onclick="showScreen('paymentMethodScreen')">← Back</button>
       </section>
       <div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-top:16px;">
-        <span style="font-size:12px;color:#9CA3AF;font-family:Inter,sans-serif;">Secured by Autora</span>
-        <span onclick="showScreen('eidIntroScreen')" style="font-size:12px;color:#B36CFF;font-weight:600;cursor:pointer;text-decoration:underline;font-family:Inter,sans-serif;">Demo Skip →</span>
+        <span style="font-size:12px;color:#9CA3AF;font-family:DM Sans,sans-serif;">Secured by Autora</span>
+        <span onclick="showScreen('eidIntroScreen')" style="font-size:12px;color:var(--teal-mid);font-weight:600;cursor:pointer;text-decoration:underline;font-family:DM Sans,sans-serif;">Demo Skip →</span>
       </div>
     </div>
   </div>
@@ -703,14 +722,14 @@
         <p class="subtitle">Please have your Emirates ID ready, you can scan hard copy or soft copy</p>
         <div class="instruction-card">📋 Place your Emirates ID in front of your camera. Make sure it's well-lit and clearly visible.</div>
         <button class="primary-btn" onclick="showScreen('eidCameraScreen')" style="margin-bottom:12px;">📷 Scan Emirates ID</button>
-        <p style="text-align:center;margin:0 0 12px 0;font-size:13px;font-family:Inter,sans-serif;">
-          <span onclick="showScreen('uploadIdScreen')" style="color:#7A5CFF;text-decoration:underline;cursor:pointer;font-weight:500;">I don't have my ID, upload ID picture</span>
+        <p style="text-align:center;margin:0 0 12px 0;font-size:13px;font-family:DM Sans,sans-serif;">
+          <span onclick="showScreen('uploadIdScreen')" style="color:var(--teal);text-decoration:underline;cursor:pointer;font-weight:500;">I don't have my ID, upload ID picture</span>
         </p>
         <button type="button" class="back-outline-btn" onclick="showScreen('bankingScreen')">← Back</button>
       </section>
       <div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-top:16px;">
-        <span style="font-size:12px;color:#9CA3AF;font-family:Inter,sans-serif;">Secured by Autora</span>
-        <span onclick="showScreen('eidCameraScreen')" style="font-size:12px;color:#B36CFF;font-weight:600;cursor:pointer;text-decoration:underline;font-family:Inter,sans-serif;">Demo Skip →</span>
+        <span style="font-size:12px;color:#9CA3AF;font-family:DM Sans,sans-serif;">Secured by Autora</span>
+        <span onclick="showScreen('eidCameraScreen')" style="font-size:12px;color:var(--teal-mid);font-weight:600;cursor:pointer;text-decoration:underline;font-family:DM Sans,sans-serif;">Demo Skip →</span>
       </div>
     </div>
   </div>
@@ -727,8 +746,8 @@
         </div>
       </div>
       <div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-top:16px;padding-bottom:24px;">
-        <span style="font-size:12px;color:#9CA3AF;font-family:Inter,sans-serif;">Secured by Autora</span>
-        <span onclick="showScreen('reviewScreen')" style="font-size:12px;color:#B36CFF;font-weight:600;cursor:pointer;text-decoration:underline;font-family:Inter,sans-serif;">Demo Skip →</span>
+        <span style="font-size:12px;color:#9CA3AF;font-family:DM Sans,sans-serif;">Secured by Autora</span>
+        <span onclick="showScreen('reviewScreen')" style="font-size:12px;color:var(--teal-mid);font-weight:600;cursor:pointer;text-decoration:underline;font-family:DM Sans,sans-serif;">Demo Skip →</span>
       </div>
     </div>
   </div>
@@ -741,28 +760,28 @@
       <section class="card" style="border-radius:20px;padding:28px 24px;max-width:420px;">
         <h1 class="title">Upload Your Emirates ID</h1>
         <p class="subtitle">Please upload a clear photo of the <strong>front</strong> of your Emirates ID.</p>
-        <div id="uploadZone" onclick="document.getElementById('eidUploadInput').click()" style="border:2px dashed #B36CFF;border-radius:16px;background:white;padding:48px 24px;display:flex;flex-direction:column;align-items:center;gap:12px;cursor:pointer;transition:border-color 0.2s,background 0.2s;" onmouseover="this.style.background='#F3F0FF'" onmouseout="this.style.background='white'">
+        <div id="uploadZone" onclick="document.getElementById('eidUploadInput').click()" style="border:2px dashed var(--teal-mid);border-radius:16px;background:white;padding:48px 24px;display:flex;flex-direction:column;align-items:center;gap:12px;cursor:pointer;transition:border-color 0.2s,background 0.2s;" onmouseover="this.style.background='#F3F0FF'" onmouseout="this.style.background='white'">
           <div style="width:56px;height:56px;border-radius:50%;background:#F3F0FF;display:flex;align-items:center;justify-content:center;">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#7A5CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
               <polyline points="17 8 12 3 7 8"/>
               <line x1="12" y1="3" x2="12" y2="15"/>
             </svg>
           </div>
-          <p style="font-size:14px;font-weight:600;color:#120C24;margin:0;">Tap to upload front of ID</p>
-          <p style="font-size:12px;color:#4E465E;margin:0;">JPG, PNG or PDF accepted</p>
+          <p style="font-size:14px;font-weight:600;color:var(--dark-blue);margin:0;">Tap to upload front of ID</p>
+          <p style="font-size:12px;color:var(--txt-muted);margin:0;">JPG, PNG or PDF accepted</p>
           <input type="file" id="eidUploadInput" accept="image/*,.pdf" style="display:none;" onchange="handleEidUpload(this)" />
         </div>
         <div id="uploadPreview" style="display:none;margin-top:20px;text-align:center;">
-          <img id="uploadedIdImg" src="" alt="Uploaded ID" style="max-width:100%;border-radius:12px;border:2px solid #EAE5F4;" />
-          <p id="uploadedFileName" style="font-size:12px;color:#4E465E;margin-top:8px;"></p>
+          <img id="uploadedIdImg" src="" alt="Uploaded ID" style="max-width:100%;border-radius:12px;border:2px solid var(--border);" />
+          <p id="uploadedFileName" style="font-size:12px;color:var(--txt-muted);margin-top:8px;"></p>
         </div>
         <button id="uploadContinueBtn" onclick="continueFromUpload()" disabled class="primary-btn" style="margin-top:24px;margin-bottom:12px;opacity:0.4;transition:opacity 0.2s;">Continue</button>
         <button type="button" class="back-outline-btn" onclick="showScreen('eidIntroScreen')">← Back</button>
       </section>
       <div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-top:16px;">
-        <span style="font-size:12px;color:#9CA3AF;font-family:Inter,sans-serif;">Secured by Autora</span>
-        <span onclick="showScreen('reviewScreen')" style="font-size:12px;color:#B36CFF;font-weight:600;cursor:pointer;text-decoration:underline;font-family:Inter,sans-serif;">Demo Skip →</span>
+        <span style="font-size:12px;color:#9CA3AF;font-family:DM Sans,sans-serif;">Secured by Autora</span>
+        <span onclick="showScreen('reviewScreen')" style="font-size:12px;color:var(--teal-mid);font-weight:600;cursor:pointer;text-decoration:underline;font-family:DM Sans,sans-serif;">Demo Skip →</span>
       </div>
     </div>
   </div>
@@ -805,37 +824,37 @@
         <button type="button" class="back-outline-btn" onclick="reviewGoBack()">← Back</button>
       </section>
       <div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-top:16px;">
-        <span style="font-size:12px;color:#9CA3AF;font-family:Inter,sans-serif;">Secured by Autora</span>
-        <span onclick="showScreen('signatureInfoScreen')" style="font-size:12px;color:#B36CFF;font-weight:600;cursor:pointer;text-decoration:underline;font-family:Inter,sans-serif;">Demo Skip →</span>
+        <span style="font-size:12px;color:#9CA3AF;font-family:DM Sans,sans-serif;">Secured by Autora</span>
+        <span onclick="showScreen('signatureInfoScreen')" style="font-size:12px;color:var(--teal-mid);font-weight:600;cursor:pointer;text-decoration:underline;font-family:DM Sans,sans-serif;">Demo Skip →</span>
       </div>
     </div>
   </div>
 
   <!-- Screen 6: Signature Info -->
   <div id="signatureInfoScreen" class="screen">
-    <div style="min-height:100vh;background:white;display:flex;flex-direction:column;padding:40px 20px 32px;font-family:Inter,sans-serif;">
+    <div style="min-height:100vh;background:white;display:flex;flex-direction:column;padding:40px 20px 32px;font-family:DM Sans,sans-serif;">
       <div style="display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:20px;">
         <div id="signatureInfoLogo" style="margin-bottom:12px;"></div>
-        <p style="font-size:14px;line-height:1.6;margin:8px 0 0 0;color:#4E465E;max-width:420px;">Sign as you would on your bank documents</p>
-        <div style="margin-top:16px;width:100%;max-width:384px;border:1px solid #F8F7FB;border-radius:16px;background:#F8F7FB;padding:16px;text-align:left;">
-          <p style="font-size:12px;font-weight:700;color:#7A5CFF;margin:0 0 4px 0;">✍️ Use your Emirates ID signature for better acceptance</p>
-          <p style="font-size:12px;color:#4E465E;margin:0 0 12px 0;">Please use the <strong>same signature</strong> as the one on your Emirates ID (bottom-left corner).</p>
-          <div style="position:relative;border-radius:12px;overflow:hidden;border:1px solid #EAE5F4;box-shadow:0 1px 3px rgba(18,12,36,0.08);">
+        <p style="font-size:14px;line-height:1.6;margin:8px 0 0 0;color:var(--txt-muted);max-width:420px;">Sign as you would on your bank documents</p>
+        <div style="margin-top:16px;width:100%;max-width:384px;border:1px solid var(--bg);border-radius:16px;background:var(--bg);padding:16px;text-align:left;">
+          <p style="font-size:12px;font-weight:700;color:var(--teal);margin:0 0 4px 0;">✍️ Use your Emirates ID signature for better acceptance</p>
+          <p style="font-size:12px;color:var(--txt-muted);margin:0 0 12px 0;">Please use the <strong>same signature</strong> as the one on your Emirates ID (bottom-left corner).</p>
+          <div style="position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--border);box-shadow:0 1px 3px rgba(15,31,56,0.08);">
             <img src="https://media.base44.com/images/public/69de3f9703954884fc094b1f/475589d54_Emirates_ID_Card_For_UAE_Citizens_New.png" alt="Emirates ID example" style="width:100%;display:block;object-fit:cover;" />
-            <div style="position:absolute;bottom:calc(7% + 17px);left:calc(3% + 10px);width:25%;height:14%;border:2.5px solid #FF6B68;border-radius:6px;box-shadow:0 0 0 2px rgba(255,107,104,0.3);"></div>
-            <div style="position:absolute;bottom:calc(7% + 17px + 14% + 3px);left:calc(3% + 10px);background:#FF6B68;color:white;font-size:9px;font-weight:700;padding:1px 6px;border-radius:4px;font-family:Inter,sans-serif;">Your signature</div>
+            <div style="position:absolute;bottom:calc(7% + 17px);left:calc(3% + 10px);width:25%;height:14%;border:2.5px solid var(--red);border-radius:6px;box-shadow:0 0 0 2px rgba(255,107,104,0.3);"></div>
+            <div style="position:absolute;bottom:calc(7% + 17px + 14% + 3px);left:calc(3% + 10px);background:var(--red);color:white;font-size:9px;font-weight:700;padding:1px 6px;border-radius:4px;font-family:DM Sans,sans-serif;">Your signature</div>
           </div>
         </div>
       </div>
-      <button onclick="showSignScreen(1)" style="width:100%;padding:16px;border-radius:16px;background:linear-gradient(135deg,#7A5CFF,#5A3FE0);color:white;font-size:16px;font-weight:700;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(122,92,255,0.35);">Get Started →</button>
+      <button onclick="showSignScreen(1)" style="width:100%;padding:16px;border-radius:16px;background: var(--teal);color:white;font-size:16px;font-weight:700;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(122,92,255,0.35);">Get Started →</button>
       <button type="button" class="back-outline-btn" onclick="showScreen('reviewScreen')" style="margin-top:12px;">← Back</button>
-      <p style="text-align:center;font-size:12px;color:#FF6B68;font-weight:600;margin-top:12px;">You will sign 5 times total</p>
+      <p style="text-align:center;font-size:12px;color:var(--red);font-weight:600;margin-top:12px;">You will sign 5 times total</p>
     </div>
   </div>
 
   <div id="signatureDocModal" style="display:none;position:fixed;inset:0;z-index:2000;align-items:center;justify-content:center;padding:16px;background:rgba(18,12,36,0.6);" onclick="closeSignatureDocModal()">
     <div style="position:relative;width:90vw;max-width:700px;height:80vh;background:white;border-radius:16px;overflow:hidden;box-shadow:0 20px 60px rgba(18,12,36,0.25);" onclick="event.stopPropagation()">
-      <button type="button" onclick="closeSignatureDocModal()" style="position:absolute;top:12px;right:12px;z-index:1;width:32px;height:32px;border:none;border-radius:999px;background:#7A5CFF;color:white;font-size:14px;font-weight:700;cursor:pointer;">✕</button>
+      <button type="button" onclick="closeSignatureDocModal()" style="position:absolute;top:12px;right:12px;z-index:1;width:32px;height:32px;border:none;border-radius:999px;background:var(--teal);color:white;font-size:14px;font-weight:700;cursor:pointer;">✕</button>
       <img id="signatureDocImage" alt="Document preview" style="display:none;width:100%;height:100%;object-fit:contain;background:white;" />
       <iframe id="signatureDocFrame" title="Document preview" style="display:none;width:100%;height:100%;border:0;background:white;"></iframe>
     </div>
@@ -845,23 +864,23 @@
     <div class="sign-header">
       <div style="display:flex; align-items:center; gap:12px;">
         <svg class="autora-mark" width="24" height="24" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-          <defs><linearGradient id="autoraGradSign1" x1="2" y1="26" x2="26" y2="2" gradientUnits="userSpaceOnUse"><stop stop-color="#7A5CFF"/><stop offset="0.55" stop-color="#B36CFF"/><stop offset="1" stop-color="#FF6B68"/></linearGradient></defs>
-          <rect width="28" height="28" rx="8" fill="url(#autoraGradSign1)"/>
+          <defs></defs>
+          <rect width="28" height="28" rx="8" fill="#00A3A3"/>
           <path d="M8 21L13.15 7H15.25L20.4 21H17.85L16.75 17.75H11.6L10.5 21H8ZM12.3 15.55H16.05L14.2 10.05L12.3 15.55Z" fill="white"/>
         </svg>
         <div>
-          <div style="font-size:12px; font-weight:700; color:#7A5CFF; line-height:1.2;">Signature 1 of 5</div>
-          <div style="font-size:11px; color:#B36CFF; line-height:1.2;">Sign in the space below</div>
+          <div style="font-size:12px; font-weight:700; color:var(--teal); line-height:1.2;">Signature 1 of 5</div>
+          <div style="font-size:11px; color:var(--teal-mid); line-height:1.2;">Sign in the space below</div>
         </div>
       </div>
-      <div style="display:flex; gap:6px;"><div style="width:10px;height:10px;border-radius:50%;background:#7A5CFF;"></div><div style="width:10px;height:10px;border-radius:50%;background:#EAE5F4;"></div><div style="width:10px;height:10px;border-radius:50%;background:#EAE5F4;"></div><div style="width:10px;height:10px;border-radius:50%;background:#EAE5F4;"></div><div style="width:10px;height:10px;border-radius:50%;background:#EAE5F4;"></div></div>
+      <div style="display:flex; gap:6px;"><div style="width:10px;height:10px;border-radius:50%;background:var(--teal);"></div><div style="width:10px;height:10px;border-radius:50%;background:var(--border);"></div><div style="width:10px;height:10px;border-radius:50%;background:var(--border);"></div><div style="width:10px;height:10px;border-radius:50%;background:var(--border);"></div><div style="width:10px;height:10px;border-radius:50%;background:var(--border);"></div></div>
     </div>
     <div class="sign-canvas-area">
     </div>
     <div class="sign-bottom-bar">
-      <button onclick="sigUndo(1)" style="flex:0 0 64px;padding:10px 0;border-radius:10px;border:1.5px solid #7A5CFF;color:#7A5CFF;font-size:13px;font-weight:600;background:white;cursor:pointer;font-family:Inter,sans-serif;">Undo</button>
-      <button onclick="sigClear(1)" style="flex:0 0 64px;padding:10px 0;border-radius:10px;border:1.5px solid #FF6B68;color:#FF6B68;font-size:13px;font-weight:600;background:white;cursor:pointer;font-family:Inter,sans-serif;">Clear</button>
-      <button id="sigNextBtn_1" onclick="sigNext(1)" disabled style="flex:1;padding:10px 0;border-radius:10px;border:none;color:white;font-size:13px;font-weight:700;cursor:pointer;opacity:0.35;font-family:Inter,sans-serif;background:#7A5CFF;">Next →</button>
+      <button onclick="sigUndo(1)" style="flex:0 0 64px;padding:10px 0;border-radius:10px;border:1.5px solid var(--teal);color:var(--teal);font-size:13px;font-weight:600;background:white;cursor:pointer;font-family:DM Sans,sans-serif;">Undo</button>
+      <button onclick="sigClear(1)" style="flex:0 0 64px;padding:10px 0;border-radius:10px;border:1.5px solid var(--red);color:var(--red);font-size:13px;font-weight:600;background:white;cursor:pointer;font-family:DM Sans,sans-serif;">Clear</button>
+      <button id="sigNextBtn_1" onclick="sigNext(1)" disabled style="flex:1;padding:10px 0;border-radius:10px;border:none;color:white;font-size:13px;font-weight:700;cursor:pointer;opacity:0.35;font-family:DM Sans,sans-serif;background:var(--teal);">Next →</button>
     </div>
     <div id="rotateOverlay_1" class="sign-rotate-overlay">
       <div class="sign-rotate-phone">
@@ -869,13 +888,13 @@
           <rect x="8" y="24" width="64" height="34" rx="7" fill="white" fill-opacity="0.15" stroke="white" stroke-width="3"></rect>
           <rect x="14" y="30" width="52" height="22" rx="3" fill="white" fill-opacity="0.25"></rect>
           <circle cx="69" cy="41" r="3" fill="white" fill-opacity="0.8"></circle>
-          <circle cx="36" cy="41" r="7" fill="#FF6B68"></circle>
+          <circle cx="36" cy="41" r="7" fill="var(--red)"></circle>
           <circle cx="34" cy="39" r="2.5" fill="white" fill-opacity="0.6"></circle>
           <path d="M20 41 Q28 35 36 41 Q44 47 52 41" stroke="white" stroke-width="2" stroke-linecap="round" fill="none" stroke-opacity="0.7"></path>
         </svg>
       </div>
       <h2 class="sign-rotate-title">Rotate Your Phone</h2>
-      <p class="sign-rotate-subtitle">Please rotate your device to <span style="font-weight:700;color:#FF6B68;">landscape mode</span> to sign</p>
+      <p class="sign-rotate-subtitle">Please rotate your device to <span style="font-weight:700;color:var(--red);">landscape mode</span> to sign</p>
       <div class="sign-rotate-hint"><span style="font-size:24px;">↻</span><span>Turn sideways</span></div>
     </div>
   </div>
@@ -883,23 +902,23 @@
     <div class="sign-header">
       <div style="display:flex; align-items:center; gap:12px;">
         <svg class="autora-mark" width="24" height="24" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-          <defs><linearGradient id="autoraGradSign2" x1="2" y1="26" x2="26" y2="2" gradientUnits="userSpaceOnUse"><stop stop-color="#7A5CFF"/><stop offset="0.55" stop-color="#B36CFF"/><stop offset="1" stop-color="#FF6B68"/></linearGradient></defs>
-          <rect width="28" height="28" rx="8" fill="url(#autoraGradSign2)"/>
+          <defs></defs>
+          <rect width="28" height="28" rx="8" fill="#00A3A3"/>
           <path d="M8 21L13.15 7H15.25L20.4 21H17.85L16.75 17.75H11.6L10.5 21H8ZM12.3 15.55H16.05L14.2 10.05L12.3 15.55Z" fill="white"/>
         </svg>
         <div>
-          <div style="font-size:12px; font-weight:700; color:#7A5CFF; line-height:1.2;">Signature 2 of 5</div>
-          <div style="font-size:11px; color:#B36CFF; line-height:1.2;">Sign in the space below</div>
+          <div style="font-size:12px; font-weight:700; color:var(--teal); line-height:1.2;">Signature 2 of 5</div>
+          <div style="font-size:11px; color:var(--teal-mid); line-height:1.2;">Sign in the space below</div>
         </div>
       </div>
-      <div style="display:flex; gap:6px;"><div style="width:10px;height:10px;border-radius:50%;background:#7A5CFF;"></div><div style="width:10px;height:10px;border-radius:50%;background:#7A5CFF;"></div><div style="width:10px;height:10px;border-radius:50%;background:#EAE5F4;"></div><div style="width:10px;height:10px;border-radius:50%;background:#EAE5F4;"></div><div style="width:10px;height:10px;border-radius:50%;background:#EAE5F4;"></div></div>
+      <div style="display:flex; gap:6px;"><div style="width:10px;height:10px;border-radius:50%;background:var(--teal);"></div><div style="width:10px;height:10px;border-radius:50%;background:var(--teal);"></div><div style="width:10px;height:10px;border-radius:50%;background:var(--border);"></div><div style="width:10px;height:10px;border-radius:50%;background:var(--border);"></div><div style="width:10px;height:10px;border-radius:50%;background:var(--border);"></div></div>
     </div>
     <div class="sign-canvas-area">
     </div>
     <div class="sign-bottom-bar">
-      <button onclick="sigUndo(2)" style="flex:0 0 64px;padding:10px 0;border-radius:10px;border:1.5px solid #7A5CFF;color:#7A5CFF;font-size:13px;font-weight:600;background:white;cursor:pointer;font-family:Inter,sans-serif;">Undo</button>
-      <button onclick="sigClear(2)" style="flex:0 0 64px;padding:10px 0;border-radius:10px;border:1.5px solid #FF6B68;color:#FF6B68;font-size:13px;font-weight:600;background:white;cursor:pointer;font-family:Inter,sans-serif;">Clear</button>
-      <button id="sigNextBtn_2" onclick="sigNext(2)" disabled style="flex:1;padding:10px 0;border-radius:10px;border:none;color:white;font-size:13px;font-weight:700;cursor:pointer;opacity:0.35;font-family:Inter,sans-serif;background:#7A5CFF;">Next →</button>
+      <button onclick="sigUndo(2)" style="flex:0 0 64px;padding:10px 0;border-radius:10px;border:1.5px solid var(--teal);color:var(--teal);font-size:13px;font-weight:600;background:white;cursor:pointer;font-family:DM Sans,sans-serif;">Undo</button>
+      <button onclick="sigClear(2)" style="flex:0 0 64px;padding:10px 0;border-radius:10px;border:1.5px solid var(--red);color:var(--red);font-size:13px;font-weight:600;background:white;cursor:pointer;font-family:DM Sans,sans-serif;">Clear</button>
+      <button id="sigNextBtn_2" onclick="sigNext(2)" disabled style="flex:1;padding:10px 0;border-radius:10px;border:none;color:white;font-size:13px;font-weight:700;cursor:pointer;opacity:0.35;font-family:DM Sans,sans-serif;background:var(--teal);">Next →</button>
     </div>
     <div id="rotateOverlay_2" class="sign-rotate-overlay">
       <div class="sign-rotate-phone">
@@ -907,13 +926,13 @@
           <rect x="8" y="24" width="64" height="34" rx="7" fill="white" fill-opacity="0.15" stroke="white" stroke-width="3"></rect>
           <rect x="14" y="30" width="52" height="22" rx="3" fill="white" fill-opacity="0.25"></rect>
           <circle cx="69" cy="41" r="3" fill="white" fill-opacity="0.8"></circle>
-          <circle cx="36" cy="41" r="7" fill="#FF6B68"></circle>
+          <circle cx="36" cy="41" r="7" fill="var(--red)"></circle>
           <circle cx="34" cy="39" r="2.5" fill="white" fill-opacity="0.6"></circle>
           <path d="M20 41 Q28 35 36 41 Q44 47 52 41" stroke="white" stroke-width="2" stroke-linecap="round" fill="none" stroke-opacity="0.7"></path>
         </svg>
       </div>
       <h2 class="sign-rotate-title">Rotate Your Phone</h2>
-      <p class="sign-rotate-subtitle">Please rotate your device to <span style="font-weight:700;color:#FF6B68;">landscape mode</span> to sign</p>
+      <p class="sign-rotate-subtitle">Please rotate your device to <span style="font-weight:700;color:var(--red);">landscape mode</span> to sign</p>
       <div class="sign-rotate-hint"><span style="font-size:24px;">↻</span><span>Turn sideways</span></div>
     </div>
   </div>
@@ -921,23 +940,23 @@
     <div class="sign-header">
       <div style="display:flex; align-items:center; gap:12px;">
         <svg class="autora-mark" width="24" height="24" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-          <defs><linearGradient id="autoraGradSign3" x1="2" y1="26" x2="26" y2="2" gradientUnits="userSpaceOnUse"><stop stop-color="#7A5CFF"/><stop offset="0.55" stop-color="#B36CFF"/><stop offset="1" stop-color="#FF6B68"/></linearGradient></defs>
-          <rect width="28" height="28" rx="8" fill="url(#autoraGradSign3)"/>
+          <defs></defs>
+          <rect width="28" height="28" rx="8" fill="#00A3A3"/>
           <path d="M8 21L13.15 7H15.25L20.4 21H17.85L16.75 17.75H11.6L10.5 21H8ZM12.3 15.55H16.05L14.2 10.05L12.3 15.55Z" fill="white"/>
         </svg>
         <div>
-          <div style="font-size:12px; font-weight:700; color:#7A5CFF; line-height:1.2;">Signature 3 of 5</div>
-          <div style="font-size:11px; color:#B36CFF; line-height:1.2;">Sign in the space below</div>
+          <div style="font-size:12px; font-weight:700; color:var(--teal); line-height:1.2;">Signature 3 of 5</div>
+          <div style="font-size:11px; color:var(--teal-mid); line-height:1.2;">Sign in the space below</div>
         </div>
       </div>
-      <div style="display:flex; gap:6px;"><div style="width:10px;height:10px;border-radius:50%;background:#7A5CFF;"></div><div style="width:10px;height:10px;border-radius:50%;background:#7A5CFF;"></div><div style="width:10px;height:10px;border-radius:50%;background:#7A5CFF;"></div><div style="width:10px;height:10px;border-radius:50%;background:#EAE5F4;"></div><div style="width:10px;height:10px;border-radius:50%;background:#EAE5F4;"></div></div>
+      <div style="display:flex; gap:6px;"><div style="width:10px;height:10px;border-radius:50%;background:var(--teal);"></div><div style="width:10px;height:10px;border-radius:50%;background:var(--teal);"></div><div style="width:10px;height:10px;border-radius:50%;background:var(--teal);"></div><div style="width:10px;height:10px;border-radius:50%;background:var(--border);"></div><div style="width:10px;height:10px;border-radius:50%;background:var(--border);"></div></div>
     </div>
     <div class="sign-canvas-area">
     </div>
     <div class="sign-bottom-bar">
-      <button onclick="sigUndo(3)" style="flex:0 0 64px;padding:10px 0;border-radius:10px;border:1.5px solid #7A5CFF;color:#7A5CFF;font-size:13px;font-weight:600;background:white;cursor:pointer;font-family:Inter,sans-serif;">Undo</button>
-      <button onclick="sigClear(3)" style="flex:0 0 64px;padding:10px 0;border-radius:10px;border:1.5px solid #FF6B68;color:#FF6B68;font-size:13px;font-weight:600;background:white;cursor:pointer;font-family:Inter,sans-serif;">Clear</button>
-      <button id="sigNextBtn_3" onclick="sigNext(3)" disabled style="flex:1;padding:10px 0;border-radius:10px;border:none;color:white;font-size:13px;font-weight:700;cursor:pointer;opacity:0.35;font-family:Inter,sans-serif;background:#7A5CFF;">Next →</button>
+      <button onclick="sigUndo(3)" style="flex:0 0 64px;padding:10px 0;border-radius:10px;border:1.5px solid var(--teal);color:var(--teal);font-size:13px;font-weight:600;background:white;cursor:pointer;font-family:DM Sans,sans-serif;">Undo</button>
+      <button onclick="sigClear(3)" style="flex:0 0 64px;padding:10px 0;border-radius:10px;border:1.5px solid var(--red);color:var(--red);font-size:13px;font-weight:600;background:white;cursor:pointer;font-family:DM Sans,sans-serif;">Clear</button>
+      <button id="sigNextBtn_3" onclick="sigNext(3)" disabled style="flex:1;padding:10px 0;border-radius:10px;border:none;color:white;font-size:13px;font-weight:700;cursor:pointer;opacity:0.35;font-family:DM Sans,sans-serif;background:var(--teal);">Next →</button>
     </div>
     <div id="rotateOverlay_3" class="sign-rotate-overlay">
       <div class="sign-rotate-phone">
@@ -945,13 +964,13 @@
           <rect x="8" y="24" width="64" height="34" rx="7" fill="white" fill-opacity="0.15" stroke="white" stroke-width="3"></rect>
           <rect x="14" y="30" width="52" height="22" rx="3" fill="white" fill-opacity="0.25"></rect>
           <circle cx="69" cy="41" r="3" fill="white" fill-opacity="0.8"></circle>
-          <circle cx="36" cy="41" r="7" fill="#FF6B68"></circle>
+          <circle cx="36" cy="41" r="7" fill="var(--red)"></circle>
           <circle cx="34" cy="39" r="2.5" fill="white" fill-opacity="0.6"></circle>
           <path d="M20 41 Q28 35 36 41 Q44 47 52 41" stroke="white" stroke-width="2" stroke-linecap="round" fill="none" stroke-opacity="0.7"></path>
         </svg>
       </div>
       <h2 class="sign-rotate-title">Rotate Your Phone</h2>
-      <p class="sign-rotate-subtitle">Please rotate your device to <span style="font-weight:700;color:#FF6B68;">landscape mode</span> to sign</p>
+      <p class="sign-rotate-subtitle">Please rotate your device to <span style="font-weight:700;color:var(--red);">landscape mode</span> to sign</p>
       <div class="sign-rotate-hint"><span style="font-size:24px;">↻</span><span>Turn sideways</span></div>
     </div>
   </div>
@@ -959,23 +978,23 @@
     <div class="sign-header">
       <div style="display:flex; align-items:center; gap:12px;">
         <svg class="autora-mark" width="24" height="24" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-          <defs><linearGradient id="autoraGradSign4" x1="2" y1="26" x2="26" y2="2" gradientUnits="userSpaceOnUse"><stop stop-color="#7A5CFF"/><stop offset="0.55" stop-color="#B36CFF"/><stop offset="1" stop-color="#FF6B68"/></linearGradient></defs>
-          <rect width="28" height="28" rx="8" fill="url(#autoraGradSign4)"/>
+          <defs></defs>
+          <rect width="28" height="28" rx="8" fill="#00A3A3"/>
           <path d="M8 21L13.15 7H15.25L20.4 21H17.85L16.75 17.75H11.6L10.5 21H8ZM12.3 15.55H16.05L14.2 10.05L12.3 15.55Z" fill="white"/>
         </svg>
         <div>
-          <div style="font-size:12px; font-weight:700; color:#7A5CFF; line-height:1.2;">Signature 4 of 5</div>
-          <div style="font-size:11px; color:#B36CFF; line-height:1.2;">Sign in the space below</div>
+          <div style="font-size:12px; font-weight:700; color:var(--teal); line-height:1.2;">Signature 4 of 5</div>
+          <div style="font-size:11px; color:var(--teal-mid); line-height:1.2;">Sign in the space below</div>
         </div>
       </div>
-      <div style="display:flex; gap:6px;"><div style="width:10px;height:10px;border-radius:50%;background:#7A5CFF;"></div><div style="width:10px;height:10px;border-radius:50%;background:#7A5CFF;"></div><div style="width:10px;height:10px;border-radius:50%;background:#7A5CFF;"></div><div style="width:10px;height:10px;border-radius:50%;background:#7A5CFF;"></div><div style="width:10px;height:10px;border-radius:50%;background:#EAE5F4;"></div></div>
+      <div style="display:flex; gap:6px;"><div style="width:10px;height:10px;border-radius:50%;background:var(--teal);"></div><div style="width:10px;height:10px;border-radius:50%;background:var(--teal);"></div><div style="width:10px;height:10px;border-radius:50%;background:var(--teal);"></div><div style="width:10px;height:10px;border-radius:50%;background:var(--teal);"></div><div style="width:10px;height:10px;border-radius:50%;background:var(--border);"></div></div>
     </div>
     <div class="sign-canvas-area">
     </div>
     <div class="sign-bottom-bar">
-      <button onclick="sigUndo(4)" style="flex:0 0 64px;padding:10px 0;border-radius:10px;border:1.5px solid #7A5CFF;color:#7A5CFF;font-size:13px;font-weight:600;background:white;cursor:pointer;font-family:Inter,sans-serif;">Undo</button>
-      <button onclick="sigClear(4)" style="flex:0 0 64px;padding:10px 0;border-radius:10px;border:1.5px solid #FF6B68;color:#FF6B68;font-size:13px;font-weight:600;background:white;cursor:pointer;font-family:Inter,sans-serif;">Clear</button>
-      <button id="sigNextBtn_4" onclick="sigNext(4)" disabled style="flex:1;padding:10px 0;border-radius:10px;border:none;color:white;font-size:13px;font-weight:700;cursor:pointer;opacity:0.35;font-family:Inter,sans-serif;background:#7A5CFF;">Next →</button>
+      <button onclick="sigUndo(4)" style="flex:0 0 64px;padding:10px 0;border-radius:10px;border:1.5px solid var(--teal);color:var(--teal);font-size:13px;font-weight:600;background:white;cursor:pointer;font-family:DM Sans,sans-serif;">Undo</button>
+      <button onclick="sigClear(4)" style="flex:0 0 64px;padding:10px 0;border-radius:10px;border:1.5px solid var(--red);color:var(--red);font-size:13px;font-weight:600;background:white;cursor:pointer;font-family:DM Sans,sans-serif;">Clear</button>
+      <button id="sigNextBtn_4" onclick="sigNext(4)" disabled style="flex:1;padding:10px 0;border-radius:10px;border:none;color:white;font-size:13px;font-weight:700;cursor:pointer;opacity:0.35;font-family:DM Sans,sans-serif;background:var(--teal);">Next →</button>
     </div>
     <div id="rotateOverlay_4" class="sign-rotate-overlay">
       <div class="sign-rotate-phone">
@@ -983,13 +1002,13 @@
           <rect x="8" y="24" width="64" height="34" rx="7" fill="white" fill-opacity="0.15" stroke="white" stroke-width="3"></rect>
           <rect x="14" y="30" width="52" height="22" rx="3" fill="white" fill-opacity="0.25"></rect>
           <circle cx="69" cy="41" r="3" fill="white" fill-opacity="0.8"></circle>
-          <circle cx="36" cy="41" r="7" fill="#FF6B68"></circle>
+          <circle cx="36" cy="41" r="7" fill="var(--red)"></circle>
           <circle cx="34" cy="39" r="2.5" fill="white" fill-opacity="0.6"></circle>
           <path d="M20 41 Q28 35 36 41 Q44 47 52 41" stroke="white" stroke-width="2" stroke-linecap="round" fill="none" stroke-opacity="0.7"></path>
         </svg>
       </div>
       <h2 class="sign-rotate-title">Rotate Your Phone</h2>
-      <p class="sign-rotate-subtitle">Please rotate your device to <span style="font-weight:700;color:#FF6B68;">landscape mode</span> to sign</p>
+      <p class="sign-rotate-subtitle">Please rotate your device to <span style="font-weight:700;color:var(--red);">landscape mode</span> to sign</p>
       <div class="sign-rotate-hint"><span style="font-size:24px;">↻</span><span>Turn sideways</span></div>
     </div>
   </div>
@@ -997,23 +1016,23 @@
     <div class="sign-header">
       <div style="display:flex; align-items:center; gap:12px;">
         <svg class="autora-mark" width="24" height="24" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-          <defs><linearGradient id="autoraGradSign5" x1="2" y1="26" x2="26" y2="2" gradientUnits="userSpaceOnUse"><stop stop-color="#7A5CFF"/><stop offset="0.55" stop-color="#B36CFF"/><stop offset="1" stop-color="#FF6B68"/></linearGradient></defs>
-          <rect width="28" height="28" rx="8" fill="url(#autoraGradSign5)"/>
+          <defs></defs>
+          <rect width="28" height="28" rx="8" fill="#00A3A3"/>
           <path d="M8 21L13.15 7H15.25L20.4 21H17.85L16.75 17.75H11.6L10.5 21H8ZM12.3 15.55H16.05L14.2 10.05L12.3 15.55Z" fill="white"/>
         </svg>
         <div>
-          <div style="font-size:12px; font-weight:700; color:#7A5CFF; line-height:1.2;">Signature 5 of 5</div>
-          <div style="font-size:11px; color:#B36CFF; line-height:1.2;">Sign in the space below</div>
+          <div style="font-size:12px; font-weight:700; color:var(--teal); line-height:1.2;">Signature 5 of 5</div>
+          <div style="font-size:11px; color:var(--teal-mid); line-height:1.2;">Sign in the space below</div>
         </div>
       </div>
-      <div style="display:flex; gap:6px;"><div style="width:10px;height:10px;border-radius:50%;background:#7A5CFF;"></div><div style="width:10px;height:10px;border-radius:50%;background:#7A5CFF;"></div><div style="width:10px;height:10px;border-radius:50%;background:#7A5CFF;"></div><div style="width:10px;height:10px;border-radius:50%;background:#7A5CFF;"></div><div style="width:10px;height:10px;border-radius:50%;background:#7A5CFF;"></div></div>
+      <div style="display:flex; gap:6px;"><div style="width:10px;height:10px;border-radius:50%;background:var(--teal);"></div><div style="width:10px;height:10px;border-radius:50%;background:var(--teal);"></div><div style="width:10px;height:10px;border-radius:50%;background:var(--teal);"></div><div style="width:10px;height:10px;border-radius:50%;background:var(--teal);"></div><div style="width:10px;height:10px;border-radius:50%;background:var(--teal);"></div></div>
     </div>
     <div class="sign-canvas-area">
     </div>
     <div class="sign-bottom-bar">
-      <button onclick="sigUndo(5)" style="flex:0 0 64px;padding:10px 0;border-radius:10px;border:1.5px solid #7A5CFF;color:#7A5CFF;font-size:13px;font-weight:600;background:white;cursor:pointer;font-family:Inter,sans-serif;">Undo</button>
-      <button onclick="sigClear(5)" style="flex:0 0 64px;padding:10px 0;border-radius:10px;border:1.5px solid #FF6B68;color:#FF6B68;font-size:13px;font-weight:600;background:white;cursor:pointer;font-family:Inter,sans-serif;">Clear</button>
-      <button id="sigNextBtn_5" onclick="sigNext(5)" disabled style="flex:1;padding:10px 0;border-radius:10px;border:none;color:white;font-size:13px;font-weight:700;cursor:pointer;opacity:0.35;font-family:Inter,sans-serif;background:#FF6B68;">✓ Submit</button>
+      <button onclick="sigUndo(5)" style="flex:0 0 64px;padding:10px 0;border-radius:10px;border:1.5px solid var(--teal);color:var(--teal);font-size:13px;font-weight:600;background:white;cursor:pointer;font-family:DM Sans,sans-serif;">Undo</button>
+      <button onclick="sigClear(5)" style="flex:0 0 64px;padding:10px 0;border-radius:10px;border:1.5px solid var(--red);color:var(--red);font-size:13px;font-weight:600;background:white;cursor:pointer;font-family:DM Sans,sans-serif;">Clear</button>
+      <button id="sigNextBtn_5" onclick="sigNext(5)" disabled style="flex:1;padding:10px 0;border-radius:10px;border:none;color:white;font-size:13px;font-weight:700;cursor:pointer;opacity:0.35;font-family:DM Sans,sans-serif;background:var(--red);">✓ Submit</button>
     </div>
     <div id="rotateOverlay_5" class="sign-rotate-overlay">
       <div class="sign-rotate-phone">
@@ -1021,48 +1040,48 @@
           <rect x="8" y="24" width="64" height="34" rx="7" fill="white" fill-opacity="0.15" stroke="white" stroke-width="3"></rect>
           <rect x="14" y="30" width="52" height="22" rx="3" fill="white" fill-opacity="0.25"></rect>
           <circle cx="69" cy="41" r="3" fill="white" fill-opacity="0.8"></circle>
-          <circle cx="36" cy="41" r="7" fill="#FF6B68"></circle>
+          <circle cx="36" cy="41" r="7" fill="var(--red)"></circle>
           <circle cx="34" cy="39" r="2.5" fill="white" fill-opacity="0.6"></circle>
           <path d="M20 41 Q28 35 36 41 Q44 47 52 41" stroke="white" stroke-width="2" stroke-linecap="round" fill="none" stroke-opacity="0.7"></path>
         </svg>
       </div>
       <h2 class="sign-rotate-title">Rotate Your Phone</h2>
-      <p class="sign-rotate-subtitle">Please rotate your device to <span style="font-weight:700;color:#FF6B68;">landscape mode</span> to sign</p>
+      <p class="sign-rotate-subtitle">Please rotate your device to <span style="font-weight:700;color:var(--red);">landscape mode</span> to sign</p>
       <div class="sign-rotate-hint"><span style="font-size:24px;">↻</span><span>Turn sideways</span></div>
     </div>
   </div>
 
   <!-- Screen 11: One More Thing -->
   <div id="oneMoreThingScreen" class="screen">
-    <div style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center;gap:20px;background:#FFFFFF;font-family:Inter,sans-serif;">
+    <div style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center;gap:20px;background:#FFFFFF;font-family:DM Sans,sans-serif;">
       <div id="oneMoreThingLogo"></div>
       <div style="width:64px;height:64px;border-radius:50%;background:#F3F0FF;display:flex;align-items:center;justify-content:center;">
         <svg width="34" height="34" viewBox="0 0 40 40" fill="none">
-          <circle cx="20" cy="20" r="18" fill="#7A5CFF" />
+          <circle cx="20" cy="20" r="18" fill="var(--teal)" />
           <path d="M20 12v10" stroke="white" stroke-width="3" stroke-linecap="round" />
           <circle cx="20" cy="27" r="2" fill="white" />
         </svg>
       </div>
       <div>
-        <h1 style="font-size:20px;font-weight:700;color:#7A5CFF;margin:0 0 10px 0;">One More Thing</h1>
-        <p style="font-size:14px;color:#4E465E;line-height:1.6;max-width:300px;margin:0 auto;">
+        <h1 style="font-size:20px;font-weight:700;color:var(--teal);margin:0 0 10px 0;">One More Thing</h1>
+        <p style="font-size:14px;color:var(--txt-muted);line-height:1.6;max-width:300px;margin:0 auto;">
           If you think you have a <strong>different signature</strong>, please provide it now; otherwise, repeat the same signature.
         </p>
       </div>
-      <button onclick="showSignScreen(4)" style="padding:12px 40px;border-radius:14px;background:#7A5CFF;color:white;font-size:15px;font-weight:700;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(122,92,255,0.35);">Continue →</button>
+      <button onclick="showSignScreen(4)" style="padding:12px 40px;border-radius:14px;background:var(--teal);color:white;font-size:15px;font-weight:700;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(122,92,255,0.35);">Continue →</button>
     </div>
   </div>
 
   <!-- Screen 14: Success -->
   <div id="successScreen" class="screen">
-    <div style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#FFFFFF;font-family:Inter,sans-serif;text-align:center;padding:32px;">
+    <div style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#FFFFFF;font-family:DM Sans,sans-serif;text-align:center;padding:32px;">
       <div id="successIcon" style="width:80px;height:80px;border-radius:50%;background:#DCFCE7;display:flex;align-items:center;justify-content:center;margin-bottom:24px;transform:scale(0);transition:transform 0.5s cubic-bezier(0.34,1.56,0.64,1);">
         <svg width="44" height="44" viewBox="0 0 52 52" fill="none">
-          <circle cx="26" cy="26" r="24" fill="#7A5CFF" />
+          <circle cx="26" cy="26" r="24" fill="var(--teal)" />
           <path d="M15 26l8 8 14-14" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </div>
-      <h1 style="font-size:24px;font-weight:700;color:#120C24;margin:0;">Mandate Submitted Successfully</h1>
+      <h1 style="font-size:24px;font-weight:700;color:var(--dark-blue);margin:0;">Mandate Submitted Successfully</h1>
     </div>
   </div>
 
@@ -1088,13 +1107,8 @@
       return `
         <svg class="autora-mark" width="${size}" height="${size}" viewBox="0 0 28 28" fill="none" aria-hidden="true">
           <defs>
-            <linearGradient id="autoraGrad_${idSuffix}" x1="2" y1="26" x2="26" y2="2" gradientUnits="userSpaceOnUse">
-              <stop stop-color="#7A5CFF"/>
-              <stop offset="0.55" stop-color="#B36CFF"/>
-              <stop offset="1" stop-color="#FF6B68"/>
-            </linearGradient>
-          </defs>
-          <rect width="28" height="28" rx="8" fill="url(#autoraGrad_${idSuffix})"/>
+            </defs>
+          <rect width="28" height="28" rx="8" fill="#00A3A3"/>
           <path d="M8 21L13.15 7H15.25L20.4 21H17.85L16.75 17.75H11.6L10.5 21H8ZM12.3 15.55H16.05L14.2 10.05L12.3 15.55Z" fill="white"/>
         </svg>
       `;
@@ -1104,7 +1118,7 @@
       return `
         <div style="display:flex;align-items:center;gap:9px;">
           ${autoraMark(markSize, "hdr" + markSize)}
-          <span style="font-size:16px;font-weight:700;color:#7A5CFF;letter-spacing:0.02em;">Autora</span>
+          <span style="font-size:16px;font-weight:700;color:var(--teal);letter-spacing:0.02em;">Autora</span>
         </div>
       `;
     }
@@ -1185,7 +1199,7 @@
         el.innerHTML = iconSvg("check-circle-2", 18);
       } else if (state === "invalid") {
         el.className = "field-state";
-        el.style.color = "#FF6B68";
+        el.style.color = "var(--red)";
         el.innerHTML = iconSvg("circle-x", 18);
       } else {
         el.className = "field-state";
@@ -1366,7 +1380,7 @@
       wrapper.innerHTML = `
         <p style="
           color: white; font-size: 13px; font-weight: 600;
-          font-family: Inter, sans-serif; margin-bottom: 12px;
+          font-family: DM Sans, sans-serif; margin-bottom: 12px;
           text-shadow: 0 1px 4px rgba(0,0,0,0.8);
         ">Align your Emirates ID within the frame</p>
 
@@ -1387,7 +1401,7 @@
           />
           <div style="
             position: absolute; inset: 0;
-            border: 2.5px solid #7A5CFF;
+            border: 2.5px solid var(--teal);
             border-radius: 12px;
             box-shadow: 0 0 0 2px rgba(122,92,255,0.4), 0 0 20px rgba(122,92,255,0.3);
             animation: eidBlink 1.2s ease-in-out infinite;
@@ -1467,7 +1481,7 @@
       } else if (image) {
         image.src =
           "data:image/svg+xml;utf8," +
-          encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200"><rect width="100%" height="100%" fill="#F3F0FF"/><text x="50%" y="52%" text-anchor="middle" font-family="Inter, sans-serif" font-size="18" fill="#7A5CFF">PDF Uploaded</text></svg>');
+          encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200"><rect width="100%" height="100%" fill="#F3F0FF"/><text x="50%" y="52%" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="18" fill="var(--teal)">PDF Uploaded</text></svg>');
       }
     }
 
@@ -1539,9 +1553,9 @@
       if (window.lucide) lucide.createIcons();
 
       document.body.style.background =
-        id === "eidCameraScreen" ? "#1A1A1A" :
+        id === "eidCameraScreen" ? "var(--txt-head)" :
         id === "signatureInfoScreen" ? "white" :
-        "#EAE5F4";
+        "var(--border)";
       document.body.style.overflow = id === "eidCameraScreen" ? "hidden" : "auto";
     }
 
